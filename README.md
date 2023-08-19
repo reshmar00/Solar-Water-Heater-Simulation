@@ -29,10 +29,13 @@ This is a simple software simulation of a heat transfer system using a solar col
 
 *I have used the following formulae:
 
-$$
+
+$
 - Q_{coll} = F_{R}(τα) G − F_{R}U_{L}ΔT
-$$
- &nbsp;&nbsp;&nbsp;&nbsp; where *Q<sub>coll</sub>* is the energy collected per unit collector area (m<sup>2</sup>) per unit time (s)\
+$
+
+
+&nbsp;&nbsp;&nbsp;&nbsp; where *Q<sub>coll</sub>* is the energy collected per unit collector area (m<sup>2</sup>) per unit time (s)\
 	 &nbsp;&nbsp;&nbsp;&nbsp; *F<sub>R</sub>* is the collector's heat removal factor,\
 	 &nbsp;&nbsp;&nbsp;&nbsp; *τ* is the transmittance of the cover,\
 	 &nbsp;&nbsp;&nbsp;&nbsp; *α* is the shortwave absorptivity of the absorber,\
