@@ -1,9 +1,11 @@
 const model = {
-    temperature: 50,  // Default value
-    month: null,
-    date: null,
-    daysInMonths: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+    /* Logic for reading user inputs */
 
+    temperature: 50,  // Default value
+    month: "January", // Default value
+    date: 1, // Default value
+
+    /* Getters and setters */
     setTemperature: function(temp) {
         this.temperature = temp;
     },
@@ -23,9 +25,5 @@ const model = {
     },
     getDate: function() {
         return this.date;
-    },
-
-    getDaysInMonth: function(monthIndex) {
-        return this.daysInMonths[monthIndex];
     }
 };
