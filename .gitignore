@@ -1,0 +1,10 @@
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+#Large files
+node_modules/
+.idea/
