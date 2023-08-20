@@ -81,5 +81,19 @@ const view = {
     /* ... and logic for updating its display */
     updateTemperatureDisplay: function(value) {
         this.temperatureValueElement.textContent = value;
+    },
+
+    /* Setting up the controller area's slider's value... */
+    collectorAreaValueElement: document.getElementById('collector-area-value'),
+    /* ... and logic for updating its display */
+    updateCollectorAreaDisplay: function(value) {
+        this.collectorAreaValueElement.textContent = value;
+    },
+
+    /* Setting up the controller depth's slider's value... */
+    collectorDepthValueElement: document.getElementById('collector-depth-value'),
+    /* ... and logic for updating its display */
+    updateCollectorDepthDisplay: function(value) {
+        this.collectorDepthValueElement.textContent = value;
     }
 };

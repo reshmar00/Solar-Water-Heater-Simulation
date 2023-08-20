@@ -9,21 +9,20 @@ const controller = {
 
     /* Functions for different elements to respond to based on user interaction */
     setupEventListeners: function() {
-        const temperatureSlider = document.getElementById('temperature-slider');
-        temperatureSlider.addEventListener('input', this.handleTemperatureChange);
-
         const monthListElem = document.getElementById("monthList");
         monthListElem.addEventListener('change', this.handleMonthChange);
 
         const dateListElem = document.getElementById("dateList");
         dateListElem.addEventListener('change', this.handleDateChange);
-    },
 
-    /* Updating the temperature, based on value selected on slider */
-    handleTemperatureChange: function(event) {
-        const value = event.target.value;
-        model.setTemperature(value);
-        view.updateTemperatureDisplay(value);
+        const temperatureSlider = document.getElementById('temperature-slider');
+        temperatureSlider.addEventListener('input', this.handleTemperatureChange);
+
+        const collectorAreaSlider = document.getElementById('collector-area-slider');
+        collectorAreaSlider.addEventListener('input', this.handleControllerAreaChange);
+
+        const collectorDepthSlider = document.getElementById('collector-depth-slider');
+        collectorDepthSlider.addEventListener('input', this.handleControllerDepthChange);
     },
 
     /* Updating the month, based on selection from drop-down menu */
@@ -39,6 +38,27 @@ const controller = {
     handleDateChange: function(event) {
         const selectedDate = event.target.value;
         model.setDate(selectedDate);
+    },
+
+    /* Updating the temperature, based on value selected on slider */
+    handleTemperatureChange: function(event) {
+        const value = event.target.value;
+        model.setTemperature(value);
+        view.updateTemperatureDisplay(value);
+    },
+
+    /* Updating the collector area, based on value selected on slider */
+    handleControllerAreaChange: function(event) {
+        const value = event.target.value;
+        model.setCollectorArea(value);
+        view.updateCollectorAreaDisplay(value);
+    },
+
+    /* Updating the collector depth, based on value selected on slider */
+    handleControllerDepthChange: function(event) {
+        const value = event.target.value;
+        model.setCollectorDepth(value);
+        view.updateCollectorDepthDisplay(value);
     }
 };
 

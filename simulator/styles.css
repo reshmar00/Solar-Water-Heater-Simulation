@@ -15,7 +15,6 @@ h1 {
     height: 100%;
 }
 
-
 .left {
     box-sizing: border-box;
     flex: 3;
@@ -29,8 +28,8 @@ h1 {
     background-color: gray;
     height: 15%;
     width: 93%;
-    position: absolute; /* to position it at the bottom */
-    bottom: 3%; /* from the bottom of the parent div */
+    position: absolute;
+    bottom: 3%;
     left: 3%;
     padding: 5px;
     border-radius: 5px;
@@ -44,22 +43,67 @@ h1 {
     overflow-y: auto;
 }
 
-#months {
-    display: inline-block;
-    margin-right: 20px;
-}
-
-#dates {
-    display: inline-block;
-}
-
-.form-wrapper{
+.form-wrapper {
     font-family: "Bai Jamjuree", sans-serif;
     color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
 }
 
-.temperature-slider {
-    margin-top: 20px;
+.date-container, .temperature-slider{
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.collector-area-slider, .collector-depth-slider{
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.date-container, .temperature-slider, .collector-area-slider, .collector-depth-slider {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.collector-area-slider{
+    margin-top: 10px;
+    margin-left: 7px;
+}
+
+.collector-depth-slider {
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+input[type="range"] {
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+
+#collector-area-value, #collector-depth-value, #temperature-value {
+    display: inline-block;
+    width: 30px;
+    text-align: right;
+    vertical-align: baseline;
+}
+
+.second-row {
     font-family: "Bai Jamjuree", sans-serif;
     color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
