@@ -10,7 +10,7 @@ const view = {
         camera.position.z = 5;
 
         renderer = new THREE.WebGLRenderer();
-        const container = document.querySelector('.left');
+        const container = document.querySelector('.right');
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
 
@@ -31,20 +31,11 @@ const view = {
         renderer.render(scene, camera);
     },
 
-    /* Splitting up the scene for different views */
-    setScreenSplit: function() {
-        const leftRatio = 3/5;
-        const rightRatio = 2/5;
-
-        document.querySelector('.left').style.width = `${leftRatio * 100}%`;
-        document.querySelector('.right').style.width = `${rightRatio * 100}%`;
-    },
-
     /* Logic for selecting the month and date*/
     /* Month selection */
     populateMonthDropdown: function() {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const monthDropdown = document.getElementById('monthList');
+        const monthDropdown = document.getElementById('month');
 
         monthDropdown.innerHTML = '<option>---Choose month---</option>'; // Clear current month options
 
@@ -56,7 +47,7 @@ const view = {
     },
 
     /* Date selection - based on month ~ account for 30/31 days + Feb */
-    dateListElement: document.getElementById('dateList'),
+    dateListElement: document.getElementById('date'),
     updateDateOptions: function(month) {
         // Clear current date options
         this.dateListElement.innerHTML = '<option> ---Choose date--- </option>';
@@ -72,7 +63,7 @@ const view = {
             let option = document.createElement("option");
             option.value = i;
             option.text = i;
-            dateList.appendChild(option);
+            this.dateListElement.appendChild(option);
         }
     },
 

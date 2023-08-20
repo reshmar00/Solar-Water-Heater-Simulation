@@ -7,52 +7,63 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="controls-container">
     <div class="left">
-        <h1>Solar Collector Simulator</h1>
-        <div class="options">
-            <div class="form-wrapper">
-                <div class="date-container"> <!-- Added this container -->
-                    <form id="months">
-                        <b>&nbsp;Month:</b>
-                        <select id="monthList">
-                            <option>---Choose month---</option>
-                        </select>
-                    </form>
-                    <form id="dates">
-                        <b>Date:</b>
-                        <select id="dateList">
-                            <option>---Choose date---</option>
-                        </select>
-                    </form>
+        <div id="options-container">
+            <h2>Choose conditions:</h2>
+            <div id="options">
+                <div class="option-item">
+                    <label for="month"><b>&nbsp;&nbsp;&nbsp;Month:</b></label>
+                    <select id="month"></select>
                 </div>
 
-                <div class="temperature-slider"> <!-- This is the other child of the flex container -->
-                    <b>&nbsp;Temperature (in °C):</b>
-                    <input type="range" id="temperature-slider" min="0" max="100" step="10" value="50">
-                    <span id="temperature-value">50</span>&nbsp;°C
+                <div class="option-item">
+                    <label for="date"><b>&nbsp;&nbsp;&nbsp;Date:</b></label>
+                    <select id="date"></select>
                 </div>
-            </div>
-            <div class ="second-row">
-                <div class="collector-area-slider">
-                    <b>&nbsp;Collector Area (in m<sup>2</sup>):</b>
-                    <input type="range" id="collector-area-slider" min="1" max="10" step="1" value="5">
-                    <span id="collector-area-value">5&nbsp;</span>
+
+                <div class="option-item">
+                    <label for="temperature"><b>&nbsp;&nbsp;&nbsp;Temperature (°C):</b></label>
+                    <input type="range" id="temperature" min="0" max="50" value="25">
+                    <span id="temperature-value">25</span>
                 </div>
-                <div class="collector-depth-slider">
-                    <b>&nbsp;Collector depth (in m):</b>
-                    <input type="range" id="collector-depth-slider" min="0.05" max="0.15" step="0.01" value="0.10">
-                    <span id="collector-depth-value">0.10</span>
+
+                <div class="option-item">
+                    <label for="collector-area"><b>&nbsp;&nbsp;&nbsp;Collector Area (m<sup>2</sup>):</b></label>
+                    <input type="range" id="collector-area" min="0" max="10" value="5">
+                    <span id="collector-area-value">5</span>
+                </div>
+
+                <div class="option-item">
+                    <label for="collector-depth"><b>&nbsp;&nbsp;&nbsp;Collector Depth (m):</b></label>
+                    <input type="range" id="collector-depth" min="0" max="5" value="2.5">
+                    <span id="collector-depth-value">2.5</span>
                 </div>
             </div>
         </div>
+        <button id = "startSimulator"> Start Simulator </button>
     </div>
     <div class="right">
-
+        <!-- This is where the THREE.js scene will render -->
+        <h1>Solar Collector Simulator</h1>
+    </div>
+    <div class="simulator-results">
+        <!-- This is where the simulation results or other data will appear -->
+        <!-- You can populate this with desired content -->
+        <h2>Simulation Results</h2>
     </div>
 </div>
+<!-- GSAP Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+
+<!-- ScrollMagic Library & Plugins -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/plugins/animation.gsap.min.js"></script>
+
+<!-- My MVC scripts  -->
 <script src="model.js"></script>
 <script src="view.js"></script>
 <script src="controller.js"></script>
+
 </body>
 </html>

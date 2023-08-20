@@ -42,6 +42,4 @@ const model = {
     getCollectorDepth: function() {
         return this.collectorDepth;
     }
-
-
 };
