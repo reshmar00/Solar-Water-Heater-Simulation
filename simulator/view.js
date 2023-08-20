@@ -23,6 +23,7 @@ const view = {
         /* Calling 'animate' to be able to actually view
          * the scene + its elements */
         this.animate();
+        renderer.render(scene, camera);
     },
 
     /* Function to animate the scene - binding it to the view */
@@ -121,5 +122,29 @@ const view = {
     /* ... and logic for updating its display */
     updateTemperatureDisplay: function(value) {
         this.temperatureValueElement.textContent = value;
+    },
+
+
+    displaySelectedValues: function(selectedValues) {
+        // Clear previous content
+        const simulatorResultsContent = document.getElementById('simulator-results-content');
+        simulatorResultsContent.innerHTML = '';
+
+        // Iterate over the selected values and create content
+        for (const key in selectedValues) {
+            const { label } = selectedValues[key];
+            const getterName = 'get' + key.charAt(0).toUpperCase() + key.slice(1); // Convert the key to the getter function name
+            const value = model[getterName](); // Call the corresponding getter function
+            const formattedValue = this.formatValue(key, value);
+            const content = `${label}: ${formattedValue}`;
+            simulatorResultsContent.innerHTML += content + '<br>';
+        }
+    },
+
+    formatValue: function(key, value) {
+        if (key !== 'month' && key !== 'date' && key !== 'time') {
+            return parseFloat(value).toFixed(3);
+        }
+        return value;
     }
 };

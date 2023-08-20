@@ -26,7 +26,6 @@ h2{
     height: 100%;
     overflow: hidden; /* Prevents horizontal scrolling */
     box-sizing: border-box;
-    transition: width 0.5s, left 0.5s; /* Smooth transition when resizing divs */
     position: relative;
 }
 
@@ -149,7 +148,34 @@ select {
     position: absolute;
     box-sizing: border-box;
     left: 100%;
-    transition: left 0.5s; /* Transition for the `left` property */
     color: black;
     z-index: 1000;
+}
+
+#simulator-results-content {
+    font-family: "Bai Jamjuree", sans-serif;
+    font-size: 20px;
+    color: #000000;
+    padding: 20px;
+}
+
+.left-slide-out {
+    left: -40%;
+    width: 0;
+    opacity: 0;
+    transition: left 0.5s ease-in-out, width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.right-slide-in {
+    width: 60%;
+    left: 0;
+}
+
+.simulator-results-slide-in {
+    width: 40%;
+    left: 60%;
+}
+
+.transition {
+    transition: all 0.5s ease; /* Adjust the timing as needed */
 }

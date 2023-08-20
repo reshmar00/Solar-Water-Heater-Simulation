@@ -3,78 +3,80 @@
 const model = {
 
     /* Setting default values */
-    month: "January", // Default value
-    date: 1, // Default value
-    time: 12, // Default values
-    collectorArea: 280.0, // Default value
-    collectorDepth: 0.150, // Default value
-    collectorTilt: 45.0, // Default value
-    pipeLength: 130.0, // Default value
-    storageTankVolume: 1251.0, // Default value
-    temperature: 47.5,  // Default value
+    selectedValues: {
+        month: { label: 'Month', value: 'January' },
+        date: { label: 'Date', value: 1 },
+        time: { label: 'Time', value: 12 },
+        collectorArea: { label: 'Collector Area', value: 280.0 },
+        collectorDepth: { label: 'Collector Depth', value: 0.150 },
+        collectorTilt: { label: 'Collector Tilt', value: 45.0 },
+        pipeLength: { label: 'Pipe Length', value: 130.0 },
+        storageTankVolume: { label: 'Storage Tank Volume', value: 1251.0 },
+        temperature: { label: 'Starting Temperature', value: 47.5 },
+    },
 
     /* Getters and setters */
 
     setMonth: function(month) {
-        this.month = month;
+        this.selectedValues.month.value = month;
     },
     getMonth: function() {
-        return this.month;
+        return this.selectedValues.month.value;
     },
 
     setDate: function(date) {
-        this.date = date;
+        this.selectedValues.date.value = date;
     },
     getDate: function() {
-        return this.date;
+        return this.selectedValues.date.value;
     },
 
     setTime: function(time) {
-        this.time = time;
+        this.selectedValues.time.value = time;
     },
     getTime: function() {
-        return this.time;
+        return this.selectedValues.time.value;
     },
 
     setCollectorArea: function(collectorArea) {
-        this.collectorArea = collectorArea;
+        this.selectedValues.collectorArea.value = collectorArea;
     },
     getCollectorArea: function() {
-        return this.collectorArea;
+        return this.selectedValues.collectorArea.value;
     },
 
     setCollectorDepth: function(collectorDepth) {
-        this.collectorDepth = collectorDepth;
+        this.selectedValues.collectorDepth.value = collectorDepth;
     },
     getCollectorDepth: function() {
-        return this.collectorDepth;
+        return this.selectedValues.collectorDepth.value;
     },
 
     setCollectorTilt: function(collectorTilt) {
-        this.collectorTilt = collectorTilt;
+        this.selectedValues.collectorTilt.value = collectorTilt;
     },
     getCollectorTilt: function() {
-        return this.collectorTilt;
+        return this.selectedValues.collectorTilt.value;
     },
 
     setPipeLength: function(pipeLength) {
-        this.pipeLength = pipeLength;
+        this.selectedValues.pipeLength.value = pipeLength;
     },
     getPipeLength: function() {
-        return this.pipeLength;
+        return this.selectedValues.pipeLength.value;
     },
 
     setStorageTankVolume: function(storageTankVolume) {
-        this.storageTankVolume = storageTankVolume;
+        this.selectedValues.storageTankVolume.value = storageTankVolume;
     },
     getStorageTankVolume: function() {
-        return this.storageTankVolume;
+        return this.selectedValues.storageTankVolume.value;
     },
 
     setTemperature: function(temp) {
-        this.temperature = temp;
+        this.selectedValues.temperature.value = temp;
     },
     getTemperature: function() {
-        return this.temperature;
+        return this.selectedValues.temperature.value;
     }
 };

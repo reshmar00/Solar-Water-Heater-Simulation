@@ -1,6 +1,16 @@
 const controller = {
     /* Initializing the webpage */
     init: function() {
+
+        /* Initializing values based on model's default values */
+        //
+        // view.updateCollectorAreaDisplay(model.getCollectorArea());
+        // view.updateCollectorDepthDisplay(model.getCollectorDepth());
+        // view.updateCollectorTiltDisplay(model.getCollectorTilt());
+        // view.updatePipeLengthDisplay(model.getPipeLength());
+        // view.updateStorageTankVolumeDisplay(model.getStorageTankVolume());
+        // view.updateTemperatureDisplay(model.getTemperature());
+
         /* setting up event listeners */
         this.setupEventListeners();
 
@@ -14,63 +24,62 @@ const controller = {
 
     /* Functions for different elements to respond to based on user interaction */
     setupEventListeners: function() {
-        const monthListElem = document.getElementById("month");
-        monthListElem.addEventListener('change', this.handleMonthChange);
+        const inputListeners = [
+            { id: 'month', event: 'change', handler: this.handleMonthChange },
+            { id: 'date', event: 'change', handler: this.handleDateChange },
+            { id: 'time', event: 'change', handler: this.handleTimeChange },
+            { id: 'collector-area', event: 'input', handler: this.handleCollectorAreaChange },
+            { id: 'collector-depth', event: 'input', handler: this.handleCollectorDepthChange },
+            { id: 'collector-tilt', event: 'input', handler: this.handleCollectorTiltChange },
+            { id: 'pipe-length', event: 'input', handler: this.handlePipeLengthChange },
+            { id: 'storage-tank-volume', event: 'input', handler: this.handleStorageTankVolumeChange },
+            { id: 'temperature', event: 'input', handler: this.handleTemperatureChange },
+            { id: 'startSimulator', event: 'click', handler: this.startSimulator }
+        ];
 
-        const dateListElem = document.getElementById("date");
-        dateListElem.addEventListener('change', this.handleDateChange);
+        console.log("Event listener for 'Start Simulator' button added.");
 
-        const timeListElem = document.getElementById("time");
-        timeListElem.addEventListener('change', this.handleTimeChange);
-
-        const collectorAreaSlider = document.getElementById('collector-area');
-        collectorAreaSlider.addEventListener('input', this.handleCollectorAreaChange);
-
-        const collectorDepthSlider = document.getElementById('collector-depth');
-        collectorDepthSlider.addEventListener('input', this.handleCollectorDepthChange);
-
-        const collectorTiltSlider = document.getElementById('collector-tilt');
-        collectorTiltSlider.addEventListener('input', this.handleCollectorTiltChange);
-
-        const pipeLengthSlider = document.getElementById('pipe-length');
-        pipeLengthSlider.addEventListener('input', this.handlePipeLengthChange);
-
-        const storageTankVolumeSlider = document.getElementById('storage-tank-volume');
-        storageTankVolumeSlider.addEventListener('input', this.handleStorageTankVolumeChange);
-
-        const temperatureSlider = document.getElementById('temperature');
-        temperatureSlider.addEventListener('input', this.handleTemperatureChange);
-
-        const startSimulatorButton = document.getElementById('startSimulator');
-        startSimulatorButton.addEventListener('click', this.startSimulator);
-
-        window.addEventListener('resize', function() {
-            const container = document.querySelector('.right');
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
+        inputListeners.forEach(item => {
+            const element = document.getElementById(item.id);
+            element.addEventListener(item.event, item.handler.bind(this));
         });
+
+        window.addEventListener('resize', this.handleWindowResize);
     },
 
     startSimulator: function() {
+        console.log("Entered startSimulator function");
+
+        // Display selected values in simulatorResultsDiv
+        view.displaySelectedValues(model.selectedValues);
+
+        // Apply classes to trigger sliding animations
         const leftDiv = document.querySelector('.left');
         const rightDiv = document.querySelector('.right');
         const simulatorResultsDiv = document.querySelector('.simulator-results');
 
-        // Make the left div slide away to the left
-        leftDiv.style.width = '0%';
-        leftDiv.style.left = '-40%'; // Push it out of view
+        leftDiv.classList.add('left-slide-out', 'transition');
+        rightDiv.classList.add('right-slide-in', 'transition');
+        simulatorResultsDiv.classList.add('simulator-results-slide-in', 'transition');
 
-        // Make the right div occupy same width, but moved to the left
-        rightDiv.style.width = '60%';
-        rightDiv.style.left = '0';
+        // Listen for the transitionend event on any of the divs
+        leftDiv.addEventListener('transitionend', this.handleAnimationEnd);
+        console.log("Exiting startSimulator function");
+    },
 
-        // Bring in simulator-results div
-        simulatorResultsDiv.style.width = '40%';
-        simulatorResultsDiv.style.left = '60%';
+    handleAnimationEnd: function(event) {
+        // Remove the event listener to avoid multiple calls
+        event.target.removeEventListener('transitionend', controller.handleAnimationEnd);
 
-        // Now let's ensure the THREE.js visualization is being rendered
+        // Now that the sliding animations are complete, render the scene
         view.renderScene();
+    },
+
+    handleWindowResize: function(){
+        const container = document.querySelector('.right');
+        view.renderer.setSize(container.clientWidth, container.clientHeight);
+        view.camera.aspect = container.clientWidth / container.clientHeight;
+        view.camera.updateProjectionMatrix();
     },
 
     /* Updating the month, based on selection from drop-down menu */
