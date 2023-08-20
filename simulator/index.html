@@ -18,26 +18,49 @@
                 </div>
 
                 <div class="option-item">
-                    <label for="date"><b>&nbsp;&nbsp;&nbsp;Date:</b></label>
+                    <label for="date"><b>&nbsp;&nbsp;&nbspDate:</b></label>
                     <select id="date"></select>
                 </div>
 
                 <div class="option-item">
-                    <label for="temperature"><b>&nbsp;&nbsp;&nbsp;Temperature (°C):</b></label>
-                    <input type="range" id="temperature" min="0" max="50" value="25">
-                    <span id="temperature-value">25</span>
+                    <label for="time"><b>&nbsp;&nbsp;&nbspTime:</b></label>
+                    <select id="time"></select>
                 </div>
 
                 <div class="option-item">
                     <label for="collector-area"><b>&nbsp;&nbsp;&nbsp;Collector Area (m<sup>2</sup>):</b></label>
-                    <input type="range" id="collector-area" min="0" max="10" value="5">
+                    <input type="range" id="collector-area" min="0.0" max="10.0" value="5.0">
                     <span id="collector-area-value">5</span>
                 </div>
 
                 <div class="option-item">
                     <label for="collector-depth"><b>&nbsp;&nbsp;&nbsp;Collector Depth (m):</b></label>
-                    <input type="range" id="collector-depth" min="0" max="5" value="2.5">
-                    <span id="collector-depth-value">2.5</span>
+                    <input type="range" id="collector-depth" min="0.0" max="5.0" value="2.5">
+                    <span id="collector-depth-value">&nbsp;&nbsp;2.5</span>
+                </div>
+
+                <div class="option-item">
+                    <label for="collector-tilt"><b>&nbsp;&nbsp;&nbsp;Collector Tilt (°):</b></label>
+                    <input type="range" id="collector-tilt" min="30.0" max="270.0" value="90.0">
+                    <span id="collector-tilt-value">&nbsp;&nbsp;90.0</span>
+                </div>
+
+                <div class="option-item">
+                    <label for="pipe-length"><b>&nbsp;&nbsp;&nbsp;Pipe Length (m):</b></label>
+                    <input type="range" id="pipe-length" min="1.0" max="100.0" value="50.0">
+                    <span id="pipe-length-value">&nbsp;&nbsp;50.0</span>
+                </div>
+
+                <div class="option-item">
+                    <label for="storage-tank-volume"><b>&nbsp;&nbsp;&nbsp;Storage Tank Volume (m<sup>3</sup>):</b></label>
+                    <input type="range" id="storage-tank-volume" min="1.0" max="2500.0" value="1251.0">
+                    <span id="storage-tank-volume-value">&nbsp;&nbsp;1251.0</span>
+                </div>
+
+                <div class="option-item">
+                    <label for="temperature"><b>&nbsp;&nbsp;&nbsp;Temperature (°C):</b></label>
+                    <input type="range" id="temperature" min="5.0" max="85.0" value="47.5">
+                    <span id="temperature-value">&nbsp;&nbsp;47.5</span>
                 </div>
             </div>
         </div>

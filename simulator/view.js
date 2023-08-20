@@ -31,7 +31,7 @@ const view = {
         renderer.render(scene, camera);
     },
 
-    /* Logic for selecting the month and date*/
+    /* Logic for selecting the month, date, and time*/
     /* Month selection */
     populateMonthDropdown: function() {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -67,24 +67,59 @@ const view = {
         }
     },
 
-    /* Setting up the temperature slider's value... */
-    temperatureValueElement: document.getElementById('temperature-value'),
-    /* ... and logic for updating its display */
-    updateTemperatureDisplay: function(value) {
-        this.temperatureValueElement.textContent = value;
+    /* Time selection */
+    populateTimeDropdown: function() {
+        const times = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        const timeDropdown = document.getElementById('time');
+
+        timeDropdown.innerHTML = '<option>---Choose time---</option>';
+
+        times.forEach(time => {
+            const option = document.createElement('option');
+            option.text = time;
+            timeDropdown.appendChild(option);
+        });
     },
 
-    /* Setting up the controller area's slider's value... */
+    /* Setting up the collector area slider's value... */
     collectorAreaValueElement: document.getElementById('collector-area-value'),
     /* ... and logic for updating its display */
     updateCollectorAreaDisplay: function(value) {
         this.collectorAreaValueElement.textContent = value;
     },
 
-    /* Setting up the controller depth's slider's value... */
+    /* Setting up the collector depth slider's value... */
     collectorDepthValueElement: document.getElementById('collector-depth-value'),
     /* ... and logic for updating its display */
     updateCollectorDepthDisplay: function(value) {
         this.collectorDepthValueElement.textContent = value;
+    },
+
+    /* Setting up the collector tilt slider's value... */
+    collectorTiltValueElement: document.getElementById('collector-tilt-value'),
+    /* ... and logic for updating its display */
+    updateCollectorTiltDisplay: function(value) {
+        this.collectorTiltValueElement.textContent = value;
+    },
+
+    /* Setting up the pipe length slider's value... */
+    pipeLengthValueElement: document.getElementById('pipe-length-value'),
+    /* ... and logic for updating its display */
+    updatePipeLengthDisplay: function(value) {
+        this.pipeLengthValueElement.textContent = value;
+    },
+
+    /* Setting up the storage tank's volume slider's value... */
+    storageTankVolumeElement: document.getElementById('storage-tank-volume-value'),
+    /* ... and logic for updating its display */
+    updateStorageTankVolumeDisplay: function(value) {
+        this.storageTankVolumeElement.textContent = value;
+    },
+
+    /* Setting up the temperature slider's value... */
+    temperatureValueElement: document.getElementById('temperature-value'),
+    /* ... and logic for updating its display */
+    updateTemperatureDisplay: function(value) {
+        this.temperatureValueElement.textContent = value;
     }
 };

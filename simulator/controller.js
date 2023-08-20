@@ -1,9 +1,15 @@
 const controller = {
     /* Initializing the webpage */
     init: function() {
-        this.setupEventListeners(); // setting up event listeners
-        view.populateMonthDropdown(); // keeping drop-down menus populated
-        view.renderScene(); // 3D rendering
+        /* setting up event listeners */
+        this.setupEventListeners();
+
+        /* keeping drop-down menus populated */
+        view.populateMonthDropdown();
+        view.populateTimeDropdown();
+
+        /* 3D rendering */
+        view.renderScene();
     },
 
     /* Functions for different elements to respond to based on user interaction */
@@ -14,14 +20,26 @@ const controller = {
         const dateListElem = document.getElementById("date");
         dateListElem.addEventListener('change', this.handleDateChange);
 
-        const temperatureSlider = document.getElementById('temperature');
-        temperatureSlider.addEventListener('input', this.handleTemperatureChange);
+        const timeListElem = document.getElementById("time");
+        timeListElem.addEventListener('change', this.handleTimeChange);
 
         const collectorAreaSlider = document.getElementById('collector-area');
         collectorAreaSlider.addEventListener('input', this.handleCollectorAreaChange);
 
         const collectorDepthSlider = document.getElementById('collector-depth');
         collectorDepthSlider.addEventListener('input', this.handleCollectorDepthChange);
+
+        const collectorTiltSlider = document.getElementById('collector-tilt');
+        collectorTiltSlider.addEventListener('input', this.handleCollectorTiltChange);
+
+        const pipeLengthSlider = document.getElementById('pipe-length');
+        pipeLengthSlider.addEventListener('input', this.handlePipeLengthChange);
+
+        const storageTankVolumeSlider = document.getElementById('storage-tank-volume');
+        storageTankVolumeSlider.addEventListener('input', this.handleStorageTankVolumeChange);
+
+        const temperatureSlider = document.getElementById('temperature');
+        temperatureSlider.addEventListener('input', this.handleTemperatureChange);
 
         const startSimulatorButton = document.getElementById('startSimulator');
         startSimulatorButton.addEventListener('click', this.startSimulator);
@@ -70,6 +88,14 @@ const controller = {
         model.setDate(selectedDate);
     },
 
+    /* Updating the time, based on selection from drop-down menu */
+    handleTimeChange: function(event) {
+        const selectedTime = event.target.options[event.target.selectedIndex].text;
+        if (selectedTime !== '---Choose time---') { // check if a valid time is selected
+            model.setTime(selectedTime);
+        }
+    },
+
     /* Updating the temperature, based on value selected on slider */
     handleTemperatureChange: function(event) {
         const value = event.target.value;
@@ -77,18 +103,39 @@ const controller = {
         view.updateTemperatureDisplay(value);
     },
 
-    /* Updating the collector area, based on value selected on slider */
+    /* Updating the collector's area, based on value selected on slider */
     handleCollectorAreaChange: function(event) {
         const value = event.target.value;
         model.setCollectorArea(value);
         view.updateCollectorAreaDisplay(value);
     },
 
-    /* Updating the collector depth, based on value selected on slider */
+    /* Updating the collector's depth, based on value selected on slider */
     handleCollectorDepthChange: function(event) {
         const value = event.target.value;
         model.setCollectorDepth(value);
         view.updateCollectorDepthDisplay(value);
+    },
+
+    /* Updating the collector's tilt, based on value selected on slider */
+    handleCollectorTiltChange: function(event) {
+        const value = event.target.value;
+        model.setCollectorTilt(value);
+        view.updateCollectorTiltDisplay(value);
+    },
+
+    /* Updating the pipe's length, based on value selected on slider */
+    handlePipeLengthChange: function(event) {
+        const value = event.target.value;
+        model.setPipeLength(value);
+        view.updatePipeLengthDisplay(value);
+    },
+
+    /* Updating the storage tank's volume, based on value selected on slider */
+    handleStorageTankVolumeChange: function(event) {
+        const value = event.target.value;
+        model.setStorageTankVolume(value);
+        view.updateStorageTankVolumeDisplay(value);
     }
 };
 

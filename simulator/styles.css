@@ -32,12 +32,12 @@ h2{
 
 .left {
     background-color: #B9FAFA;
-    width: 40%;
+    width: 45%;
 }
 
 .right {
     background-color: black;
-    width: 60%;
+    width: 55%;
 }
 
 .options-container {
@@ -54,8 +54,8 @@ h2{
 }
 
 .option-item {
-    margin: 10px -10px;
-    width: 100%;
+    margin: 10px -5px;
+    width: 80%;
     display: flex;
     justify-content: space-between;
 }
@@ -75,7 +75,7 @@ input[type="range"] {
     padding: 0;
 }
 
-#collector-area-value, #collector-depth-value, #temperature-value {
+#collector-area-value, #collector-depth-value, #temperature-value, #storage-tank-volume-value {
     display: inline-block;
     width: 25px;
     text-align: right;
