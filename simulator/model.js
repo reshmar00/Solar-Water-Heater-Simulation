@@ -6,10 +6,10 @@ const model = {
     month: "January", // Default value
     date: 1, // Default value
     time: 12, // Default values
-    collectorArea: 5.0, // Default value
-    collectorDepth: 0.10, // Default value
-    collectorTilt: 90.0, // Default value
-    pipeLength: 90.0, // Default value
+    collectorArea: 280.0, // Default value
+    collectorDepth: 0.150, // Default value
+    collectorTilt: 45.0, // Default value
+    pipeLength: 130.0, // Default value
     storageTankVolume: 1251.0, // Default value
     temperature: 47.5,  // Default value
 
