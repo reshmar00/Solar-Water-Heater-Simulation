@@ -132,7 +132,7 @@ const view = {
     },
 
 
-    displaySelectedValues: function(selectedValues) {
+    displaySelectedValues: function(selectedValues, Qcoll, time) {
         // Clear previous content
         const simulatorResultsContent = document.getElementById('simulator-results-content');
         simulatorResultsContent.innerHTML = '';
@@ -146,6 +146,12 @@ const view = {
             const content = `${label}: ${formattedValue}`;
             simulatorResultsContent.innerHTML += content + '<br>';
         }
+
+        // Add the calculated result to the content
+        const resultContent = `Using the following formula:<br>
+                          Qcoll = FR (τα) G − FRUL ΔT<br>
+                          we get: ${Qcoll.toFixed(2)} energy generated to heat the water in the system in ${time.toFixed(2)} seconds`;
+        simulatorResultsContent.innerHTML += resultContent;
     },
 
     formatValue: function(key, value) {

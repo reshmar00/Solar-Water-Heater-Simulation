@@ -42,7 +42,8 @@ const controller = {
         console.log("Entered startSimulator function");
 
         // Display selected values in simulatorResultsDiv
-        view.displaySelectedValues(model.selectedValues);
+        const { Qcoll, finalTime } = model.simulateTemperatureChange(n, tilt, initialTemperature, timeStep);
+        view.displaySelectedValues(model.selectedValues, Qcoll, finalTime);
 
         // Apply classes to trigger sliding animations
         const leftDiv = document.querySelector('.left');
