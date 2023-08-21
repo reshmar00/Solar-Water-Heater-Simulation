@@ -1,16 +1,6 @@
 const controller = {
     /* Initializing the webpage */
     init: function() {
-
-        /* Initializing values based on model's default values */
-        //
-        // view.updateCollectorAreaDisplay(model.getCollectorArea());
-        // view.updateCollectorDepthDisplay(model.getCollectorDepth());
-        // view.updateCollectorTiltDisplay(model.getCollectorTilt());
-        // view.updatePipeLengthDisplay(model.getPipeLength());
-        // view.updateStorageTankVolumeDisplay(model.getStorageTankVolume());
-        // view.updateTemperatureDisplay(model.getTemperature());
-
         /* setting up event listeners */
         this.setupEventListeners();
 
@@ -34,7 +24,8 @@ const controller = {
             { id: 'pipe-length', event: 'input', handler: this.handlePipeLengthChange },
             { id: 'storage-tank-volume', event: 'input', handler: this.handleStorageTankVolumeChange },
             { id: 'temperature', event: 'input', handler: this.handleTemperatureChange },
-            { id: 'startSimulator', event: 'click', handler: this.startSimulator }
+            { id: 'startSimulator', event: 'click', handler: this.startSimulator },
+            { id: 'time-step', event: 'input', handler: this.handleTimeStepChange }
         ];
 
         console.log("Event listener for 'Start Simulator' button added.");
@@ -105,13 +96,6 @@ const controller = {
         }
     },
 
-    /* Updating the temperature, based on value selected on slider */
-    handleTemperatureChange: function(event) {
-        const value = event.target.value;
-        model.setTemperature(value);
-        view.updateTemperatureDisplay(value);
-    },
-
     /* Updating the collector's area, based on value selected on slider */
     handleCollectorAreaChange: function(event) {
         const value = event.target.value;
@@ -145,6 +129,19 @@ const controller = {
         const value = event.target.value;
         model.setStorageTankVolume(value);
         view.updateStorageTankVolumeDisplay(value);
+    },
+
+    /* Updating the temperature, based on value selected on slider */
+    handleTemperatureChange: function(event) {
+        const value = event.target.value;
+        model.setTemperature(value);
+        view.updateTemperatureDisplay(value);
+    },
+
+    handleTimeStepChange: function(event) {
+        const value = event.target.value;
+        model.setTimeStep(value);
+        view.updateTimeStepDisplay(value);
     }
 };
 

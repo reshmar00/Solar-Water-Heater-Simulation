@@ -124,6 +124,13 @@ const view = {
         this.temperatureValueElement.textContent = value;
     },
 
+    /* Setting up the temperature slider's value... */
+    timeStepValueElement: document.getElementById('time-step-value'),
+    /* ... and logic for updating its display */
+    updateTimeStepDisplay: function(value) {
+        this.timeStepValueElement.textContent = value;
+    },
+
 
     displaySelectedValues: function(selectedValues) {
         // Clear previous content

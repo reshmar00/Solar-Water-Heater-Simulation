@@ -13,6 +13,7 @@ const model = {
         pipeLength: { label: 'Pipe Length', value: 130.0 },
         storageTankVolume: { label: 'Storage Tank Volume', value: 1251.0 },
         temperature: { label: 'Starting Temperature', value: 47.5 },
+        timeStep: { label: 'Time Step', value: 0.1 },
     },
 
     /* Getters and setters */
@@ -78,5 +79,12 @@ const model = {
     },
     getTemperature: function() {
         return this.selectedValues.temperature.value;
+    },
+
+    setTimeStep: function(timeStep) {
+        this.selectedValues.timeStep.value = timeStep;
+    },
+    getTimeStep: function() {
+        return this.selectedValues.timeStep.value;
     }
 };
