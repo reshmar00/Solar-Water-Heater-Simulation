@@ -115,41 +115,84 @@ const model = {
         return degrees * (Math.PI / 180);
     },
 
-    // calculateCosineFromSine: function(sineValue){
-    //     return Math.sqrt(1 - Math.pow(sineValue, 2));
-    // },
+    calculateCosineFromSine: function(sineValue){
+        try {
+            if (typeof sineValue !== 'number') {
+                throw new Error('Input must be a number');
+            }
 
-    // calculateKT: function(n) {
-    //     if ((n >= 349 && n <= 365) || (n >= 1 && n <= 45)) {  // Mid Dec+1, Jan, mid Feb
-    //         return 0.3;
-    //     } else if (n >= 46 && n <= 105) {  // Mid Feb+1 - Mid April
-    //         return 0.4;
-    //     } else if (n >= 106 && n <= 135) {  // Mid April+1 - Mid May
-    //         return 0.6;
-    //     } else if (n >= 136 && n <= 166) {  // Mid May+1 - June end
-    //         return 0.8;
-    //     } else if (n >= 182 && n <= 212) {  // July full - Mid Aug
-    //         return 0.7;
-    //     } else if (n >= 213 && n <= 243) {  // Mid Aug+1 - Full Sept
-    //         return 0.6;
-    //     } else if (n >= 274 && n <= 319) {  // October full - Mid November
-    //         return 0.5;
-    //     } else if (n >= 320 && n <= 348) {  // Mid Nov+1 - Mid Dec
-    //         return 0.4;
-    //     } else {
-    //         return 0.3;  // Default to overcast
-    //     }
-    // },
+            if (sineValue > 1 || sineValue < -1) {
+                throw new Error('Input value must be between -1 and 1');
+            }
 
-    // calculateExtraterrestrialRadiation: function(n) {
-    //     const H0Avg = 1361; // Average solar constant in W/m2
-    //     return H0Avg * (1 + 0.034 * Math.cos((360 * n) / 365));
-    // },
+            return Math.sqrt(1 - Math.pow(sineValue, 2));
+        } catch (error) {
+            throw error;
+        }
+    },
 
-    // calculateRadiationAtSurface: function(H0, KT) {
-    //     const H = H0 * KT;
-    //     return H;
-    // },
+    calculateKT: function(n) {
+        try {
+            if (typeof n !== 'number') {
+                throw new Error('Input must be a number');
+            }
+
+            if (n <= 0 || n > 365) {
+                throw new Error('Input value must be between 1 and 365');
+            }
+
+            if (n === Infinity) {
+                throw new Error('Input value cannot be infinity');
+            }
+
+            if ((n >= 349 && n <= 365) || (n >= 1 && n <= 45)) {  // Mid Dec+1, Jan, mid Feb
+                return 0.3;
+            } else if (n >= 46 && n <= 105) {  // Mid Feb+1 - Mid April
+                return 0.4;
+            } else if (n >= 106 && n <= 135) {  // Mid April+1 - Mid May
+                return 0.6;
+            } else if (n >= 136 && n <= 166) {  // Mid May+1 - June end
+                return 0.8;
+            } else if (n >= 182 && n <= 212) {  // July full - Mid Aug
+                return 0.7;
+            } else if (n >= 213 && n <= 243) {  // Mid Aug+1 - Full Sept
+                return 0.6;
+            } else if (n >= 274 && n <= 319) {  // October full - Mid November
+                return 0.5;
+            } else if (n >= 320 && n <= 348) {  // Mid Nov+1 - Mid Dec
+                return 0.4;
+            }
+        } catch (error) {
+            throw error;
+        }
+
+    },
+
+    calculateExtraterrestrialRadiation: function(n) {
+        const H0Avg = 1361; // Average solar constant in W/m2
+        try {
+            if (typeof n !== 'number') {
+                throw new Error('Input must be a number');
+            }
+
+            if (!Number.isInteger(n) || n <= 0 || n > 365) {
+                throw new Error('Input value must be an integer between 1 and 365');
+            }
+
+            if (n === Infinity) {
+                throw new Error('Input value cannot be infinity');
+            }
+
+            return H0Avg * (1 + 0.034 * Math.cos((360 * n) / 365));
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    calculateRadiationAtSurface: function(H0, KT) {
+        const H = H0 * KT;
+        return H;
+    },
 
     // calculateSolarDeclination: function(n) {
     //     const numerator = 284 + n;
