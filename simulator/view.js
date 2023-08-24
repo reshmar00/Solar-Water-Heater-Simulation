@@ -1,4 +1,5 @@
 import { model } from './model.js';
+// this.chartInstance = null;
 
 export const view = {
 
@@ -121,25 +122,30 @@ export const view = {
     /* Using chart.js to creat a line chart */
     displayGraph(xArray, yArray) {
         const ctx = document.getElementById('myChart');
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: xArray,
-                datasets: [{
-                    label: 'Temperature increase with Time',
-                    data: yArray,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        beginAtZero: true
+        if (this.chartInstance) {
+            this.chartInstance.data.labels = xArray;
+            this.chartInstance.data.datasets[0].data = yArray;
+            this.chartInstance.update();
+        } else {
+            this.chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xArray,
+                    datasets: [{
+                        label: 'Temperature increase with Time',
+                        data: yArray,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     },
 
     /* Method to format how values are displayed */

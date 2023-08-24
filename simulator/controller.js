@@ -12,17 +12,6 @@ const controller = {
         view.populateTimeDropdown();
     },
 
-    /* Recursive function to simulate for loop behavior */
-    updateGraphUntilTarget: function() {
-        // This function acts as a loop iteration
-        if (model.nextDataPoint()) {
-            view.displayGraph(model.graphData.xArray, model.graphData.yArray);
-
-            // Call this function again after a delay, simulating the next iteration of a loop
-            setTimeout(updateGraphUntilTarget, 500); // Adjust the 500ms as per your needs
-        }
-    },
-
     /* Functions for different elements to respond to based on user interaction */
     setupEventListeners: function() {
         const inputListeners = [
@@ -87,8 +76,37 @@ const controller = {
         console.log("Displayed selected values");
 
         //Start plotting the graph
-        this.updateGraphUntilTarget();
+        this.startGraphUpdate();
     },
+
+    startGraphUpdate: function() {
+        let currentTemperature = 25;  // Starting temperature
+        let elapsedSeconds = 0;  // Start from 0 seconds
+
+        let intervalId = setInterval(() => {
+            // Increase the temperature every 2 iterations (every 400ms)
+            let updateFrequency = 2;
+
+            // Increase elapsed time by 0.2 seconds every iteration
+            elapsedSeconds += 0.2;
+            model.graphData.xArray.push(elapsedSeconds.toFixed(1));  // Pushing elapsed time to xArray and rounding to 1 decimal
+
+            if (model.graphData.xArray.length % updateFrequency === 0) {
+                currentTemperature += 1;
+            }
+
+            // Push the currentTemperature to yArray. Now it will only increase and won't dip back down.
+            model.graphData.yArray.push(currentTemperature);
+
+            view.displayGraph(model.graphData.xArray, model.graphData.yArray);
+
+            // If temperature reaches 85°C, clear the interval
+            if (currentTemperature >= 85) {
+                clearInterval(intervalId);
+            }
+        }, 200);
+    },
+
 
 
     /* Updating the month, based on selection from drop-down menu */

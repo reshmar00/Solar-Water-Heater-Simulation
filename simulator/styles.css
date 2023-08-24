@@ -144,7 +144,7 @@ select {
     background-color: beige;
     width: 40%;
     height: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: absolute;
     box-sizing: border-box;
     left: 100%;
