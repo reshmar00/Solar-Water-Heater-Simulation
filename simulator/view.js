@@ -1,36 +1,6 @@
-let scene, camera, renderer;
+import { model } from './model.js';
 
-const view = {
-
-    /* Rendering scene using THREE.js library */
-    renderScene: function(){
-        /* Setting up the scene and camera */
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-        camera.position.z = 5;
-
-        renderer = new THREE.WebGLRenderer();
-        const container = document.querySelector('.right');
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        container.appendChild(renderer.domElement);
-
-        /* Adding a cylinder */
-        const geometry = new THREE.CylinderGeometry(1, 1, 2, 32);
-        const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-        const cylinder = new THREE.Mesh(geometry, material);
-        scene.add(cylinder);
-
-        /* Calling 'animate' to be able to actually view
-         * the scene + its elements */
-        this.animate();
-        renderer.render(scene, camera);
-    },
-
-    /* Function to animate the scene - binding it to the view */
-    animate: function() {
-        requestAnimationFrame(this.animate.bind(this));
-        renderer.render(scene, camera);
-    },
+export const view = {
 
     /* Logic for selecting the month, date, and time*/
     /* Month selection */
@@ -131,8 +101,8 @@ const view = {
         this.timeStepValueElement.textContent = value;
     },
 
-
-    displaySelectedValues: function(selectedValues, Qcoll, time) {
+    /* Method to display the values selected by the user */
+    displaySelectedValues: function(selectedValues) {
         // Clear previous content
         const simulatorResultsContent = document.getElementById('simulator-results-content');
         simulatorResultsContent.innerHTML = '';
@@ -146,14 +116,33 @@ const view = {
             const content = `${label}: ${formattedValue}`;
             simulatorResultsContent.innerHTML += content + '<br>';
         }
-
-        // Add the calculated result to the content
-        const resultContent = `Using the following formula:<br>
-                          Qcoll = FR (τα) G − FRUL ΔT<br>
-                          we get: ${Qcoll.toFixed(2)} energy generated to heat the water in the system in ${time.toFixed(2)} seconds`;
-        simulatorResultsContent.innerHTML += resultContent;
     },
 
+    /* Using chart.js to creat a line chart */
+    displayGraph(xArray, yArray) {
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: xArray,
+                datasets: [{
+                    label: 'Temperature increase with Time',
+                    data: yArray,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    },
+
+    /* Method to format how values are displayed */
     formatValue: function(key, value) {
         if (key !== 'month' && key !== 'date' && key !== 'time') {
             return parseFloat(value).toFixed(3);

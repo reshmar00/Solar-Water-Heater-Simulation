@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Solar Collector Simulator</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div class="controls-container">
@@ -138,19 +138,18 @@
         <pre id="simulator-results-content"></pre>
         <!-- This is where the simulation results or other data will appear -->
         <!-- You can populate this with desired content -->
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
 </div>
-<!-- GSAP Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-
-<!-- ScrollMagic Library & Plugins -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/ScrollMagic.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.8/plugins/animation.gsap.min.js"></script>
-
 <!-- My MVC scripts  -->
-<script src="model.js"></script>
-<script src="view.js"></script>
-<script src="controller.js"></script>
+<script type="module" src="model.js"></script>
+<script type="module" src="view.js"></script>
+<script type="module" src="controller.js"></script>
+<!--<script src="view.js"></script>-->
+<!--<script src="controller.js"></script>-->
+
 
 </body>
 </html>

@@ -1,3 +1,6 @@
+import { model } from './model.js';
+import { view } from './view.js';
+
 const controller = {
     /* Initializing the webpage */
     init: function() {
@@ -7,9 +10,17 @@ const controller = {
         /* keeping drop-down menus populated */
         view.populateMonthDropdown();
         view.populateTimeDropdown();
+    },
 
-        /* 3D rendering */
-        view.renderScene();
+    /* Recursive function to simulate for loop behavior */
+    updateGraphUntilTarget: function() {
+        // This function acts as a loop iteration
+        if (model.nextDataPoint()) {
+            view.displayGraph(model.graphData.xArray, model.graphData.yArray);
+
+            // Call this function again after a delay, simulating the next iteration of a loop
+            setTimeout(updateGraphUntilTarget, 500); // Adjust the 500ms as per your needs
+        }
     },
 
     /* Functions for different elements to respond to based on user interaction */
@@ -41,11 +52,13 @@ const controller = {
     startSimulator: function() {
         console.log("Entered startSimulator function");
 
-        /* Commented out for now because I want to run unit tests first */
-        // Display selected values in simulatorResultsDiv
-        // const { Qcoll, finalTime } = model.simulateTemperatureChange(n, tilt, initialTemperature, timeStep);
-        // view.displaySelectedValues(model.selectedValues, Qcoll, finalTime);
+        // Begin the animation process
+        this.triggerAnimations();
 
+        console.log("Exiting startSimulator function");
+    },
+
+    triggerAnimations: function() {
         // Apply classes to trigger sliding animations
         const leftDiv = document.querySelector('.left');
         const rightDiv = document.querySelector('.right');
@@ -56,24 +69,27 @@ const controller = {
         simulatorResultsDiv.classList.add('simulator-results-slide-in', 'transition');
 
         // Listen for the transitionend event on any of the divs
-        leftDiv.addEventListener('transitionend', this.handleAnimationEnd);
-        console.log("Exiting startSimulator function");
+        leftDiv.addEventListener('transitionend', this.handleAnimationEnd.bind(this));
     },
 
     handleAnimationEnd: function(event) {
+        console.log("Animation ended");
         // Remove the event listener to avoid multiple calls
         event.target.removeEventListener('transitionend', controller.handleAnimationEnd);
 
-        // Now that the sliding animations are complete, render the scene
-        view.renderScene();
+        // Display values and start plotting the graph
+        this.displayValues();
     },
 
-    handleWindowResize: function(){
-        const container = document.querySelector('.right');
-        view.renderer.setSize(container.clientWidth, container.clientHeight);
-        view.camera.aspect = container.clientWidth / container.clientHeight;
-        view.camera.updateProjectionMatrix();
+    displayValues: function() {
+        // Display selected values in simulatorResultsDiv
+        view.displaySelectedValues(model.selectedValues);
+        console.log("Displayed selected values");
+
+        //Start plotting the graph
+        this.updateGraphUntilTarget();
     },
+
 
     /* Updating the month, based on selection from drop-down menu */
     handleMonthChange: function(event) {

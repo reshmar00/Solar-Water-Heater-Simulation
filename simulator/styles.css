@@ -167,13 +167,13 @@ select {
 }
 
 .right-slide-in {
-    width: 60%;
+    width: 40%;
     left: 0;
 }
 
 .simulator-results-slide-in {
-    width: 40%;
-    left: 60%;
+    width: 60%;
+    left: 40%;
 }
 
 .transition {
