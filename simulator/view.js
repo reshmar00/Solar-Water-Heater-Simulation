@@ -205,87 +205,87 @@ export const view = {
             this.chartInstance.destroy();
         }
 
-        // Initialize a new blank graph.
-        this.chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Temperature increase with Time',
-                    data: [],
-                    borderWidth: 1,
-                    borderColor: 'rgba(255, 255, 255, 1)',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    pointBackgroundColor: 'rgba(255, 255, 255, 1)',
-                    pointRadius: 3,
-                }]
-            },
-            options: {
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        display: true,
-                        title:{
-                            display: true,
-                            align: 'center',
-                            color: 'rgba(255, 255, 255, 1)',
-                            text: 'Time',
-                            font: {
-                                family: "Bai Jamjuree",
-                                size: 18,
-                                weight: 'bold'
-                            }
-                        },
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 1)' // White color for the x-axis ticks
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
-                        },
-                    },
-                    y: {
-                        beginAtZero: true,
-                        display: true,
-                        title:{
-                            display: true,
-                            align: 'center',
-                            color: 'rgba(255, 255, 255, 1)',
-                            text: 'Temperature',
-                            font: {
-                                family: "Bai Jamjuree",
-                                size: 18,
-                                weight: 'bold'
-                            }
-                        },
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 1)' // White color for the y-axis ticks
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
-                        }
-                    }
+        else{
+            // Initialize a new blank graph.
+            this.chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Temperature increase with Time',
+                        data: [],
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 1)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                        pointRadius: 3,
+                    }]
                 },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'rgba(255, 255, 255, 1)' // White color for the legend labels
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            display: true,
+                            title:{
+                                display: true,
+                                align: 'center',
+                                color: 'rgba(255, 255, 255, 1)',
+                                text: 'Time',
+                                font: {
+                                    family: "Bai Jamjuree",
+                                    size: 18,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 1)' // White color for the x-axis ticks
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
+                            },
+                        },
+                        y: {
+                            title:{
+                                display: true,
+                                align: 'center',
+                                color: 'rgba(255, 255, 255, 1)',
+                                text: 'Temperature',
+                                font: {
+                                    family: "Bai Jamjuree",
+                                    size: 18,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 1)' // White color for the y-axis ticks
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
+                            }
                         }
                     },
-                    title:{
-                        display: true,
-                        align: 'center',
-                        color: 'rgba(255, 255, 255, 1)',
-                        text: 'Solar collector heat transfer efficiency',
-                        font: {
-                            family: "Bai Jamjuree",
-                            size: 18,
-                            weight: 'bold'
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 1)' // White color for the legend labels
+                            }
+                        },
+                        title:{
+                            display: true,
+                            align: 'center',
+                            color: 'rgba(255, 255, 255, 1)',
+                            text: 'Solar collector heat transfer efficiency',
+                            font: {
+                                family: "Bai Jamjuree",
+                                size: 18,
+                                weight: 'bold'
+                            }
                         }
                     }
-                }
 
-            }
-        });
+                }
+            });
+        }
     },
 
     /* Using chart.js to update the initialized graph to show

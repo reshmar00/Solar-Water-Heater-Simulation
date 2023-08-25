@@ -91,5 +91,4 @@ export const model = {
     getTimeStep: function() {
         return this.selectedValues.timeStep.value;
     },
-
 };

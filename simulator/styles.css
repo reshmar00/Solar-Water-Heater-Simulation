@@ -151,7 +151,7 @@ select {
     vertical-align: baseline;
 }
 
-#startSimulator, #goBack {
+#startSimulator, #resetButton {
     font-size: 16px;
     display: block;
     margin: 20px auto;
@@ -163,7 +163,7 @@ select {
     cursor: pointer;
 }
 
-#startSimulator:hover, #goBack:hover {
+#startSimulator:hover, #resetButton:hover {
     background-color: #FFEA00;
 }
 
@@ -204,24 +204,4 @@ select {
 
 .transition {
     transition: all 0.5s ease; /* Adjust the timing as needed */
-}
-
-
-/* Reversing transitions */
-
-.controls-slide-in {
-    left: 0;
-    width: 45%;
-    opacity: 1;
-    transition: left 0.5s ease-in-out, width 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-.graph-slide-out {
-    width: 45%;
-    left: 55%;
-}
-
-.two-d-rendering-slide-out {
-    width: 40%;
-    left: 100%; /* Revert to its original position */
 }
