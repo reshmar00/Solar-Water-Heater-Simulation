@@ -1,6 +1,9 @@
 import { model } from './model.js';
 import { view } from './view.js';
 
+let intervalId;
+let stopGraph = false;  // Adding this flag
+
 const controller = {
     /* Initializing the webpage */
     init: function() {
@@ -30,11 +33,10 @@ const controller = {
             { id: 'pipe-length', event: 'input', handler: this.handlePipeLengthChange },
             { id: 'storage-tank-volume', event: 'input', handler: this.handleStorageTankVolumeChange },
             { id: 'temperature', event: 'input', handler: this.handleTemperatureChange },
+            { id: 'time-step', event: 'input', handler: this.handleTimeStepChange },
             { id: 'startSimulator', event: 'click', handler: this.startSimulator },
-            { id: 'time-step', event: 'input', handler: this.handleTimeStepChange }
+            { id: 'goBack', event: 'click', handler: this.goBack }
         ];
-
-        console.log("Event listener for 'Start Simulator' button added.");
 
         inputListeners.forEach(item => {
             const element = document.getElementById(item.id);
@@ -76,6 +78,45 @@ const controller = {
         this.displayValues();
     },
 
+    goBack: function() {
+        console.log("Entered goBack function");
+
+        // Begin the animation process
+        this.triggerGoingBackAnimations();
+
+        stopGraph = true;
+
+        // Reset the graph's data.
+        model.graphData.xArray = [];
+        model.graphData.yArray = [];
+        view.initEmptyGraph();
+
+        console.log("Exiting goBack function");
+    },
+
+    triggerGoingBackAnimations: function() {
+        // Apply classes to trigger sliding animations
+        const controlsDiv = document.querySelector('.controls');
+        const graphDiv = document.querySelector('.graph');
+        const twoDRenderingDiv = document.querySelector('.two-d-rendering');
+
+        controlsDiv.classList.add('controls-slide-in', 'transition');
+        graphDiv.classList.add('graph-slide-out', 'transition');
+        twoDRenderingDiv.classList.add('two-d-rendering-slide-out', 'transition');
+
+        // Listen for the transitionend event on any of the divs
+        controlsDiv.addEventListener('transitionend', this.handleGoingBackAnimationEnd.bind(this));
+    },
+
+    handleGoingBackAnimationEnd: function(event) {
+        console.log("Animation ended");
+        // Remove the event listener to avoid multiple calls
+        event.target.removeEventListener('transitionend', controller.handleGoingBackAnimationEnd);
+
+        // Back to og setup
+        this.init();
+    },
+
     displayValues: function() {
         // Display selected values in simulatorResultsDiv
         view.displaySelectedValues(model.selectedValues);
@@ -89,7 +130,9 @@ const controller = {
         let currentTemperature = 25;  // Starting temperature
         let elapsedSeconds = 0;  // Start from 0 seconds
 
-        let intervalId = setInterval(() => {
+        stopGraph = false;
+
+        intervalId = setInterval(() => {
             // Increase the temperature every 1 iteration (every 400ms)
             // pass in the slider time-step here //
             let updateFrequency = 1;
@@ -108,7 +151,7 @@ const controller = {
             view.displayGraph(model.graphData.xArray, model.graphData.yArray);
 
             // If temperature reaches 85°C, clear the interval
-            if (currentTemperature >= 85) {
+            if (currentTemperature >= 85 || stopGraph) {
                 clearInterval(intervalId);
             }
         }, 200);

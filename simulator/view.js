@@ -100,7 +100,16 @@ export const view = {
         this.timeStepValueElement.textContent = value;
     },
 
+    /* Method to format how values are displayed */
+    formatValue: function(key, value) {
+        if (key !== 'month' && key !== 'date' && key !== 'time') {
+            return parseFloat(value).toFixed(3);
+        }
+        return value;
+    },
+
     /************************  2D Drawing **************************/
+
     /* Initializing a two.js instance to be used throughout */
 
     initializeTwoJS: function() {
@@ -184,10 +193,19 @@ export const view = {
         columns.forEach(column => simulatorResultsContent.appendChild(column));
     },
 
+    /********************** Chart Code  *************************/
+
     /* Using chart.js to create a line chart - first initialized without
      * information */
     initEmptyGraph() {
         const ctx = document.getElementById('myChart');
+
+        // Destroy/delete the old graph instance.
+        if (this.chartInstance) {
+            this.chartInstance.destroy();
+        }
+
+        // Initialize a new blank graph.
         this.chartInstance = new Chart(ctx, {
             type: 'line',
             data: {
@@ -279,13 +297,5 @@ export const view = {
             this.chartInstance.data.datasets[0].data = yArray;
             this.chartInstance.update();
         }
-    },
-
-    /* Method to format how values are displayed */
-    formatValue: function(key, value) {
-        if (key !== 'month' && key !== 'date' && key !== 'time') {
-            return parseFloat(value).toFixed(3);
-        }
-        return value;
     }
 };
