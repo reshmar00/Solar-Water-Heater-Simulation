@@ -1,6 +1,4 @@
 import { model } from './model.js';
-// this.chartInstance = null;
-
 export const view = {
 
     /* Logic for selecting the month, date, and time*/
@@ -101,6 +99,57 @@ export const view = {
     updateTimeStepDisplay: function(value) {
         this.timeStepValueElement.textContent = value;
     },
+
+    /************************  2D Drawing **************************/
+    /* Initializing a two.js instance to be used throughout */
+
+    initializeTwoJS: function() {
+        const element = document.getElementById('twojs-container');
+        const params = {
+            width: element.clientWidth,
+            height: element.clientHeight
+        };
+        this.two = new Two(params).appendTo(element);
+    },
+
+    drawSolarSimulation: function() {
+        this.initializeTwoJS();
+        this.drawSun();
+        this.drawSolarCollector();
+        this.drawPipesAndPump();
+        this.drawStorageTank();
+    },
+
+    drawSun: function() {
+        // Use this.two for all your drawing related to the sun
+    },
+
+    drawSolarCollector: function() {
+        const width = 120;
+        const height = 200;
+
+        // Move the rectangle to the top-left corner
+        const rectX = (width / 2) + 200;
+        const rectY = (height / 2) + 200;
+
+        // Draw the rectangle with rounded corners
+        const rect = this.two.makeRoundedRectangle(rectX, rectY, width, height, 10);
+        rect.linewidth = 2;
+        rect.stroke = "white";
+        rect.fill = "transparent";
+
+        // Update the Two.js scene
+        this.two.update();
+    },
+
+    drawPipesAndPump: function() {
+        // Use this.two for all your drawing related to the pipes and pump
+    },
+
+    drawStorageTank: function() {
+        // Use this.two for all your drawing related to the storage tank
+    },
+
 
     /* Method to display the values selected by the user */
     displaySelectedValues: function(selectedValues) {

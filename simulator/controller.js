@@ -10,6 +10,9 @@ const controller = {
         /* keeping drop-down menus populated */
         view.populateMonthDropdown();
         view.populateTimeDropdown();
+
+        /* show the drawing */
+        view.drawSolarSimulation();
     },
 
     /* Functions for different elements to respond to based on user interaction */
