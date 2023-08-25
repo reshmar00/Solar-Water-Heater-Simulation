@@ -1,5 +1,4 @@
-import { model } from './model.js';
-export const view = {
+const view = {
 
     /* Logic for selecting the month, date, and time*/
     /* Month selection */
