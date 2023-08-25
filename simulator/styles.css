@@ -5,6 +5,7 @@ body, html {
     font-family: "Bai Jamjuree", sans-serif;
     color: white;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 h1, h2 {
@@ -25,11 +26,11 @@ h2{
     background: url('/bg_solar-2.png') no-repeat center center fixed;
     background-size: 140% 100%;
 }
-.left, .right, .simulator-results {
+.controls, .graph, .two-d-rendering {
     background-color: transparent;
 }
 
-.left {
+.controls {
     height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -38,7 +39,7 @@ h2{
     width: 45%;
 }
 
-.right {
+.graph {
     height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -53,7 +54,7 @@ h2{
     height: 100%;
 }
 
-.simulator-results {
+.two-d-rendering {
     /*background-color: beige;*/
     width: 40%;
     height: 100%;
@@ -166,7 +167,7 @@ select {
     background-color: #FFEA00;
 }
 
-#simulator-results-content {
+#two-d-rendering-content {
     font-family: "Bai Jamjuree", sans-serif;
     font-size: 18px;
     color: #FFFFFF;
@@ -182,21 +183,21 @@ select {
     box-sizing: border-box;  /* Include padding in width calculation */
 }
 
-.left-slide-out {
+.controls-slide-out {
     left: -40%;
     width: 0;
     opacity: 0;
     transition: left 0.5s ease-in-out, width 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
-.right-slide-in {
-    width: 40%;
+.graph-slide-in {
+    width: 60%;
     left: 0;
 }
 
-.simulator-results-slide-in {
-    width: 60%;
-    left: 40%;
+.two-d-rendering-slide-in {
+    width: 40%;
+    left: 60%;
 }
 
 .transition {

@@ -52,16 +52,16 @@ const controller = {
 
     triggerAnimations: function() {
         // Apply classes to trigger sliding animations
-        const leftDiv = document.querySelector('.left');
-        const rightDiv = document.querySelector('.right');
-        const simulatorResultsDiv = document.querySelector('.simulator-results');
+        const controlsDiv = document.querySelector('.controls');
+        const graphDiv = document.querySelector('.graph');
+        const twoDRenderingDiv = document.querySelector('.two-d-rendering');
 
-        leftDiv.classList.add('left-slide-out', 'transition');
-        rightDiv.classList.add('right-slide-in', 'transition');
-        simulatorResultsDiv.classList.add('simulator-results-slide-in', 'transition');
+        controlsDiv.classList.add('controls-slide-out', 'transition');
+        graphDiv.classList.add('graph-slide-in', 'transition');
+        twoDRenderingDiv.classList.add('two-d-rendering-slide-in', 'transition');
 
         // Listen for the transitionend event on any of the divs
-        leftDiv.addEventListener('transitionend', this.handleAnimationEnd.bind(this));
+        controlsDiv.addEventListener('transitionend', this.handleAnimationEnd.bind(this));
     },
 
     handleAnimationEnd: function(event) {
@@ -110,8 +110,6 @@ const controller = {
             }
         }, 200);
     },
-
-
 
     /* Updating the month, based on selection from drop-down menu */
     handleMonthChange: function(event) {

@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="controls-container">
-    <div class="left">
+    <div class="controls">
         <div id="options-container">
             <h2>Choose conditions:</h2><br><br>
             <div id="options">
@@ -135,14 +135,9 @@
         </div>
         <button id = "startSimulator"> Start Simulator </button>
     </div>
-    <div class="right">
-        <!-- This is where the TWO.js scene will render -->
-        <h1>Solar Collector Simulator</h1>
-        <div id="twojs-container"></div>
-    </div>
-    <div class="simulator-results">
+    <div class="graph">
         <h2>Simulator Results</h2>
-        <pre id="simulator-results-content"></pre>
+        <pre id="two-d-rendering-content"></pre>
         <div class="result-column"></div>
         <div class="result-column"></div>
         <div class="result-column"></div>
@@ -151,6 +146,12 @@
         <div>
             <canvas id="myChart"></canvas>
         </div>
+    </div>
+    <div class="two-d-rendering">
+        <!-- This is where the TWO.js scene will render -->
+        <h1>Solar Collector Simulator</h1>
+        <div id="twojs-container"></div>
+
     </div>
 </div>
 <!-- My MVC scripts  -->

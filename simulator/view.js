@@ -153,7 +153,7 @@ export const view = {
 
     /* Method to display the values selected by the user */
     displaySelectedValues: function(selectedValues) {
-        const simulatorResultsContent = document.getElementById('simulator-results-content');
+        const simulatorResultsContent = document.getElementById('two-d-rendering-content');
         simulatorResultsContent.innerHTML = '';
 
         const columns = [
@@ -234,8 +234,7 @@ export const view = {
                 }
             });
         }
-    }
-    ,
+    },
 
     /* Method to format how values are displayed */
     formatValue: function(key, value) {
