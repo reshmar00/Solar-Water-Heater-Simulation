@@ -84,8 +84,9 @@ const controller = {
         let elapsedSeconds = 0;  // Start from 0 seconds
 
         let intervalId = setInterval(() => {
-            // Increase the temperature every 2 iterations (every 400ms)
-            let updateFrequency = 2;
+            // Increase the temperature every 1 iteration (every 400ms)
+            // pass in the slider time-step here //
+            let updateFrequency = 1;
 
             // Increase elapsed time by 0.2 seconds every iteration
             elapsedSeconds += 0.2;

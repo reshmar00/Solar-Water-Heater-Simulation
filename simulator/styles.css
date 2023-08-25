@@ -3,6 +3,8 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: "Bai Jamjuree", sans-serif;
+    color: white;
+    overflow-x: hidden;
 }
 
 h1, h2 {
@@ -13,30 +15,48 @@ h1 {
     color: white;
 }
 h2{
-    color: black;
+    color: white;
 }
 
 .controls-container {
     display: flex;
     height: 100%;
     position: relative;
+    background: url('/bg_solar-2.png') no-repeat center center fixed;
+    background-size: 140% 100%;
 }
-
-.left, .right {
-    height: 100%;
-    overflow: hidden; /* Prevents horizontal scrolling */
-    box-sizing: border-box;
-    position: relative;
+.left, .right, .simulator-results {
+    background-color: transparent;
 }
 
 .left {
-    background-color: #B9FAFA;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    position: relative;
     width: 45%;
 }
 
 .right {
-    background-color: black;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    position: relative;
     width: 55%;
+}
+
+.simulator-results {
+    /*background-color: beige;*/
+    width: 40%;
+    height: 100%;
+    /*overflow: hidden;*/
+    position: absolute;
+    box-sizing: border-box;
+    left: 100%;
+    color: white;
+    z-index: 1000;
 }
 
 .options-container {
@@ -140,22 +160,10 @@ select {
     background-color: darkred;
 }
 
-.simulator-results {
-    background-color: beige;
-    width: 40%;
-    height: 100%;
-    /*overflow: hidden;*/
-    position: absolute;
-    box-sizing: border-box;
-    left: 100%;
-    color: black;
-    z-index: 1000;
-}
-
 #simulator-results-content {
     font-family: "Bai Jamjuree", sans-serif;
-    font-size: 20px;
-    color: #000000;
+    font-size: 15px;
+    color: #FFFFFF;
     padding: 20px;
 }
 
