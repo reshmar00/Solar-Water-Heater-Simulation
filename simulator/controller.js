@@ -11,6 +11,9 @@ const controller = {
         view.populateMonthDropdown();
         view.populateTimeDropdown();
 
+        /* initialize empty graph */
+        view.initEmptyGraph();
+
         /* show the drawing */
         view.drawSolarSimulation();
     },

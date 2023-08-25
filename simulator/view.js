@@ -39,7 +39,7 @@ export const view = {
 
     /* Time selection */
     populateTimeDropdown: function() {
-        const times = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+        const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
         const timeDropdown = document.getElementById('time');
 
         timeDropdown.innerHTML = '<option>---Choose time---</option>';
@@ -184,55 +184,100 @@ export const view = {
         columns.forEach(column => simulatorResultsContent.appendChild(column));
     },
 
-    /* Using chart.js to creat a line chart */
+    /* Using chart.js to create a line chart - first initialized without
+     * information */
+    initEmptyGraph() {
+        const ctx = document.getElementById('myChart');
+        this.chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Temperature increase with Time',
+                    data: [],
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                    pointRadius: 3,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        display: true,
+                        title:{
+                            display: true,
+                            align: 'center',
+                            color: 'rgba(255, 255, 255, 1)',
+                            text: 'Time',
+                            font: {
+                                family: "Bai Jamjuree",
+                                size: 18,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 1)' // White color for the x-axis ticks
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        display: true,
+                        title:{
+                            display: true,
+                            align: 'center',
+                            color: 'rgba(255, 255, 255, 1)',
+                            text: 'Temperature',
+                            font: {
+                                family: "Bai Jamjuree",
+                                size: 18,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 1)' // White color for the y-axis ticks
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'rgba(255, 255, 255, 1)' // White color for the legend labels
+                        }
+                    },
+                    title:{
+                        display: true,
+                        align: 'center',
+                        color: 'rgba(255, 255, 255, 1)',
+                        text: 'Solar collector heat transfer efficiency',
+                        font: {
+                            family: "Bai Jamjuree",
+                            size: 18,
+                            weight: 'bold'
+                        }
+                    }
+                }
+
+            }
+        });
+    },
+
+    /* Using chart.js to update the initialized graph to show
+     * a line chart */
     displayGraph(xArray, yArray) {
         const ctx = document.getElementById('myChart');
         if (this.chartInstance) {
             this.chartInstance.data.labels = xArray;
             this.chartInstance.data.datasets[0].data = yArray;
             this.chartInstance.update();
-        } else {
-            this.chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: xArray,
-                    datasets: [{
-                        label: 'Temperature increase with Time',
-                        data: yArray,
-                        borderWidth: 1,
-                        borderColor: 'rgba(255, 255, 255, 1)', // White color for the line
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)' // Black color with 50% transparency for background
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 1)' // White color for the x-axis ticks
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 1)' // White color for the y-axis ticks
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'rgba(255, 255, 255, 1)' // White color for the legend labels
-                            }
-                        }
-                    }
-                }
-            });
         }
     },
 
