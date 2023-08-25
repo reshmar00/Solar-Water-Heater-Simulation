@@ -161,13 +161,8 @@ select {
 }
 
 #simulator-results-content {
-    /*font-family: "Bai Jamjuree", sans-serif;*/
-    /*font-size: 15px;*/
-    /*color: #FFFFFF;*/
-    /*padding: 20px;*/
-
     font-family: "Bai Jamjuree", sans-serif;
-    font-size: 15px;
+    font-size: 18px;
     color: #FFFFFF;
     padding: 20px;
     display: flex;  /* Turn this into a flex container */

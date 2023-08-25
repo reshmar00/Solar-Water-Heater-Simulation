@@ -104,19 +104,35 @@ export const view = {
 
     /* Method to display the values selected by the user */
     displaySelectedValues: function(selectedValues) {
-        // Clear previous content
         const simulatorResultsContent = document.getElementById('simulator-results-content');
         simulatorResultsContent.innerHTML = '';
 
-        // Iterate over the selected values and create content
+        const columns = [
+            document.createElement('div'),
+            document.createElement('div'),
+            document.createElement('div')
+        ];
+        columns.forEach(column => column.className = 'result-column');
+
+        let currentColumn = 0;
+        let count = 0;
+
         for (const key in selectedValues) {
+            if ((count === 3 && currentColumn === 0) || (count === 6 && currentColumn === 1)) {
+                currentColumn++;  // move to next column after 3 values for the first column, and 6 values total for the second column
+            }
+
             const { label } = selectedValues[key];
             const getterName = 'get' + key.charAt(0).toUpperCase() + key.slice(1); // Convert the key to the getter function name
             const value = model[getterName](); // Call the corresponding getter function
             const formattedValue = this.formatValue(key, value);
-            const content = `${label}: ${formattedValue}`;
-            simulatorResultsContent.innerHTML += content + '<br>';
+            const content = `${label}: ${formattedValue}<br>`;
+            columns[currentColumn].innerHTML += content;
+
+            count++;
         }
+
+        columns.forEach(column => simulatorResultsContent.appendChild(column));
     },
 
     /* Using chart.js to creat a line chart */
@@ -134,19 +150,43 @@ export const view = {
                     datasets: [{
                         label: 'Temperature increase with Time',
                         data: yArray,
-                        borderWidth: 1
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 1)', // White color for the line
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)' // Black color with 50% transparency for background
                     }]
                 },
                 options: {
                     scales: {
                         x: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 1)' // White color for the x-axis ticks
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 1)' // White color for the y-axis ticks
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)' // Light grid lines to make it visible on a dark background
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 1)' // White color for the legend labels
+                            }
                         }
                     }
                 }
             });
         }
-    },
+    }
+    ,
 
     /* Method to format how values are displayed */
     formatValue: function(key, value) {
