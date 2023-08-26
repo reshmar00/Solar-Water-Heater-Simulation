@@ -266,19 +266,22 @@ const model = {
     const solarDeclination = this.calculateSolarDeclination(n);
 
     // Calculate sin(αs)
-    const sinAlphaS = Math.sin(solarDeclination) * Math.sin(this.latitudeRadians) +
-        Math.cos(solarDeclination) * Math.cos(this.latitudeRadians) * Math.tan(this.latitudeRadians) * Math.tan(solarDeclination);
+    const latInRadians = 0.686280915;
+    const sinAlphaS = Math.sin(solarDeclination) * Math.sin(latInRadians) +
+        Math.cos(solarDeclination) * Math.cos(latInRadians) * Math.tan(latInRadians) * Math.tan(solarDeclination);
 
     // Calculate cos(αs)
-    const cosAlphaS = this.calculateCosineFromSine(sinAlphaS);
+    //const cosAlphaS = this.calculateCosineFromSine(sinAlphaS);
+    //const cosAlphaS = Math.sqrt(1 - Math.pow(sinAlphaS, 2));
+    const cosAlphaS = Math.sqrt(Math.abs(1 - Math.pow(sinAlphaS, 2)));
 
     // Calculate cos(θ) using assumed γs
     const angleTheta = sinAlphaS * Math.cos(this.degreesToRadians(tilt)) +
-        cosAlphaS * Math.sin(this.degreesToRadians(tilt)) * Math.cos(Math.PI - this.degreesToRadians(180)); // Using fixed azimuth angle
+        cosAlphaS * Math.sin(this.degreesToRadians(tilt)); //* Math.cos(Math.PI - this.degreesToRadians(180)); // Using fixed azimuth angle
 
     // Calculate Rb
     return sinAlphaS / angleTheta;
-},
+    },
 
 // calculateTotalRadiationOnCollector: function(n, tilt) {
 //     // Calculate extraterrestrial radiation (H0) and KT

@@ -254,6 +254,7 @@ describe('calculateSolarDeclination', () => {
         expect(model.calculateSolarDeclination(46)).toBeCloseTo(-13.289, 2);
         expect(model.calculateSolarDeclination(78)).toBeCloseTo(-1.210, 2);
         expect(model.calculateSolarDeclination(82)).toBeCloseTo(0.403, 2);
+        expect(model.calculateSolarDeclination(90)).toBeCloseTo(3.618, 2);
         expect(model.calculateSolarDeclination(112)).toBeCloseTo(11.928, 2);
         expect(model.calculateSolarDeclination(180)).toBeCloseTo(23.241, 2);
         expect(model.calculateSolarDeclination(250)).toBeCloseTo(5.400, 2);
@@ -279,8 +280,8 @@ describe('calculateRb', () => {
     it('should calculate Rb correctly for valid input', () => {
         // Test cases for specific days of the year and tilt angles
         expect(model.calculateRb(90, 30)).toBeCloseTo(5.986, 2);
-        // expect(model.calculateRb(180, 45)).toBeCloseTo(0.550, 2);
-        // expect(model.calculateRb(270, 60)).toBeCloseTo(0.741, 2);
+        expect(model.calculateRb(180, 45)).toBeCloseTo(3.183, 2);
+        expect(model.calculateRb(270, 60)).toBeCloseTo(-1.790, 2);
     });
 
     it('should throw an error for non-number input', () => {
