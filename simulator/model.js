@@ -186,7 +186,10 @@ const model = {
                 throw new Error('Input value cannot be infinity');
             }
 
-            return H0Avg * (1 + 0.034 * Math.cos((360 * n) / 365));
+            // returning value after converting expression inside cosine
+            // function to be in radians
+            return H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365));
+
         } catch (error) {
             throw error;
         }
@@ -199,7 +202,7 @@ const model = {
             }
 
             if (KT < 0.3 || KT > 0.8) {
-                throw new Error('Input value must be an integer between 1 and 365');
+                throw new Error('Input value must be a number between 0.3 and 0.8');
             }
 
             if (H0 === Infinity || KT === Infinity) {
@@ -233,6 +236,29 @@ const model = {
         return true;
     },
 
+    calculateSolarDeclinationInDegrees: function(n) {
+        try {
+            if (typeof n !== 'number') {
+                throw new Error('Input must be a number');
+            }
+
+            if (!Number.isInteger(n) || n <= 0 || n > 365) {
+                throw new Error('Input value must be an integer between 1 and 365');
+            }
+
+            if (n === Infinity) {
+                throw new Error('Input value cannot be infinity');
+            }
+            const numerator = 284 + n;
+            const denominator = 365;
+            const mixedFraction = numerator / denominator;
+            const angle = 2 * Math.PI * mixedFraction;
+            return 23.45 * Math.sin(angle);
+        } catch (error) {
+            throw error;
+        }
+    },
+
     calculateSolarDeclination: function(n) {
         try {
             if (typeof n !== 'number') {
@@ -249,8 +275,8 @@ const model = {
             const numerator = 284 + n;
             const denominator = 365;
             const mixedFraction = numerator / denominator;
-            const angleInRadians = 2 * Math.PI * mixedFraction;
-            return 23.45 * Math.sin(angleInRadians);
+            const angle = 2 * Math.PI * mixedFraction;
+            return this.degreesToRadians(23.45 * Math.sin(angle)); // angle in degrees converted to radians
         } catch (error) {
             throw error;
         }
@@ -261,51 +287,90 @@ const model = {
         return latitudeDegrees * (Math.PI / 180);
     },
 
-    calculateRb: function(n, tilt) {
-    // Calculate solar declination (δ)
-    const solarDeclination = this.calculateSolarDeclination(n);
-
-    // Calculate sin(αs)
-    const latInRadians = 0.686280915;
-    const sinAlphaS = Math.sin(solarDeclination) * Math.sin(latInRadians) +
-        Math.cos(solarDeclination) * Math.cos(latInRadians) * Math.tan(latInRadians) * Math.tan(solarDeclination);
-
-    // Calculate cos(αs)
-    //const cosAlphaS = this.calculateCosineFromSine(sinAlphaS);
-    //const cosAlphaS = Math.sqrt(1 - Math.pow(sinAlphaS, 2));
-    const cosAlphaS = Math.sqrt(Math.abs(1 - Math.pow(sinAlphaS, 2)));
-
-    // Calculate cos(θ) using assumed γs
-    const angleTheta = sinAlphaS * Math.cos(this.degreesToRadians(tilt)) +
-        cosAlphaS * Math.sin(this.degreesToRadians(tilt)); //* Math.cos(Math.PI - this.degreesToRadians(180)); // Using fixed azimuth angle
-
-    // Calculate Rb
-    return sinAlphaS / angleTheta;
+    calculateOmegaFromLST(LST) {
+        /* We have made some assumptions here (*)
+         * refer to the readme for more details */
+        return this.degreesToRadians(15 * (LST - 12));
     },
 
-// calculateTotalRadiationOnCollector: function(n, tilt) {
-//     // Calculate extraterrestrial radiation (H0) and KT
-//     const extraterrestrialRadiation = this.calculateExtraterrestrialRadiation(n);
-//     const KT = this.calculateKT(n); // You need to define the calculateKT function
-//
-//     // Calculate radiation at the Earth's surface (H)
-//     const radiationAtSurface = this.calculateRadiationAtSurface(extraterrestrialRadiation, KT);
-//
-//     // Calculate Rb
-//     const Rb = this.calculateRb(n, tilt);
-//
-//     // Calculate direct/beam radiation on tilted surface (IbT)
-//     const directRadiationTilted = radiationAtSurface * Rb;
-//
-//     // Calculate diffuse radiation on tilted surface (IdT)
-//     const diffuseRadiationTilted = radiationAtSurface * ((1 + Math.cos(this.degreesToRadians(tilt))) / 2);
-//
-//     // Calculate reflected radiation on tilted surface (IrT)
-//     const reflectedRadiationTilted = 0.2 * diffuseRadiationTilted;
-//
-//     // Calculate total radiation on collector (G)
-//     return directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted;
-// },
+    calculateOmegaS(latitudeInRadians, solarDeclinationInRadians) {
+        const cosOmegaS = -Math.tan(latitudeInRadians) * Math.tan(solarDeclinationInRadians);
+        return Math.acos(cosOmegaS);
+    },
+
+    calculateRb: function(n, tilt, LST) {
+        const latInRadians = 0.686280915;
+
+        // Calculate solar declination (δ) -- in radians
+        const solarDeclination = this.calculateSolarDeclination(n);
+
+        const omegaInRadians = this.calculateOmegaFromLST(LST);
+        // Check that it makes sense, given the sunset hour angle (ωs)
+        const omegaS = this.calculateOmegaS(latInRadians, solarDeclination)
+
+        // Sun below the horizon
+        if (Math.abs(omegaInRadians) > omegaS) {
+            return 0;  // handled by returning 0
+        }
+
+        // Get cosine of omega
+        const cosOmega = Math.cos(omegaInRadians);
+
+        const phi = this.degreesToRadians(tilt);
+        // Get its sine and cosine
+        const cosPhi = Math.cos(phi);
+        const sinPhi = Math.sin(phi);
+
+        // Calculate artificial latitude calculated by subtracting
+        // the tilt from the latitude
+        const phiMinusBeta = latInRadians - phi;
+        // Get its sine and cosine
+        const cosPhiMinusBeta = Math.cos(phiMinusBeta);
+        const sinPhiMinusBeta = Math.sin(phiMinusBeta);
+
+        // Get its sine and cosine
+        const cosSolarDeclination = Math.cos(solarDeclination);
+        const sinSolarDeclination = Math.sin(solarDeclination);
+
+        // Calculate numerator
+        const numerator = cosSolarDeclination * cosOmega * cosPhiMinusBeta + sinSolarDeclination * sinPhiMinusBeta;
+
+        // Calculate denominator
+        const denominator = cosPhi * cosSolarDeclination * cosOmega + sinPhi * sinSolarDeclination;
+
+        // Division by almost-zero check
+        const epsilon = 1e-10;
+        if (Math.abs(denominator) < epsilon) {
+            throw new Error('Denominator too close to zero');
+        }
+
+        // Calculate and return the quotient, Rb
+        return numerator / denominator;
+    },
+
+    // calculateTotalRadiationOnCollector: function(n, tilt) {
+    //     // Calculate extraterrestrial radiation (H0) and KT
+    //     const H0 = this.calculateExtraterrestrialRadiation(n);
+    //     const KT = this.calculateKT(n);
+    //
+    //     // Calculate radiation at the Earth's surface (H)
+    //     const H = this.calculateRadiationAtSurface(H0, KT);
+    //
+    //     // Calculate Rb
+    //     const Rb = this.calculateRb(n, tilt);
+    //
+    //     // Calculate direct/beam radiation on tilted surface (IbT)
+    //     const directRadiationTilted = H * Rb;
+    //
+    //     // Calculate diffuse radiation on tilted surface (IdT)
+    //     const diffuseRadiationTilted = radiationAtSurface * ((1 + Math.cos(this.degreesToRadians(tilt))) / 2);
+    //
+    //     // Calculate reflected radiation on tilted surface (IrT)
+    //     const reflectedRadiationTilted = 0.2 * diffuseRadiationTilted;
+    //
+    //     // Calculate total radiation on collector (G)
+    //     return directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted;
+    // },
 
 // simulateTemperatureChange: function(n, tilt, initialTemperature, timeStep) {
 //     let T = initialTemperature;
@@ -321,6 +386,7 @@ const model = {
 //
 //     return { Qcoll: calculateQcoll(n, tilt, T, Tnew), finalTime: time };
 // },
+
 
 };
 
