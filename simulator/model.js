@@ -214,27 +214,6 @@ const model = {
         }
     },
 
-    nextDataPoint: function() {
-        const startingTemp = this.selectedValues.temperature.value;
-        const targetTemp = 85;
-        const totalSecondsFor1CIncrease = 102;
-        const timeStepInSeconds = this.selectedValues.timeStep.value;
-        const tempIncreasePerTimeStep = 1 / (totalSecondsFor1CIncrease / timeStepInSeconds);
-        const lastTemperature = this.graphData.yArray[this.graphData.yArray.length - 1] || startingTemp;
-
-        if (lastTemperature >= targetTemp) {
-            return false;
-        }
-
-        const nextTemperature = lastTemperature + tempIncreasePerTimeStep;
-        const nextTime = (this.graphData.xArray[this.graphData.xArray.length - 1] || 0) + timeStepInSeconds;
-
-        this.graphData.xArray.push(nextTime);
-        this.graphData.yArray.push(nextTemperature);
-
-        return true;
-    },
-
     calculateSolarDeclinationInDegrees: function(n) {
         try {
             if (typeof n !== 'number') {
@@ -396,24 +375,10 @@ const model = {
 
         // Calculate total radiation on collector (G)
         return directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted;
-    },
-
-// simulateTemperatureChange: function(n, tilt, initialTemperature, timeStep) {
-//     let T = initialTemperature;
-//     let Tnew = initialTemperature;
-//     const targetTemperature = 85;
-//     let time = 0;
-//
-//     while (Tnew < targetTemperature) {
-//         T = Tnew;
-//         Tnew += timeStep * calculateQcoll(n, tilt, T, Tnew);
-//         time += timeStep;
-//     }
-//
-//     return { Qcoll: calculateQcoll(n, tilt, T, Tnew), finalTime: time };
-// },
-
-
+    }
 };
 
-module.exports = model;
+//module.exports = model;
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = model;
+}
