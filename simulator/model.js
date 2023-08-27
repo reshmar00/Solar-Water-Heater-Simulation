@@ -2,16 +2,16 @@ const model = {
 
     /* Setting default values */
     selectedValues: {
-        month: { label: 'Month', value: 'January' },
-        date: { label: 'Date', value: 1 },
-        time: { label: 'Time', value: 12 },
-        collectorArea: { label: 'Collector Area', value: 280.0 },
-        collectorDepth: { label: 'Collector Depth', value: 0.150 },
-        collectorTilt: { label: 'Collector Tilt', value: 45.0 },
-        pipeLength: { label: 'Pipe Length', value: 130.0 },
-        storageTankVolume: { label: 'Storage Tank Volume', value: 1251.0 },
-        temperature: { label: 'Starting Temperature', value: 47.5 },
-        timeStep: { label: 'Time Step', value: 0.1 },
+        month: { label: 'Month', value: this.getMonth || 'January' },
+        date: { label: 'Date', value: this.getDate || 1 },
+        time: { label: 'Time', value: this.getTime || 12 },
+        collectorArea: { label: 'Collector Area', value: this.getCollectorArea || 280.0 },
+        collectorDepth: { label: 'Collector Depth', value: this.getCollectorDepth || 0.150 },
+        collectorTilt: { label: 'Collector Tilt', value: this.getCollectorTilt || 45.0 },
+        pipeLength: { label: 'Pipe Length', value: this.getPipeLength || 130.0 },
+        storageTankVolume: { label: 'Storage Tank Volume', value: this.getStorageTankVolume || 1251.0 },
+        temperature: { label: 'Starting Temperature', value: this.getTemperature || 47.5 },
+        timeStep: { label: 'Time Step', value: this.getTimeStep || 0.1 },
     },
 
     graphData: {
@@ -91,6 +91,33 @@ const model = {
         return this.selectedValues.timeStep.value;
     },
 
+    dayOfYear: function (month, date) {
+        const daysBeforeMonth = {
+            'January': 0,
+            'February': 31,
+            'March': 59, //31 + 28
+            'April': 90, //31 + 28 + 31,
+            'May': 120, //31 + 28 + 31 + 30,
+            'June': 151, //31 + 28 + 31 + 30 + 31,
+            'July': 181, //31 + 28 + 31 + 30 + 31 + 30,
+            'August': 212, //31 + 28 + 31 + 30 + 31 + 30 + 31,
+            'September': 243, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31,
+            'October': 273, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30,
+            'November': 304, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31,
+            'December': 334, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30
+        };
+
+        let myDate = Number(date);
+
+        // Check if the month and date are valid
+        if (!daysBeforeMonth.hasOwnProperty(month) || myDate < 1 || myDate > 31) {
+            throw new Error('Invalid month or date');
+        }
+
+        // Sum the days before the current month with the given date
+        return daysBeforeMonth[month] + myDate;
+    },
+
     /*********** Calculations ***********/
 
     /* Main formula */
@@ -98,10 +125,11 @@ const model = {
         const FR_tau_alpha = 0.58;
         const FRUL = 0.7;
 
-        const G = this.calculateTotalRadiationOnCollector(n, tilt, LST);
+        const G = Number(this.calculateTotalRadiationOnCollector(n, tilt, LST));
         const deltaT = Tnew - Told;
 
-        return FR_tau_alpha * G - FRUL * deltaT;
+        //return FR_tau_alpha * G - FRUL * deltaT;
+        return parseFloat(String(FR_tau_alpha * G - FRUL * deltaT)).toFixed(3);
     },
 
     /* Supporting formulae / methods */
@@ -114,8 +142,8 @@ const model = {
         if (degrees === Infinity) {
             throw new Error('Cannot divide by zero');
         }
-
-        return degrees * (Math.PI / 180);
+        //return degrees * (Math.PI / 180);
+        return parseFloat(String(degrees * (Math.PI / 180))).toFixed(3);
     },
 
     calculateCosineFromSine: function(sineValue){
@@ -127,8 +155,8 @@ const model = {
             if (sineValue > 1 || sineValue < -1) {
                 throw new Error('Input value must be between -1 and 1');
             }
-
-            return Math.sqrt(1 - Math.pow(sineValue, 2));
+            //return Math.sqrt(1 - Math.pow(sineValue, 2));
+            parseFloat(Math.sqrt(1 - Math.pow(sineValue, 2)).toString()).toFixed(3);
         } catch (error) {
             throw error;
         }
@@ -150,19 +178,19 @@ const model = {
 
             if ((n >= 349 && n <= 365) || (n >= 1 && n <= 45)) {  // Mid Dec+1, Jan, mid Feb
                 return 0.3;
-            } else if (n >= 46 && n <= 105) {  // Mid Feb+1 - Mid April
+            } else if (n >= 46 && n <= 105) {  // Mid-Feb+1 - Mid-April
                 return 0.4;
-            } else if (n >= 106 && n <= 135) {  // Mid April+1 - Mid May
+            } else if (n >= 106 && n <= 135) {  // Mid-April+1 - Mid-May
                 return 0.6;
-            } else if (n >= 136 && n <= 166) {  // Mid May+1 - June end
+            } else if (n >= 136 && n <= 166) {  // Mid-May+1 - June end
                 return 0.8;
-            } else if (n >= 165 && n <= 181) {  // Mid May+1 - June end
+            } else if (n >= 165 && n <= 181) {  // Mid-May+1 - June end
                 return 0.7;
-            } else if (n >= 182 && n <= 212) {  // July full - Mid Aug
+            } else if (n >= 182 && n <= 212) {  // July full - Mid-Aug
                 return 0.6;
-            } else if (n >= 213 && n <= 243) {  // Mid Aug+1 - Full Sept
+            } else if (n >= 213 && n <= 243) {  // Mid-Aug+1 - Full Sept
                 return 0.5;
-            } else if (n >= 244 && n <= 348) {  // Late Sept through Mid November
+            } else if (n >= 244 && n <= 348) {  // Late Sept through Mid-November
                 return 0.4;
             }
         } catch (error) {
@@ -187,8 +215,8 @@ const model = {
 
             // returning value after converting expression inside cosine
             // function to be in radians
-            return H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365));
-
+            //return H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365));
+            return parseFloat(String(H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365)))).toFixed(3);
         } catch (error) {
             throw error;
         }
@@ -207,8 +235,8 @@ const model = {
             if (H0 === Infinity || KT === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-
-            return H0 * KT;
+            //return H0 * KT;
+            return parseFloat(String(H0 * KT)).toFixed(3);
         } catch (error) {
             throw error;
         }
@@ -231,7 +259,8 @@ const model = {
             const denominator = 365;
             const mixedFraction = numerator / denominator;
             const angle = 2 * Math.PI * mixedFraction;
-            return 23.45 * Math.sin(angle);
+            //return 23.45 * Math.sin(angle);
+            return parseFloat(String(23.45 * Math.sin(angle))).toFixed(3);
         } catch (error) {
             throw error;
         }
@@ -254,7 +283,8 @@ const model = {
             const denominator = 365;
             const mixedFraction = numerator / denominator;
             const angle = 2 * Math.PI * mixedFraction;
-            return this.degreesToRadians(23.45 * Math.sin(angle)); // angle in degrees converted to radians
+            //return this.degreesToRadians(23.45 * Math.sin(angle)); // angle in degrees converted to radians
+            return parseFloat(String(this.degreesToRadians(23.45 * Math.sin(angle)))).toFixed(3);
         } catch (error) {
             throw error;
         }
@@ -273,7 +303,8 @@ const model = {
             if (LST === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            return this.degreesToRadians(15 * (LST - 12));
+            //return this.degreesToRadians(15 * (LST - 12));
+            return parseFloat(String(this.degreesToRadians(15 * (LST - 12)))).toFixed(3);
         } catch (error) {
             throw error;
         }
@@ -281,7 +312,8 @@ const model = {
 
     calculateOmegaS(latitudeInRadians, solarDeclinationInRadians) {
         const cosOmegaS = -Math.tan(latitudeInRadians) * Math.tan(solarDeclinationInRadians);
-        return Math.acos(cosOmegaS);
+        //return Math.acos(cosOmegaS);
+        return parseFloat(String(Math.acos(cosOmegaS))).toFixed(3);
     },
 
     calculateRb: function(n, tilt, LST) {
@@ -304,21 +336,21 @@ const model = {
             const latInRadians = 0.686280915;
 
             // Calculate solar declination (δ) -- in radians
-            const solarDeclination = this.calculateSolarDeclination(n);
+            const solarDeclination = Number(this.calculateSolarDeclination(n));
 
-            const omegaInRadians = this.calculateOmegaFromLST(LST);
+            const omegaInRadians = Number(this.calculateOmegaFromLST(LST))
             // Check that it makes sense, given the sunset hour angle (ωs)
-            const omegaS = this.calculateOmegaS(latInRadians, solarDeclination)
+            const omegaS = Number(this.calculateOmegaS(latInRadians, solarDeclination))
 
             // Sun below the horizon
-            if (Math.abs(omegaInRadians) > omegaS) {
+            if (Math.abs(Number(omegaInRadians)) > omegaS) {
                 return 0;  // handled by returning 0
             }
 
             // Get cosine of omega
-            const cosOmega = Math.cos(omegaInRadians);
+            const cosOmega = Math.cos(Number(omegaInRadians));
 
-            const phi = this.degreesToRadians(tilt);
+            const phi = Number(this.degreesToRadians(tilt));
             // Get its sine and cosine
             const cosPhi = Math.cos(phi);
             const sinPhi = Math.sin(phi);
@@ -347,7 +379,8 @@ const model = {
             }
 
             // Calculate and return the quotient, Rb
-            return numerator / denominator;
+            //return numerator / denominator;
+            return parseFloat(String(numerator / denominator)).toFixed(3);
         } catch (error) {
             throw error;
         }
@@ -355,26 +388,48 @@ const model = {
 
     calculateTotalRadiationOnCollector: function(n, tilt, LST) {
         // Calculate extraterrestrial radiation (H0) and KT
-        const H0 = this.calculateExtraterrestrialRadiation(n);
+        const H0 = Number(this.calculateExtraterrestrialRadiation(n));
         const KT = this.calculateKT(n);
 
         // Calculate radiation at the Earth's surface (H)
-        const H = this.calculateRadiationAtSurface(H0, KT);
+        const H = Number(this.calculateRadiationAtSurface(H0, KT));
 
         // Calculate Rb
-        const Rb = this.calculateRb(n, tilt, LST);
+        const Rb = Number(this.calculateRb(n, tilt, LST));
 
         // Calculate direct/beam radiation on tilted surface (IbT)
-        const directRadiationTilted = H * Rb;
+        const directRadiationTilted = Number(H * Rb);
 
         // Calculate diffuse radiation on tilted surface (IdT)
-        const diffuseRadiationTilted = H * ((1 + Math.cos(this.degreesToRadians(tilt))) / 2);
+        const diffuseRadiationTilted = H * ((1 + Math.cos(Number(this.degreesToRadians(tilt)))) / 2);
 
         // Calculate reflected radiation on tilted surface (IrT)
         const reflectedRadiationTilted = 0.2 * diffuseRadiationTilted;
 
         // Calculate total radiation on collector (G)
-        return directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted;
+        //return directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted;
+        return parseFloat(String(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted)).toFixed(3);
+    },
+
+    calculateTemperatureForNextStep: function(n, tilt, LST, Told, Tnew, V, timeStep) {
+        // Constants
+        const C = 4182; // specific heat of water in J/kg°C
+        const rho = 1000; // density of water in kg/m^3
+
+        // Calculate Qcoll with the current guess of Tnew
+        let Qcoll = Number(this.calculateQcoll(n, tilt, LST, Told, Tnew));
+
+        // Calculate the new temperature Tnew using the formula
+        //Tnew = Told + (Qcoll / (C * rho * V));
+        Tnew = parseFloat(String(Told + (Qcoll / (C * rho * V)))).toFixed(2);
+
+        // Add Tnew to yArray
+        this.graphData.yArray.push(Tnew);
+
+        // Update elapsed time based on the timeStep and add it to xArray
+        let newTime = this.graphData.xArray.length === 0 ? timeStep : this.graphData.xArray[this.graphData.xArray.length - 1] + timeStep;
+        this.graphData.xArray.push(parseFloat(String(newTime)).toFixed(3));
+        return { newTemperature: Tnew, newTime: newTime };
     }
 };
 
