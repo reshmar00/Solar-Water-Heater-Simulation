@@ -1,6 +1,15 @@
+/* MVC Architecture */
+/**
+ * Model - Represents the application's data and logic (physics and math).
+ * Handles data retrieval, storage, and processing.
+ * Not directly concerned with user interface or presentation.
+ */
+
 const model = {
 
     /* Setting default values */
+    /* This sets up default values in case the user doesn't
+     * make any selection from the dropdown menus or sliders */
     selectedValues: {
         month: { label: 'Month', value: this.getMonth || 'January' },
         date: { label: 'Date', value: this.getDate || 1 },
@@ -14,23 +23,27 @@ const model = {
         timeStep: { label: 'Time Step', value: this.getTimeStep || 0.1 },
     },
 
-    graphData: {
-        xArray: [],
-        yArray: []
+    /* Arrays that contain the values of time and temperature */
+    simulationData: {
+        xArrayTime: [],
+        yArrayTemp: []
     },
 
     /* Constants */
     specificHeatOfWater: 4200.0, // J/kg°C
     densityOfWater: 1.0, // kg/m^3
+    averageSolarConstant: 1361, // W/m2
+    latInRadians: 0.686280915, // latitude (of Utah) in radians
+
     // F_R is the collector’s heat removal factor as a function of
     // tau, the transmittance of the cover
     // and alpha, the shortwave absorptivity of the absorber
     F_R_tau_alpha: 0.58,
+
     // U_L is the overall heat loss coefficient of the collector
     F_R_times_U_L: 0.7,
 
     /* Getters and setters */
-
     setMonth: function(month) {
         this.selectedValues.month.value = month;
     },
@@ -101,26 +114,29 @@ const model = {
         return this.selectedValues.timeStep.value;
     },
 
+    /* Function to convert the month and date selections
+     * to correspond to days of the year; 1 -365 */
     dayOfYear: function (month, date) {
         const daysBeforeMonth = {
             'January': 0,
             'February': 31,
-            'March': 59, //31 + 28
-            'April': 90, //31 + 28 + 31,
-            'May': 120, //31 + 28 + 31 + 30,
-            'June': 151, //31 + 28 + 31 + 30 + 31,
-            'July': 181, //31 + 28 + 31 + 30 + 31 + 30,
-            'August': 212, //31 + 28 + 31 + 30 + 31 + 30 + 31,
-            'September': 243, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31,
-            'October': 273, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30,
-            'November': 304, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31,
-            'December': 334, //31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30
+            'March': 59,
+            'April': 90,
+            'May': 120,
+            'June': 151,
+            'July': 181,
+            'August': 212,
+            'September': 243,
+            'October': 273,
+            'November': 304,
+            'December': 334,
         };
 
         let myDate = Number(date);
 
         // Check if the month and date are valid
-        if (!daysBeforeMonth.hasOwnProperty(month) || myDate < 1 || myDate > 31) {
+        if (!daysBeforeMonth.hasOwnProperty(month) || myDate < 1
+                                                   || myDate > 31) {
             throw new Error('Invalid month or date');
         }
 
@@ -128,6 +144,8 @@ const model = {
         return daysBeforeMonth[month] + myDate;
     },
 
+    /* Function that returns average temperature based
+     * of the day of the year */
     temperatureForDay: function (dayOfYear) {
         if (dayOfYear >= 1 && dayOfYear <= 31) { // January
             return (4 - 3) / 2;
@@ -158,29 +176,56 @@ const model = {
         }
     },
 
-    /*********** Calculations ***********/
+    /************************ Calculations ************************/
 
-    /* Main formula */
-    /* Formula for calculating */
-    calculateEnergyCollected: function(G, Tambient, Tfluid) {
-        let deltaT = Tambient - Tfluid;
+    /* Function for calculating the solar energy collected
+     * on a solar collector per unit collector area per unit time
+     *
+     * Inputs: G, Global incident solar radiation on the collector (W/m^2)
+     *         TAmbient, Temperature outside the collector (°C)
+     *         TFluid, Temperature of the water inside the collector (°C)
+     * Output: QColl, the energy collected per unit collector area
+     *         per unit time (J/m^2s)
+     *
+     * This is the "main" formula to calculate how much solar
+     * energy can be used to heat water - it accounts for some
+     * heat loss */
+    calculateEnergyCollected: function(G, TAmbient, TFluid) {
+        let deltaT = TAmbient - TFluid;
 
         let term1 = this.F_R_tau_alpha * G;
         let term2 = this.F_R_times_U_L * deltaT;
-        let Qcoll = Number(term1 - term2);
+        let QColl = Number(term1 - term2);
 
-        console.log("Qcoll:", Qcoll)
-        return Qcoll;
+        console.log("QColl:", QColl)
+        return QColl;
     },
 
-    computeNewTemperature: function (E, Told, volume){
-        let Tnew = Told + (E / (volume * this.specificHeatOfWater * this.densityOfWater));
-        console.log("T new:", Tnew);
-        return Number(Tnew);
+    /* Function for computing the change in temperature of water
+     * given the inputs of energy, starting / old temperature, and
+     * volume of water being heated
+     *
+     * Inputs: E, energy required to heat water (J)
+     *         TOld, Starting temperature of the water in the collector (°C)
+     *         Volume, Total volume of the water being heated (m^3)
+     * Output: TNew, New temperature of the water in the collector (°C)
+     *
+     * This is the other "main" formula which is used to calculate
+     * how much the water's temperature increases in order to create
+     * the simulation */
+    computeNewTemperature: function (E, TOld, Volume){
+        let TNew = TOld + (E /
+                  (Volume * this.specificHeatOfWater * this.densityOfWater));
+        console.log("T new:", TNew);
+        return Number(TNew);
     },
 
-    /* Supporting formulae / methods */
+    /************************ Supporting functions *******************/
 
+    /* Function to convert angle in degrees to radians
+     *
+     * Input: angle in degrees (number)
+     * Output: angle in radians (number) */
     degreesToRadians: function(degrees) {
         if (typeof degrees !== 'number') {
             throw new Error('Cannot convert string to radians');
@@ -190,9 +235,13 @@ const model = {
             throw new Error('Cannot divide by zero');
         }
         return Number(degrees * (Math.PI / 180.0));
-        //return Number(parseFloat(String(degrees * (Math.PI / 180))).toFixed(6));
     },
 
+    /* Function to get the cosine of an angle when the angle's
+     * sine is given
+     *
+     * Input: sine value of angle (number)
+     * Output: cosine value of angle (number) */
     calculateCosineFromSine: function(sineValue){
         try {
             if (typeof sineValue !== 'number') {
@@ -203,12 +252,19 @@ const model = {
                 throw new Error('Input value must be between -1 and 1');
             }
             return Number(Math.sqrt(1.0 - Math.pow(sineValue, 2)));
-            //return Number(parseFloat(Math.sqrt(1 - Math.pow(sineValue, 2)).toString()).toFixed(6));
         } catch (error) {
             throw error;
         }
     },
 
+    /* Function to calculate the clearness index (KT) of a given day
+     * in the year - it generally ranges from
+     * 0.3 (low clearness, overcast skies) to 0.8 (high clearness, sunny sky)
+     * It is an important factor when measuring how much solar radiation
+     * is incident on the solar collector
+     *
+     * Input: n, day of the year (number between 1 and 365)
+     * Output: KT, clearness index (floating point number between 0.3 and 0.8) */
     calculateClearnessIndex: function(dayOfYear) {
         try {
             if (typeof dayOfYear !== 'number') {
@@ -245,8 +301,14 @@ const model = {
         }
     },
 
+    /* Function to calculate the daily extraterrestrial radiation on
+     * a horizontal surface. Extraterrestrial radiation is the solar
+     * radiation outside the earth’s atmosphere.
+     *
+     * Input: n, day of the year (number between 1 and 365)
+     * Output: H0, daily extraterrestrial radiation on
+     *             a horizontal surface (number) */
     calculateExtraterrestrialRadiation: function(dayOfYear) {
-        const H0Avg = 1361; // Average solar constant in W/m2
         try {
             if (typeof dayOfYear !== 'number') {
                 throw new Error('Input must be a number');
@@ -262,33 +324,49 @@ const model = {
 
             // returning value after converting expression inside cosine
             // function to be in radians
-            return Number(H0Avg * (1.0 + 0.034 * Math.cos((2.0 * Math.PI * dayOfYear) / 365.0)));
-            //return Number(parseFloat(String(H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * dayOfYear) / 365)))).toFixed(6));
+            return Number(this.averageSolarConstant *
+                (1.0 + 0.034 *
+                Math.cos((2.0 * Math.PI * dayOfYear) / 365.0)));
         } catch (error) {
             throw error;
         }
     },
 
-    calculateRadiationAtSurface: function(H0, KT) {
+    /* Function to calculate the monthly average daily solar radiation on
+     * a horizontal surface.
+     *
+     * Input:  H0, daily extraterrestrial radiation on a horizontal surface
+     *         (number)
+     *         KT, clearness index of a given day in the year (number)
+     * Output: H, monthly average daily solar radiation on a
+     *            horizontal surface (number) */
+    calculateRadiationAtSurface: function(extraterrestrialRadiation, clearnessIndex) {
         try {
-            if (typeof H0 !== 'number' || typeof KT !== 'number') {
+            if (typeof extraterrestrialRadiation !== 'number' || typeof clearnessIndex !== 'number') {
                 throw new Error('Input must be a number');
             }
 
-            if (KT < 0.3 || KT > 0.8) {
+            if (clearnessIndex < 0.3 || clearnessIndex > 0.8) {
                 throw new Error('Input value must be a number between 0.3 and 0.8');
             }
 
-            if (H0 === Infinity || KT === Infinity) {
+            if (extraterrestrialRadiation === Infinity || clearnessIndex === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            return Number(H0 * KT);
-            //return Number(parseFloat(String(H0 * KT)).toFixed(6));
+
+            return Number(extraterrestrialRadiation * clearnessIndex);
         } catch (error) {
             throw error;
         }
     },
 
+    /* Formula to calculate solar declination
+     * The declination is the angular position of the sun at solar noon,
+     * with respect to the plane of the equator. Its value in degrees
+     * is given by Cooper’s equation
+     *
+     * Input: n, day of the year (number between 1 and 365)
+     * Output: delta, angular position of the sun (number in degrees) */
     calculateSolarDeclinationInDegrees: function(dayOfYear) {
         try {
             if (typeof dayOfYear !== 'number') {
@@ -307,12 +385,18 @@ const model = {
             let mixedFraction = numerator / denominator;
             let angle = 2.0 * Math.PI * mixedFraction;
             return Number(23.45 * Math.sin(angle));
-            //return Number(parseFloat(String(23.45 * Math.sin(angle))).toFixed(6));
         } catch (error) {
             throw error;
         }
     },
 
+    /* Formula to calculate solar declination
+     * The declination is the angular position of the sun at solar noon,
+     * with respect to the plane of the equator. Its value in degrees
+     * is given by Cooper’s equation
+     *
+     * Input: n, day of the year (number between 1 and 365)
+     * Output: delta, angular position of the sun (number in radians) */
     calculateSolarDeclination: function(dayOfYear) {
         try {
             if (typeof dayOfYear !== 'number') {
@@ -330,13 +414,21 @@ const model = {
             const denominator = 365.0;
             let mixedFraction = numerator / denominator;
             let angle = 2.0 * Math.PI * mixedFraction;
-            return Number(this.degreesToRadians(23.45 * Math.sin(angle))); // angle in degrees converted to radians
-            //return Number(parseFloat(String(this.degreesToRadians(23.45 * Math.sin(angle)))).toFixed(6));
+            // returning angle in degrees converted to radians
+            return Number(this.degreesToRadians(23.45 * Math.sin(angle)));
         } catch (error) {
             throw error;
         }
     },
 
+    /* Function to calculate the solar hour angle. The solar hour angle is
+     * the angular displacement of the sun east or west of the local
+     * meridian; morning negative, afternoon positive. It is an important
+     * factor when measuring how much solar radiation is incident on the
+     * solar collector
+     *
+     * Input: t, time of day (number between 1 and 24)
+     * Output: omega, the solar hour angle in radians (number) */
     calculateOmegaFromTimeOfDay(timeOfDay) {
         /* We have made some assumptions here (*)
          * refer to the readme for more details */
@@ -351,18 +443,35 @@ const model = {
                 throw new Error('Input value cannot be infinity');
             }
             return Number(this.degreesToRadians(15.0 * (timeOfDay - 12.0)));
-            //return Number(parseFloat(String(this.degreesToRadians(15 * (timeOfDay - 12)))).toFixed(6));
         } catch (error) {
             throw error;
         }
     },
 
+    /**/
+    /* Function to calculate the sunset hour angle, omegaS. It is the solar
+     * hour angle corresponding to the time when the sun sets. It useful
+     * to know what the sunset hour angle is given a location's latitude
+     * and solar declination. It can serve as a check to ensure that the
+     * calculated solar hour angle (omega) is within a reasonable range
+     *
+     * Inputs: phi, the latitude of the site (number in radians)
+     *         delta, angular position of the sun (number in radians)
+     * Output: omegaS, sunset hour angle (number) */
     calculateOmegaS(latitudeInRadians, solarDeclinationInRadians) {
         let cosOmegaS = -Math.tan(latitudeInRadians) * Math.tan(solarDeclinationInRadians);
         return Number(Math.acos(cosOmegaS));
     },
 
-    calculateRb: function(dayOfYear, collectorTilt, timeOfDay) {
+    /* Function to calculate the ratio of direct (beam) radiation on a tilted
+     * surface to that on a horizontal surface, which is called
+     * the geometric factor (Rb)
+     *
+     * Inputs: n, day of the year (number between 1 and 365)
+     *         beta, the slope/tilt of the solar collector (number)
+     *         t, time of day (number between 1 and 24)
+     * Output: Rb, the geometric factor */
+    calculateGeometricFactor: function(dayOfYear, collectorTilt, timeOfDay) {
         try {
             if (typeof dayOfYear !== 'number' || typeof collectorTilt !== 'number' || typeof timeOfDay !== 'number') {
                 throw new Error('Input must be a number');
@@ -379,22 +488,25 @@ const model = {
             if (!Number.isFinite(dayOfYear) || !Number.isFinite(collectorTilt) || !Number.isFinite(timeOfDay)) {
                 throw new Error('Input value cannot be infinity');
             }
-            const latInRadians = 0.686280915;
 
-            // Calculate solar declination (δ) -- in radians
+            // Calculate solar declination (delta) -- in radians
             let solarDeclination = Number(this.calculateSolarDeclination(dayOfYear));
+            // Get its sine and cosine
+            let cosSolarDeclination = Math.cos(solarDeclination);
+            let sinSolarDeclination = Math.sin(solarDeclination);
 
-            // Make global
+            // Calculate the solar hour angle -- in radians
             let omegaInRadians = Number(this.calculateOmegaFromTimeOfDay(timeOfDay))
+
             // Check that it makes sense, given the sunset hour angle (ωs)
             let omegaS = Number(this.calculateOmegaS(latInRadians, solarDeclination))
 
-            // Sun below the horizon
+            // If the sun is below the horizon...
             if (Math.abs(Number(omegaInRadians)) > omegaS) {
-                return 0;  // handled by returning 0
+                return 0;  // ... we return 0
             }
 
-            // Get cosine of omega
+            // Get the cosine of omega
             let cosOmega = Math.cos(Number(omegaInRadians));
 
             let phi = Number(this.degreesToRadians(collectorTilt));
@@ -409,9 +521,7 @@ const model = {
             let cosPhiMinusBeta = Math.cos(phiMinusBeta);
             let sinPhiMinusBeta = Math.sin(phiMinusBeta);
 
-            // Get its sine and cosine
-            let cosSolarDeclination = Math.cos(solarDeclination);
-            let sinSolarDeclination = Math.sin(solarDeclination);
+            /***** Finally, put it all together to get the ratio *****/
 
             // Calculate numerator
             let numerator = cosSolarDeclination * cosOmega * cosPhiMinusBeta + sinSolarDeclination * sinPhiMinusBeta;
@@ -425,41 +535,54 @@ const model = {
                 throw new Error('Denominator too close to zero');
             }
 
-            // Calculate and return the quotient, Rb
+            // Calculate and return the quotient, the geometricFactor
             return Number(numerator / denominator);
-            //return Number(parseFloat(String(numerator / denominator)).toFixed(6));
         } catch (error) {
             throw error;
         }
     },
 
+    /* Function to calculate G, the global incident solar radiation
+     * on the collector.
+     *
+     * Inputs: n, day of the year (number between 1 and 365)
+     *         beta, the slope/tilt of the solar collector (number)
+     *         t, time of day (number between 1 and 24)
+     * Output: G, the global incident solar radiation on the collector */
     calculateTotalRadiationOnCollector: function(dayOfYear, collectorTilt, timeOfDay) {
-        // Calculate extraterrestrial radiation (H0) and KT
+        // Calculate the extraterrestrial radiation (H0) and
+        // the clearness index (KT)
         let H0 = Number(this.calculateExtraterrestrialRadiation(dayOfYear));
         let KT = this.calculateClearnessIndex(dayOfYear);
 
-        // Calculate radiation at the Earth's surface (H)
+        // Calculate the radiation on the Earth's surface (H) using
+        // the two values above
         let H = Number(this.calculateRadiationAtSurface(H0, KT));
 
-        // Calculate Rb
-        let Rb = Number(this.calculateRb(dayOfYear, collectorTilt, timeOfDay));
+        // Calculate the geometric factor, Rb
+        let Rb = Number(this.calculateGeometricFactor(dayOfYear, collectorTilt, timeOfDay));
 
-        // Calculate direct/beam radiation on tilted surface (IbT)
+        // Calculate the direct/beam radiation on tilted surface (IbT)
+        // using the geometric factor and radiation on the Earth's surface
         let directRadiationTilted = Number(H * Rb);
 
-        // Calculate diffuse radiation on tilted surface (IdT)
+        // Calculate the diffuse radiation on a tilted surface (IdT)
         let diffuseRadiationTilted = H * ((1.0 + Math.cos(Number(this.degreesToRadians(collectorTilt)))) / 2.0);
 
-        // Calculate reflected radiation on tilted surface (IrT)
+        // Calculate the reflected radiation on tilted surface (IrT)
         let reflectedRadiationTilted = 0.2 * diffuseRadiationTilted;
 
-        // Calculate total radiation on collector (G)
+        // Calculate the total radiation on the collector (G)
+        // by adding the direct/beam radiation (IbT),
+        // the diffuse radiation on a tilted surface (IdT),
+        // and the reflected radiation on tilted surface (IrT)
         return Number(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted);
-        //return Number(parseFloat(String(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted)).toFixed(6));
     }
 };
 
-//module.exports = model;
+/* If condition that allows using Node.js for testing and native
+ * JavaScript for functioning in a web browser */
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = model;
 }

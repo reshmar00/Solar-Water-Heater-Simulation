@@ -309,39 +309,39 @@ describe('calculateSolarDeclination', () => {
 describe('calculateRb', () => {
     it('should calculate Rb correctly for valid input', () => {
         // Test cases for specific days of the year and tilt angles
-        expect(model.calculateRb(1, 25, 9)).toBeCloseTo(1.2573, 3);
-        expect(model.calculateRb(1, 30, 9)).toBeCloseTo(1.5723, 3);
-        expect(model.calculateRb(19, 26, 10)).toBeCloseTo(1.2316, 3);
-        expect(model.calculateRb(31, 27, 12)).toBeCloseTo(1.2188, 3);
-        expect(model.calculateRb(32, 28, 12)).toBeCloseTo(1.2501, 3);
-        expect(model.calculateRb(90, 30, 12)).toBeCloseTo(1.1107, 3);
-        expect(model.calculateRb(100, 12, 13)).toBeCloseTo(0.945, 3);
-        expect(model.calculateRb(111, 3.67, 14)).toBeCloseTo(0.938, 3);
-        expect(model.calculateRb(125, 10, 11)).toBeCloseTo(0.9822, 3);
-        expect(model.calculateRb(134, 15.5, 10)).toBeCloseTo(1.0038, 3);
-        expect(model.calculateRb(180, 45, 9)).toBeCloseTo(0.8226, 3);
-        expect(model.calculateRb(253, 34, 16)).toBeCloseTo(1.1073, 3);
-        expect(model.calculateRb(363, 18.3456, 15)).toBeCloseTo(0.9450, 3);
+        expect(model.calculateGeometricFactor(1, 25, 9)).toBeCloseTo(1.2573, 3);
+        expect(model.calculateGeometricFactor(1, 30, 9)).toBeCloseTo(1.5723, 3);
+        expect(model.calculateGeometricFactor(19, 26, 10)).toBeCloseTo(1.2316, 3);
+        expect(model.calculateGeometricFactor(31, 27, 12)).toBeCloseTo(1.2188, 3);
+        expect(model.calculateGeometricFactor(32, 28, 12)).toBeCloseTo(1.2501, 3);
+        expect(model.calculateGeometricFactor(90, 30, 12)).toBeCloseTo(1.1107, 3);
+        expect(model.calculateGeometricFactor(100, 12, 13)).toBeCloseTo(0.945, 3);
+        expect(model.calculateGeometricFactor(111, 3.67, 14)).toBeCloseTo(0.938, 3);
+        expect(model.calculateGeometricFactor(125, 10, 11)).toBeCloseTo(0.9822, 3);
+        expect(model.calculateGeometricFactor(134, 15.5, 10)).toBeCloseTo(1.0038, 3);
+        expect(model.calculateGeometricFactor(180, 45, 9)).toBeCloseTo(0.8226, 3);
+        expect(model.calculateGeometricFactor(253, 34, 16)).toBeCloseTo(1.1073, 3);
+        expect(model.calculateGeometricFactor(363, 18.3456, 15)).toBeCloseTo(0.9450, 3);
 
         // Post sunset and pre sunrise, all values of Rb should be 0
-        expect(model.calculateRb(158, 47.89, 23)).toBeCloseTo(0.000, 3);
-        expect(model.calculateRb(173, 90, 22)).toBeCloseTo(0.000, 3);
-        expect(model.calculateRb(181, 55.567, 21)).toBeCloseTo(0.000, 3);
-        expect(model.calculateRb(272, 60.9876, 6)).toBeCloseTo(0.000, 3);
+        expect(model.calculateGeometricFactor(158, 47.89, 23)).toBeCloseTo(0.000, 3);
+        expect(model.calculateGeometricFactor(173, 90, 22)).toBeCloseTo(0.000, 3);
+        expect(model.calculateGeometricFactor(181, 55.567, 21)).toBeCloseTo(0.000, 3);
+        expect(model.calculateGeometricFactor(272, 60.9876, 6)).toBeCloseTo(0.000, 3);
     });
 
     it('should throw an error for non-number input', () => {
-        expect(() => model.calculateRb('150', 30)).toThrow();
-        expect(() => model.calculateRb(180, '45')).toThrow();
+        expect(() => model.calculateGeometricFactor('150', 30)).toThrow();
+        expect(() => model.calculateGeometricFactor(180, '45')).toThrow();
     });
 
     it('should throw an error for out-of-range input', () => {
-        expect(() => model.calculateRb(0, 30)).toThrowError('Input must be a number');
-        expect(() => model.calculateRb(400, 45)).toThrowError('Input must be a number');
+        expect(() => model.calculateGeometricFactor(0, 30)).toThrowError('Input must be a number');
+        expect(() => model.calculateGeometricFactor(400, 45)).toThrowError('Input must be a number');
     });
 
     it('should throw an error for Infinity input', () => {
-        expect(() => model.calculateRb(180, Infinity)).toThrowError();
+        expect(() => model.calculateGeometricFactor(180, Infinity)).toThrowError();
     });
 });
 

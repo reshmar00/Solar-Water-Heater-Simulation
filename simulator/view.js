@@ -1,3 +1,11 @@
+/* MVC Architecture */
+/**
+ * View - Represents the user interface and display of the application.
+ * Receives user inputs and displays data.
+ * Independent of the logic (physics and math), only focused on presentation.
+ */
+
+
 const view = {
 
     /* Logic for selecting the month, date, and time*/
