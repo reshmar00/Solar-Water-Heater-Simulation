@@ -17,9 +17,6 @@ const controller = {
 
         /* initialize empty graph */
         view.initEmptyGraph();
-
-        /* show the drawing */
-        view.drawSolarSimulation();
     },
 
     /* Functions for different elements to respond to based on user interaction */
@@ -96,7 +93,7 @@ const controller = {
         //console.log("Time step:", timeStep)
         const collectorTilt = Number(model.selectedValues.collectorTilt.value);
         //console.log("Tilt:", collectorTilt)
-        const LST = Number(model.selectedValues.time.value);
+        const LST = model.timeOfDay(model.selectedValues.time.value);
         //console.log("LST:", LST)
         const n = model.dayOfYear(model.selectedValues.month.value, model.selectedValues.date.value);
         //console.log("n:", n)

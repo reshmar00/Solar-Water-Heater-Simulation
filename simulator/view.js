@@ -10,6 +10,8 @@ const view = {
 
     /* Logic for selecting the month, date, and time*/
     /* Month selection */
+    /* Populates a drop-down menu with months of th year
+     * Depending on this selection, the user can select a date */
     populateMonthDropdown: function() {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const monthDropdown = document.getElementById('month');
@@ -23,7 +25,7 @@ const view = {
         });
     },
 
-    /* Date selection - based on month ~ account for 30/31 days + Feb */
+    /* Date selection - based on the month ~ accounts for 30/31 days + Feb */
     dateListElement: document.getElementById('date'),
     updateDateOptions: function(month) {
         // Clear current date options
@@ -45,8 +47,9 @@ const view = {
     },
 
     /* Time selection */
+    /* Populates a drop-down menu with hourly options in a 24-hour */
     populateTimeDropdown: function() {
-        const times = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        const times = ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
         const timeDropdown = document.getElementById('time');
 
         timeDropdown.innerHTML = '<option>---Choose time---</option>';
@@ -113,57 +116,6 @@ const view = {
             return parseFloat(value).toFixed(6);
         }
         return value;
-    },
-
-    /************************  2D Drawing **************************/
-
-    /* Initializing a two.js instance to be used throughout */
-
-    initializeTwoJS: function() {
-        const element = document.getElementById('twojs-container');
-        const params = {
-            width: element.clientWidth,
-            height: element.clientHeight
-        };
-        this.two = new Two(params).appendTo(element);
-    },
-
-    drawSolarSimulation: function() {
-        this.initializeTwoJS();
-        this.drawSun();
-        this.drawSolarCollector();
-        this.drawPipesAndPump();
-        this.drawStorageTank();
-    },
-
-    drawSun: function() {
-        // Use this.two for all your drawing related to the sun
-    },
-
-    drawSolarCollector: function() {
-        const width = 120;
-        const height = 200;
-
-        // Move the rectangle to the top-left corner
-        const rectX = (width / 2) + 200;
-        const rectY = (height / 2) + 200;
-
-        // Draw the rectangle with rounded corners
-        const rect = this.two.makeRoundedRectangle(rectX, rectY, width, height, 10);
-        rect.linewidth = 2;
-        rect.stroke = "white";
-        rect.fill = "transparent";
-
-        // Update the Two.js scene
-        this.two.update();
-    },
-
-    drawPipesAndPump: function() {
-        // Use this.two for all your drawing related to the pipes and pump
-    },
-
-    drawStorageTank: function() {
-        // Use this.two for all your drawing related to the storage tank
     },
 
 

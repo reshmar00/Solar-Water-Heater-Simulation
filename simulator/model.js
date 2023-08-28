@@ -144,6 +144,60 @@ const model = {
         return daysBeforeMonth[month] + myDate;
     },
 
+    /* Function to convert the time selection from a string
+     * to a number */
+    timeOfDay: function (time) {
+        if (time === '01:00'){
+            return Number(1);
+        } else if(time === '02:00'){
+            return Number(2);
+        } else if(time === '03:00'){
+            return Number(3);
+        } else if(time === '04:00'){
+            return Number(4);
+        } else if(time === '05:00'){
+            return Number(5);
+        } else if(time === '06:00'){
+            return Number(6);
+        } else if(time === '07:00'){
+            return Number(7);
+        } else if(time === '08:00'){
+            return Number(8);
+        } else if(time === '09:00'){
+            return Number(9);
+        } else if(time === '10:00') {
+            return Number(10);
+        } else if(time === '11:00'){
+            return Number(11);
+        } else if(time === '12:00'){
+            return Number(12);
+        } else if(time === '13:00'){
+            return Number(13);
+        } else if(time === '14:00'){
+            return Number(14);
+        } else if(time === '15:00'){
+            return Number(15);
+        } else if(time === '16:00'){
+            return Number(16);
+        } else if(time === '17:00'){
+            return Number(17);
+        } else if(time === '18:00'){
+            return Number(18);
+        } else if(time === '19:00'){
+            return Number(19);
+        } else if(time === '20:00'){
+            return Number(20);
+        } else if(time === '21:00'){
+            return Number(21);
+        } else if(time === '22:00'){
+            return Number(22);
+        } else if(time === '23:00'){
+            return Number(23);
+        } else if(time === '24:00'){
+            return Number(24);
+        }
+    },
+
     /* Function that returns average temperature based
      * of the day of the year */
     temperatureForDay: function (dayOfYear) {
@@ -499,7 +553,7 @@ const model = {
             let omegaInRadians = Number(this.calculateOmegaFromTimeOfDay(timeOfDay))
 
             // Check that it makes sense, given the sunset hour angle (ωs)
-            let omegaS = Number(this.calculateOmegaS(latInRadians, solarDeclination))
+            let omegaS = Number(this.calculateOmegaS(this.latInRadians, solarDeclination))
 
             // If the sun is below the horizon...
             if (Math.abs(Number(omegaInRadians)) > omegaS) {
@@ -516,7 +570,7 @@ const model = {
 
             // Calculate artificial latitude calculated by subtracting
             // the collectorTilt from the latitude
-            let phiMinusBeta = latInRadians - phi;
+            let phiMinusBeta = this.latInRadians - phi;
             // Get its sine and cosine
             let cosPhiMinusBeta = Math.cos(phiMinusBeta);
             let sinPhiMinusBeta = Math.sin(phiMinusBeta);
