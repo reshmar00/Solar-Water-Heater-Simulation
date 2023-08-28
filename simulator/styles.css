@@ -26,7 +26,7 @@ h2{
     background: url('/bg_solar-2.png') no-repeat center center fixed;
     background-size: 140% 100%;
 }
-.controls, .graph, .two-d-rendering {
+.controls, .graph{
     background-color: transparent;
 }
 
@@ -46,24 +46,6 @@ h2{
     box-sizing: border-box;
     position: relative;
     width: 55%;
-}
-
-#twojs-container {
-    border: 3px solid black;
-    width: 100%;
-    height: 100%;
-}
-
-.two-d-rendering {
-    /*background-color: beige;*/
-    width: 40%;
-    height: 100%;
-    /*overflow: hidden;*/
-    position: absolute;
-    box-sizing: border-box;
-    left: 100%;
-    color: white;
-    z-index: 1000;
 }
 
 .options-container {
@@ -181,27 +163,4 @@ select {
     flex: 1;  /* Allow columns to grow and take up available space */
     padding: 0 10px;  /* Add some horizontal padding for separation */
     box-sizing: border-box;  /* Include padding in width calculation */
-}
-
-/* Transitions for moving scenes */
-
-.controls-slide-out {
-    left: -40%;
-    width: 0;
-    opacity: 0;
-    transition: left 0.5s ease-in-out, width 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-
-.graph-slide-in {
-    width: 60%;
-    left: 0;
-}
-
-.two-d-rendering-slide-in {
-    width: 40%;
-    left: 60%;
-}
-
-.transition {
-    transition: all 0.5s ease; /* Adjust the timing as needed */
 }
