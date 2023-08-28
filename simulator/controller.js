@@ -84,50 +84,92 @@ const controller = {
         console.log("Displayed selected values");
 
         // Extracting values from model.selectedValues
-        const initialTemperature = Number(model.selectedValues.temperature.value);
-        console.log("Initial temperature:", initialTemperature)
+        const Told = Number(model.selectedValues.temperature.value);
+        //console.log("Initial temperature:", Told)
         const timeStep = Number(model.selectedValues.timeStep.value);
-        console.log("Time step:", timeStep)
+        //console.log("Time step:", timeStep)
         const tilt = Number(model.selectedValues.collectorTilt.value);
-        console.log("Tilt:", tilt)
+        //console.log("Tilt:", tilt)
         const LST = Number(model.selectedValues.time.value);
-        console.log("LST:", LST)
+        //console.log("LST:", LST)
         const n = model.dayOfYear(model.selectedValues.month.value, model.selectedValues.date.value);
-        console.log("n:", n)
+        //console.log("n:", n)
 
         // Compute volume: storageTankVolume + π * r^2 * h of pipe + collector volume
         const pipeRadius = Number(0.05); // Example: 5cm radius for a pipe
         const pipeVolume = Number(Number(Math.PI) * Number(Math.pow(pipeRadius, 2)) * Number(model.selectedValues.pipeLength.value));
-        console.log("Pipe volume:", pipeVolume)
+        //console.log("Pipe volume:", pipeVolume)
         const collectorVolume = Number(Number(model.selectedValues.collectorArea.value) * Number(model.selectedValues.collectorDepth.value));
-        console.log("Collector volume:", collectorVolume)
+        //console.log("Collector volume:", collectorVolume)
 
-        console.log("Storage tank volume:", Number(model.selectedValues.storageTankVolume.value))
+        //console.log("Storage tank volume:", Number(model.selectedValues.storageTankVolume.value))
 
         const volume = Number(Number(model.selectedValues.storageTankVolume.value)  + Number(pipeVolume) + Number(collectorVolume));
-        console.log("Collector volume + Pipe Volume + Storage tank volume :", volume)
+        //console.log("Collector volume + Pipe Volume + Storage tank volume :", volume)
         // Start plotting the graph
-        this.startGraphUpdate(n, initialTemperature, volume, timeStep, tilt, LST);
+        this.startGraphUpdate(n, Told, volume, timeStep, tilt, LST);
+        //this.startGraphUpdateDebug();
     },
 
-    startGraphUpdate: function(n, initialTemperature, volume, timeStep, tilt, LST) {
+    // For debugging
+    startGraphUpdateDebug: function() {
+        let currentTemperature = 25; // Starting temperature
+        let elapsedSeconds = 0; // Start from 0 seconds
+
+        let intervalId = setInterval(() => {
+            // Increase the temperature every 1 iteration (every 200ms)
+            let updateFrequency = 1;
+
+            // Increase elapsed time by 0.2 seconds every iteration
+            elapsedSeconds += 0.2;
+
+            model.graphData.xArray.push(elapsedSeconds.toFixed(1)); // Pushing elapsed time to xArray and rounding to 1 decimal
+
+            if (model.graphData.xArray.length % updateFrequency === 0){
+                currentTemperature += 1;
+            }
+
+// Push the currentTemperature to yArray. Now it will only increase and won't dip back down.
+
+            model.graphData.yArray.push(currentTemperature);
+
+            view.displayGraph(model.graphData.xArray, model.graphData.yArray);
+
+// If temperature reaches 85°C, clear the interval
+
+            if (currentTemperature >= 85) {
+                clearInterval(intervalId);
+            }
+            }, 1);
+    },
+
+    startGraphUpdate: function(n, Told, volume, timeStep, tilt, LST) {
         const targetTemperature = 85;
         let currentIndex = 0;
         let initialTime = 0;  // Setting the initialTime to 0
 
-        let Tnew = initialTemperature;  // Initialize Tnew outside the interval
-
         // Ensure graphData arrays start with initial values
         model.graphData.xArray = [initialTime];
-        model.graphData.yArray = [initialTemperature];
+        model.graphData.yArray = [Told];
 
+        // First iteration, Tambient - Told
+        let Tambient = Number(model.temperatureForDay(n));
+        const firstIteration = model.calculateTemperatureForNextStep(n, tilt, LST, Told, Tambient, volume);
+
+        let Tnew = firstIteration.newTemperature;
+
+        // Subsequent iterations, Tnew - Told
         let intervalId = setInterval(() => {
+            console.log("Interval running, current iteration:", currentIndex);
+            //
+
             // Get the new simulated data from the model
-            const simulatedData = model.calculateTemperatureForNextStep(n, tilt, LST, initialTemperature, Tnew, volume, timeStep);
+            let simulatedData = model.calculateTemperatureForNextStep(n, tilt, LST, Told, Tnew, volume);
 
             // Update initialTemperature for the next iteration
-            initialTemperature = simulatedData.newTemperature;
-            Tnew = simulatedData.newTime;
+            Tnew = simulatedData.newTemperature;
+            console.log("New temp:", simulatedData.newTemperature);
+            Told = Tnew;
 
             // Add data to the model's arrays
             model.graphData.xArray.push(simulatedData.newTime);
@@ -137,12 +179,12 @@ const controller = {
             view.displayGraph(model.graphData.xArray, model.graphData.yArray);
 
             // Check if temperature reaches 85°C and stop if it does
-            if (model.graphData.yArray[currentIndex] >= targetTemperature) {
+            if (simulatedData.newTemperature >= targetTemperature) {
                 clearInterval(intervalId);
             }
 
             currentIndex++;
-        }, 100);
+        }, 400);
     },
 
     /* Updating the month, based on selection from drop-down menu */

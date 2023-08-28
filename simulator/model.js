@@ -118,6 +118,36 @@ const model = {
         return daysBeforeMonth[month] + myDate;
     },
 
+    temperatureForDay: function (n) {
+        if (n >= 1 && n <= 31) { // January
+            return (4 - 3) / 2;
+        } else if (n > 31 && n <= 59) { // February
+            return (7 - 1) / 2;
+        } else if (n > 59 && n <= 90) { // March
+            return (13 + 3) / 2;
+        } else if (n > 90 && n <= 120) { // April
+            return (17 + 7) / 2;
+        } else if (n > 120 && n <= 151) { // May
+            return (22 + 11) / 2;
+        } else if (n > 151 && n <= 181) { // June
+            return (28 + 16) / 2;
+        } else if (n > 181 && n <= 212) { // July
+            return (32 + 20) / 2;
+        } else if (n > 212 && n <= 243) { // August
+            return (32 + 20) / 2;
+        } else if (n > 243 && n <= 273) { // September
+            return (26 + 14) / 2;
+        } else if (n > 273 && n <= 304) { // October
+            return (19 + 8) / 2;
+        } else if (n > 304 && n <= 334) { // November
+            return (10 + 2) / 2;
+        } else if (n > 334 && n <= 365) { // December
+            return (4 - 3) / 2;
+        } else {
+            return 0; // Invalid day number
+        }
+    },
+
     /*********** Calculations ***********/
 
     /* Main formula */
@@ -125,11 +155,19 @@ const model = {
         const FR_tau_alpha = 0.58;
         const FRUL = 0.7;
 
-        const G = Number(this.calculateTotalRadiationOnCollector(n, tilt, LST));
-        const deltaT = Tnew - Told;
+        let G = Number(this.calculateTotalRadiationOnCollector(n, tilt, LST));
+        let deltaT = Math.abs(Tnew - Told);
 
-        //return FR_tau_alpha * G - FRUL * deltaT;
-        return parseFloat(String(FR_tau_alpha * G - FRUL * deltaT)).toFixed(3);
+        let term1 = FR_tau_alpha * G;
+        let term2 = FRUL * deltaT;
+
+        console.log("Qcoll term 1:", term1, "Qcoll term 2: ", term2)
+        return Number(term1 - term2);
+        //let Qcoll = parseFloat(FR_tau_alpha * G - FRUL * deltaT).toFixed(6);
+        //let QcollFloat = parseFloat(Qcoll)
+        // console.log("G:", G, "deltaT:", deltaT, "Qcoll:", FR_tau_alpha * G - FRUL * deltaT);
+
+        //return QcollFloat;
     },
 
     /* Supporting formulae / methods */
@@ -142,8 +180,8 @@ const model = {
         if (degrees === Infinity) {
             throw new Error('Cannot divide by zero');
         }
-        //return degrees * (Math.PI / 180);
-        return parseFloat(String(degrees * (Math.PI / 180))).toFixed(3);
+        return Number(degrees * (Math.PI / 180.0));
+        //return Number(parseFloat(String(degrees * (Math.PI / 180))).toFixed(6));
     },
 
     calculateCosineFromSine: function(sineValue){
@@ -155,8 +193,8 @@ const model = {
             if (sineValue > 1 || sineValue < -1) {
                 throw new Error('Input value must be between -1 and 1');
             }
-            //return Math.sqrt(1 - Math.pow(sineValue, 2));
-            parseFloat(Math.sqrt(1 - Math.pow(sineValue, 2)).toString()).toFixed(3);
+            return Number(Math.sqrt(1.0 - Math.pow(sineValue, 2)));
+            //return Number(parseFloat(Math.sqrt(1 - Math.pow(sineValue, 2)).toString()).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -215,8 +253,8 @@ const model = {
 
             // returning value after converting expression inside cosine
             // function to be in radians
-            //return H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365));
-            return parseFloat(String(H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365)))).toFixed(3);
+            return Number(H0Avg * (1.0 + 0.034 * Math.cos((2.0 * Math.PI * n) / 365.0)));
+            //return Number(parseFloat(String(H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365)))).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -235,8 +273,8 @@ const model = {
             if (H0 === Infinity || KT === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            //return H0 * KT;
-            return parseFloat(String(H0 * KT)).toFixed(3);
+            return Number(H0 * KT);
+            //return Number(parseFloat(String(H0 * KT)).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -255,12 +293,12 @@ const model = {
             if (n === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            const numerator = 284 + n;
-            const denominator = 365;
-            const mixedFraction = numerator / denominator;
-            const angle = 2 * Math.PI * mixedFraction;
-            //return 23.45 * Math.sin(angle);
-            return parseFloat(String(23.45 * Math.sin(angle))).toFixed(3);
+            let numerator = 284.0 + n;
+            const denominator = 365.0;
+            let mixedFraction = numerator / denominator;
+            let angle = 2.0 * Math.PI * mixedFraction;
+            return Number(23.45 * Math.sin(angle));
+            //return Number(parseFloat(String(23.45 * Math.sin(angle))).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -279,12 +317,12 @@ const model = {
             if (n === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            const numerator = 284 + n;
-            const denominator = 365;
-            const mixedFraction = numerator / denominator;
-            const angle = 2 * Math.PI * mixedFraction;
-            //return this.degreesToRadians(23.45 * Math.sin(angle)); // angle in degrees converted to radians
-            return parseFloat(String(this.degreesToRadians(23.45 * Math.sin(angle)))).toFixed(3);
+            let numerator = 284.0 + n;
+            const denominator = 365.0;
+            let mixedFraction = numerator / denominator;
+            let angle = 2.0 * Math.PI * mixedFraction;
+            return Number(this.degreesToRadians(23.45 * Math.sin(angle))); // angle in degrees converted to radians
+            //return Number(parseFloat(String(this.degreesToRadians(23.45 * Math.sin(angle)))).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -303,17 +341,17 @@ const model = {
             if (LST === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            //return this.degreesToRadians(15 * (LST - 12));
-            return parseFloat(String(this.degreesToRadians(15 * (LST - 12)))).toFixed(3);
+            return Number(this.degreesToRadians(15.0 * (LST - 12.0)));
+            //return Number(parseFloat(String(this.degreesToRadians(15 * (LST - 12)))).toFixed(6));
         } catch (error) {
             throw error;
         }
     },
 
     calculateOmegaS(latitudeInRadians, solarDeclinationInRadians) {
-        const cosOmegaS = -Math.tan(latitudeInRadians) * Math.tan(solarDeclinationInRadians);
-        //return Math.acos(cosOmegaS);
-        return parseFloat(String(Math.acos(cosOmegaS))).toFixed(3);
+        let cosOmegaS = -Math.tan(latitudeInRadians) * Math.tan(solarDeclinationInRadians);
+        return Number(Math.acos(cosOmegaS));
+        //return Number(parseFloat(String(Math.acos(cosOmegaS))).toFixed(6));
     },
 
     calculateRb: function(n, tilt, LST) {
@@ -336,11 +374,11 @@ const model = {
             const latInRadians = 0.686280915;
 
             // Calculate solar declination (δ) -- in radians
-            const solarDeclination = Number(this.calculateSolarDeclination(n));
+            let solarDeclination = Number(this.calculateSolarDeclination(n));
 
-            const omegaInRadians = Number(this.calculateOmegaFromLST(LST))
+            let omegaInRadians = Number(this.calculateOmegaFromLST(LST))
             // Check that it makes sense, given the sunset hour angle (ωs)
-            const omegaS = Number(this.calculateOmegaS(latInRadians, solarDeclination))
+            let omegaS = Number(this.calculateOmegaS(latInRadians, solarDeclination))
 
             // Sun below the horizon
             if (Math.abs(Number(omegaInRadians)) > omegaS) {
@@ -348,29 +386,29 @@ const model = {
             }
 
             // Get cosine of omega
-            const cosOmega = Math.cos(Number(omegaInRadians));
+            let cosOmega = Math.cos(Number(omegaInRadians));
 
-            const phi = Number(this.degreesToRadians(tilt));
+            let phi = Number(this.degreesToRadians(tilt));
             // Get its sine and cosine
-            const cosPhi = Math.cos(phi);
-            const sinPhi = Math.sin(phi);
+            let cosPhi = Math.cos(phi);
+            let sinPhi = Math.sin(phi);
 
             // Calculate artificial latitude calculated by subtracting
             // the tilt from the latitude
-            const phiMinusBeta = latInRadians - phi;
+            let phiMinusBeta = latInRadians - phi;
             // Get its sine and cosine
-            const cosPhiMinusBeta = Math.cos(phiMinusBeta);
-            const sinPhiMinusBeta = Math.sin(phiMinusBeta);
+            let cosPhiMinusBeta = Math.cos(phiMinusBeta);
+            let sinPhiMinusBeta = Math.sin(phiMinusBeta);
 
             // Get its sine and cosine
-            const cosSolarDeclination = Math.cos(solarDeclination);
-            const sinSolarDeclination = Math.sin(solarDeclination);
+            let cosSolarDeclination = Math.cos(solarDeclination);
+            let sinSolarDeclination = Math.sin(solarDeclination);
 
             // Calculate numerator
-            const numerator = cosSolarDeclination * cosOmega * cosPhiMinusBeta + sinSolarDeclination * sinPhiMinusBeta;
+            let numerator = cosSolarDeclination * cosOmega * cosPhiMinusBeta + sinSolarDeclination * sinPhiMinusBeta;
 
             // Calculate denominator
-            const denominator = cosPhi * cosSolarDeclination * cosOmega + sinPhi * sinSolarDeclination;
+            let denominator = cosPhi * cosSolarDeclination * cosOmega + sinPhi * sinSolarDeclination;
 
             // Division by almost-zero check
             const epsilon = 1e-10;
@@ -379,8 +417,8 @@ const model = {
             }
 
             // Calculate and return the quotient, Rb
-            //return numerator / denominator;
-            return parseFloat(String(numerator / denominator)).toFixed(3);
+            return Number(numerator / denominator);
+            //return Number(parseFloat(String(numerator / denominator)).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -388,30 +426,30 @@ const model = {
 
     calculateTotalRadiationOnCollector: function(n, tilt, LST) {
         // Calculate extraterrestrial radiation (H0) and KT
-        const H0 = Number(this.calculateExtraterrestrialRadiation(n));
-        const KT = this.calculateKT(n);
+        let H0 = Number(this.calculateExtraterrestrialRadiation(n));
+        let KT = this.calculateKT(n);
 
         // Calculate radiation at the Earth's surface (H)
-        const H = Number(this.calculateRadiationAtSurface(H0, KT));
+        let H = Number(this.calculateRadiationAtSurface(H0, KT));
 
         // Calculate Rb
-        const Rb = Number(this.calculateRb(n, tilt, LST));
+        let Rb = Number(this.calculateRb(n, tilt, LST));
 
         // Calculate direct/beam radiation on tilted surface (IbT)
-        const directRadiationTilted = Number(H * Rb);
+        let directRadiationTilted = Number(H * Rb);
 
         // Calculate diffuse radiation on tilted surface (IdT)
-        const diffuseRadiationTilted = H * ((1 + Math.cos(Number(this.degreesToRadians(tilt)))) / 2);
+        let diffuseRadiationTilted = H * ((1.0 + Math.cos(Number(this.degreesToRadians(tilt)))) / 2.0);
 
         // Calculate reflected radiation on tilted surface (IrT)
-        const reflectedRadiationTilted = 0.2 * diffuseRadiationTilted;
+        let reflectedRadiationTilted = 0.2 * diffuseRadiationTilted;
 
         // Calculate total radiation on collector (G)
-        //return directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted;
-        return parseFloat(String(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted)).toFixed(3);
+        return Number(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted);
+        //return Number(parseFloat(String(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted)).toFixed(6));
     },
 
-    calculateTemperatureForNextStep: function(n, tilt, LST, Told, Tnew, V, timeStep) {
+    calculateTemperatureForNextStep: function(n, tilt, LST, Told, Tnew, V) {
         // Constants
         const C = 4182; // specific heat of water in J/kg°C
         const rho = 1000; // density of water in kg/m^3
@@ -421,15 +459,22 @@ const model = {
 
         // Calculate the new temperature Tnew using the formula
         //Tnew = Told + (Qcoll / (C * rho * V));
-        Tnew = parseFloat(String(Told + (Qcoll / (C * rho * V)))).toFixed(2);
-
+        Tnew = Number(parseFloat(String(Told + (Qcoll / (C * rho * V)))).toFixed(2));
         // Add Tnew to yArray
-        this.graphData.yArray.push(Tnew);
+        // this.graphData.yArray.push(Tnew);
 
         // Update elapsed time based on the timeStep and add it to xArray
-        let newTime = this.graphData.xArray.length === 0 ? timeStep : this.graphData.xArray[this.graphData.xArray.length - 1] + timeStep;
-        this.graphData.xArray.push(parseFloat(String(newTime)).toFixed(3));
-        return { newTemperature: Tnew, newTime: newTime };
+        // let updatedTime = this.graphData.xArray.length === 0
+        //     ? Number(timeStep)
+        //     : Number(this.graphData.xArray[this.graphData.xArray.length - 1]) + Number(timeStep);
+        //
+        // let newTime = parseFloat(updatedTime.toFixed(6));
+
+        // console.log("newTime:", newTime, "newValue:", Tnew);
+        // console.log("Told:", Told, "Qcoll:", Qcoll, "Calculated Tnew:", Tnew);
+
+        // this.graphData.xArray.push(newTime);
+        return Tnew;
     }
 };
 

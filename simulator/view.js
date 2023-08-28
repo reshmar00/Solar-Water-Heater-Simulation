@@ -102,7 +102,7 @@ const view = {
     /* Method to format how values are displayed */
     formatValue: function(key, value) {
         if (key !== 'month' && key !== 'date' && key !== 'time') {
-            return parseFloat(value).toFixed(3);
+            return parseFloat(value).toFixed(6);
         }
         return value;
     },
