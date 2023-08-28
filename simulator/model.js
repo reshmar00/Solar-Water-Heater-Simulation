@@ -19,6 +19,10 @@ const model = {
         yArray: []
     },
 
+    /* Constants */
+    specificHeatOfWater: 4182.0, // J/kg°C
+    densityOfWater: 1000.0, // kg/m^3
+
     /* Getters and setters */
 
     setMonth: function(month) {
@@ -151,23 +155,25 @@ const model = {
     /*********** Calculations ***********/
 
     /* Main formula */
-    calculateQcoll: function(n, tilt, LST, Told, Tnew) {
+    calculateQcoll: function(n, tilt, LST, Tambient, Tfluid) {
         const FR_tau_alpha = 0.58;
         const FRUL = 0.7;
 
         let G = Number(this.calculateTotalRadiationOnCollector(n, tilt, LST));
-        let deltaT = Math.abs(Tnew - Told);
+        let deltaT = Tambient - Tfluid;
 
-        let term1 = FR_tau_alpha * G;
+        let term1 = 10.0 * FR_tau_alpha * G;
         let term2 = FRUL * deltaT;
+        let Qcoll = Number(term1 - term2);
 
-        console.log("Qcoll term 1:", term1, "Qcoll term 2: ", term2)
-        return Number(term1 - term2);
-        //let Qcoll = parseFloat(FR_tau_alpha * G - FRUL * deltaT).toFixed(6);
-        //let QcollFloat = parseFloat(Qcoll)
-        // console.log("G:", G, "deltaT:", deltaT, "Qcoll:", FR_tau_alpha * G - FRUL * deltaT);
+        console.log("Qcoll:", Qcoll)
+        return Qcoll;
+    },
 
-        //return QcollFloat;
+    computeNewTemperature: function (E, Told, volume){
+        let Tnew = Told + (E / (volume * this.specificHeatOfWater * this.densityOfWater));
+        console.log("T new:", Tnew);
+        return Number(Tnew);
     },
 
     /* Supporting formulae / methods */
