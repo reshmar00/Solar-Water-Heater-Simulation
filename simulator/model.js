@@ -20,8 +20,14 @@ const model = {
     },
 
     /* Constants */
-    specificHeatOfWater: 4182.0, // J/kg°C
-    densityOfWater: 1000.0, // kg/m^3
+    specificHeatOfWater: 4200.0, // J/kg°C
+    densityOfWater: 1.0, // kg/m^3
+    // F_R is the collector’s heat removal factor as a function of
+    // tau, the transmittance of the cover
+    // and alpha, the shortwave absorptivity of the absorber
+    F_R_tau_alpha: 0.58,
+    // U_L is the overall heat loss coefficient of the collector
+    F_R_times_U_L: 0.7,
 
     /* Getters and setters */
 
@@ -122,30 +128,30 @@ const model = {
         return daysBeforeMonth[month] + myDate;
     },
 
-    temperatureForDay: function (n) {
-        if (n >= 1 && n <= 31) { // January
+    temperatureForDay: function (dayOfYear) {
+        if (dayOfYear >= 1 && dayOfYear <= 31) { // January
             return (4 - 3) / 2;
-        } else if (n > 31 && n <= 59) { // February
+        } else if (dayOfYear > 31 && dayOfYear <= 59) { // February
             return (7 - 1) / 2;
-        } else if (n > 59 && n <= 90) { // March
+        } else if (dayOfYear > 59 && dayOfYear <= 90) { // March
             return (13 + 3) / 2;
-        } else if (n > 90 && n <= 120) { // April
+        } else if (dayOfYear > 90 && dayOfYear <= 120) { // April
             return (17 + 7) / 2;
-        } else if (n > 120 && n <= 151) { // May
+        } else if (dayOfYear > 120 && dayOfYear <= 151) { // May
             return (22 + 11) / 2;
-        } else if (n > 151 && n <= 181) { // June
+        } else if (dayOfYear > 151 && dayOfYear <= 181) { // June
             return (28 + 16) / 2;
-        } else if (n > 181 && n <= 212) { // July
+        } else if (dayOfYear > 181 && dayOfYear <= 212) { // July
             return (32 + 20) / 2;
-        } else if (n > 212 && n <= 243) { // August
+        } else if (dayOfYear > 212 && dayOfYear <= 243) { // August
             return (32 + 20) / 2;
-        } else if (n > 243 && n <= 273) { // September
+        } else if (dayOfYear > 243 && dayOfYear <= 273) { // September
             return (26 + 14) / 2;
-        } else if (n > 273 && n <= 304) { // October
+        } else if (dayOfYear > 273 && dayOfYear <= 304) { // October
             return (19 + 8) / 2;
-        } else if (n > 304 && n <= 334) { // November
+        } else if (dayOfYear > 304 && dayOfYear <= 334) { // November
             return (10 + 2) / 2;
-        } else if (n > 334 && n <= 365) { // December
+        } else if (dayOfYear > 334 && dayOfYear <= 365) { // December
             return (4 - 3) / 2;
         } else {
             return 0; // Invalid day number
@@ -155,15 +161,12 @@ const model = {
     /*********** Calculations ***********/
 
     /* Main formula */
-    calculateQcoll: function(n, tilt, LST, Tambient, Tfluid) {
-        const FR_tau_alpha = 0.58;
-        const FRUL = 0.7;
-
-        let G = Number(this.calculateTotalRadiationOnCollector(n, tilt, LST));
+    /* Formula for calculating */
+    calculateEnergyCollected: function(G, Tambient, Tfluid) {
         let deltaT = Tambient - Tfluid;
 
-        let term1 = 10.0 * FR_tau_alpha * G;
-        let term2 = FRUL * deltaT;
+        let term1 = this.F_R_tau_alpha * G;
+        let term2 = this.F_R_times_U_L * deltaT;
         let Qcoll = Number(term1 - term2);
 
         console.log("Qcoll:", Qcoll)
@@ -206,35 +209,35 @@ const model = {
         }
     },
 
-    calculateKT: function(n) {
+    calculateClearnessIndex: function(dayOfYear) {
         try {
-            if (typeof n !== 'number') {
+            if (typeof dayOfYear !== 'number') {
                 throw new Error('Input must be a number');
             }
 
-            if (n <= 0 || n > 365) {
+            if (dayOfYear <= 0 || dayOfYear > 365) {
                 throw new Error('Input value must be between 1 and 365');
             }
 
-            if (n === Infinity) {
+            if (dayOfYear === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
 
-            if ((n >= 349 && n <= 365) || (n >= 1 && n <= 45)) {  // Mid Dec+1, Jan, mid Feb
+            if ((dayOfYear >= 349 && dayOfYear <= 365) || (dayOfYear >= 1 && dayOfYear <= 45)) {  // Mid Dec+1, Jan, mid Feb
                 return 0.3;
-            } else if (n >= 46 && n <= 105) {  // Mid-Feb+1 - Mid-April
+            } else if (dayOfYear >= 46 && dayOfYear <= 105) {  // Mid-Feb+1 - Mid-April
                 return 0.4;
-            } else if (n >= 106 && n <= 135) {  // Mid-April+1 - Mid-May
+            } else if (dayOfYear >= 106 && dayOfYear <= 135) {  // Mid-April+1 - Mid-May
                 return 0.6;
-            } else if (n >= 136 && n <= 166) {  // Mid-May+1 - June end
+            } else if (dayOfYear >= 136 && dayOfYear <= 166) {  // Mid-May+1 - June end
                 return 0.8;
-            } else if (n >= 165 && n <= 181) {  // Mid-May+1 - June end
+            } else if (dayOfYear >= 165 && dayOfYear <= 181) {  // Mid-May+1 - June end
                 return 0.7;
-            } else if (n >= 182 && n <= 212) {  // July full - Mid-Aug
+            } else if (dayOfYear >= 182 && dayOfYear <= 212) {  // July full - Mid-Aug
                 return 0.6;
-            } else if (n >= 213 && n <= 243) {  // Mid-Aug+1 - Full Sept
+            } else if (dayOfYear >= 213 && dayOfYear <= 243) {  // Mid-Aug+1 - Full Sept
                 return 0.5;
-            } else if (n >= 244 && n <= 348) {  // Late Sept through Mid-November
+            } else if (dayOfYear >= 244 && dayOfYear <= 348) {  // Late Sept through Mid-November
                 return 0.4;
             }
         } catch (error) {
@@ -242,25 +245,25 @@ const model = {
         }
     },
 
-    calculateExtraterrestrialRadiation: function(n) {
+    calculateExtraterrestrialRadiation: function(dayOfYear) {
         const H0Avg = 1361; // Average solar constant in W/m2
         try {
-            if (typeof n !== 'number') {
+            if (typeof dayOfYear !== 'number') {
                 throw new Error('Input must be a number');
             }
 
-            if (!Number.isInteger(n) || n <= 0 || n > 365) {
+            if (!Number.isInteger(dayOfYear) || dayOfYear <= 0 || dayOfYear > 365) {
                 throw new Error('Input value must be an integer between 1 and 365');
             }
 
-            if (n === Infinity) {
+            if (dayOfYear === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
 
             // returning value after converting expression inside cosine
             // function to be in radians
-            return Number(H0Avg * (1.0 + 0.034 * Math.cos((2.0 * Math.PI * n) / 365.0)));
-            //return Number(parseFloat(String(H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * n) / 365)))).toFixed(6));
+            return Number(H0Avg * (1.0 + 0.034 * Math.cos((2.0 * Math.PI * dayOfYear) / 365.0)));
+            //return Number(parseFloat(String(H0Avg * (1 + 0.034 * Math.cos((2 * Math.PI * dayOfYear) / 365)))).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -286,20 +289,20 @@ const model = {
         }
     },
 
-    calculateSolarDeclinationInDegrees: function(n) {
+    calculateSolarDeclinationInDegrees: function(dayOfYear) {
         try {
-            if (typeof n !== 'number') {
+            if (typeof dayOfYear !== 'number') {
                 throw new Error('Input must be a number');
             }
 
-            if (!Number.isInteger(n) || n <= 0 || n > 365) {
+            if (!Number.isInteger(dayOfYear) || dayOfYear <= 0 || dayOfYear > 365) {
                 throw new Error('Input value must be an integer between 1 and 365');
             }
 
-            if (n === Infinity) {
+            if (dayOfYear === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            let numerator = 284.0 + n;
+            let numerator = 284.0 + dayOfYear;
             const denominator = 365.0;
             let mixedFraction = numerator / denominator;
             let angle = 2.0 * Math.PI * mixedFraction;
@@ -310,20 +313,20 @@ const model = {
         }
     },
 
-    calculateSolarDeclination: function(n) {
+    calculateSolarDeclination: function(dayOfYear) {
         try {
-            if (typeof n !== 'number') {
+            if (typeof dayOfYear !== 'number') {
                 throw new Error('Input must be a number');
             }
 
-            if (!Number.isInteger(n) || n <= 0 || n > 365) {
+            if (!Number.isInteger(dayOfYear) || dayOfYear <= 0 || dayOfYear > 365) {
                 throw new Error('Input value must be an integer between 1 and 365');
             }
 
-            if (n === Infinity) {
+            if (dayOfYear === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            let numerator = 284.0 + n;
+            let numerator = 284.0 + dayOfYear;
             const denominator = 365.0;
             let mixedFraction = numerator / denominator;
             let angle = 2.0 * Math.PI * mixedFraction;
@@ -334,21 +337,21 @@ const model = {
         }
     },
 
-    calculateOmegaFromLST(LST) {
+    calculateOmegaFromTimeOfDay(timeOfDay) {
         /* We have made some assumptions here (*)
          * refer to the readme for more details */
         try {
-            if (typeof LST !== 'number') {
+            if (typeof timeOfDay !== 'number') {
                 throw new Error('Input must be a number');
             }
-            if (!Number.isInteger(LST) || LST < 1 || LST > 24) {
+            if (!Number.isInteger(timeOfDay) || timeOfDay < 1 || timeOfDay > 24) {
                 throw new Error('Input value must be a number between 1 and 24');
             }
-            if (LST === Infinity) {
+            if (timeOfDay === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            return Number(this.degreesToRadians(15.0 * (LST - 12.0)));
-            //return Number(parseFloat(String(this.degreesToRadians(15 * (LST - 12)))).toFixed(6));
+            return Number(this.degreesToRadians(15.0 * (timeOfDay - 12.0)));
+            //return Number(parseFloat(String(this.degreesToRadians(15 * (timeOfDay - 12)))).toFixed(6));
         } catch (error) {
             throw error;
         }
@@ -357,32 +360,32 @@ const model = {
     calculateOmegaS(latitudeInRadians, solarDeclinationInRadians) {
         let cosOmegaS = -Math.tan(latitudeInRadians) * Math.tan(solarDeclinationInRadians);
         return Number(Math.acos(cosOmegaS));
-        //return Number(parseFloat(String(Math.acos(cosOmegaS))).toFixed(6));
     },
 
-    calculateRb: function(n, tilt, LST) {
+    calculateRb: function(dayOfYear, collectorTilt, timeOfDay) {
         try {
-            if (typeof n !== 'number' || typeof tilt !== 'number' || typeof LST !== 'number') {
+            if (typeof dayOfYear !== 'number' || typeof collectorTilt !== 'number' || typeof timeOfDay !== 'number') {
                 throw new Error('Input must be a number');
             }
-            if (!Number.isInteger(n) || n <= 0 || n > 365) {
+            if (!Number.isInteger(dayOfYear) || dayOfYear <= 0 || dayOfYear > 365) {
                 throw new Error('Input value must be an integer between 1 and 365');
             }
-            if (tilt < 0 || tilt > 90) {
+            if (collectorTilt < 0 || collectorTilt > 90) {
                 throw new Error('Input value must be an integer between 0 and 90');
             }
-            if (!Number.isInteger(LST) || LST < 1 || LST > 24) {
+            if (!Number.isInteger(timeOfDay) || timeOfDay < 1 || timeOfDay > 24) {
                 throw new Error('Input value must be an integer between 1 and 24');
             }
-            if (!Number.isFinite(n) || !Number.isFinite(tilt) || !Number.isFinite(LST)) {
+            if (!Number.isFinite(dayOfYear) || !Number.isFinite(collectorTilt) || !Number.isFinite(timeOfDay)) {
                 throw new Error('Input value cannot be infinity');
             }
             const latInRadians = 0.686280915;
 
             // Calculate solar declination (δ) -- in radians
-            let solarDeclination = Number(this.calculateSolarDeclination(n));
+            let solarDeclination = Number(this.calculateSolarDeclination(dayOfYear));
 
-            let omegaInRadians = Number(this.calculateOmegaFromLST(LST))
+            // Make global
+            let omegaInRadians = Number(this.calculateOmegaFromTimeOfDay(timeOfDay))
             // Check that it makes sense, given the sunset hour angle (ωs)
             let omegaS = Number(this.calculateOmegaS(latInRadians, solarDeclination))
 
@@ -394,13 +397,13 @@ const model = {
             // Get cosine of omega
             let cosOmega = Math.cos(Number(omegaInRadians));
 
-            let phi = Number(this.degreesToRadians(tilt));
+            let phi = Number(this.degreesToRadians(collectorTilt));
             // Get its sine and cosine
             let cosPhi = Math.cos(phi);
             let sinPhi = Math.sin(phi);
 
             // Calculate artificial latitude calculated by subtracting
-            // the tilt from the latitude
+            // the collectorTilt from the latitude
             let phiMinusBeta = latInRadians - phi;
             // Get its sine and cosine
             let cosPhiMinusBeta = Math.cos(phiMinusBeta);
@@ -430,22 +433,22 @@ const model = {
         }
     },
 
-    calculateTotalRadiationOnCollector: function(n, tilt, LST) {
+    calculateTotalRadiationOnCollector: function(dayOfYear, collectorTilt, timeOfDay) {
         // Calculate extraterrestrial radiation (H0) and KT
-        let H0 = Number(this.calculateExtraterrestrialRadiation(n));
-        let KT = this.calculateKT(n);
+        let H0 = Number(this.calculateExtraterrestrialRadiation(dayOfYear));
+        let KT = this.calculateClearnessIndex(dayOfYear);
 
         // Calculate radiation at the Earth's surface (H)
         let H = Number(this.calculateRadiationAtSurface(H0, KT));
 
         // Calculate Rb
-        let Rb = Number(this.calculateRb(n, tilt, LST));
+        let Rb = Number(this.calculateRb(dayOfYear, collectorTilt, timeOfDay));
 
         // Calculate direct/beam radiation on tilted surface (IbT)
         let directRadiationTilted = Number(H * Rb);
 
         // Calculate diffuse radiation on tilted surface (IdT)
-        let diffuseRadiationTilted = H * ((1.0 + Math.cos(Number(this.degreesToRadians(tilt)))) / 2.0);
+        let diffuseRadiationTilted = H * ((1.0 + Math.cos(Number(this.degreesToRadians(collectorTilt)))) / 2.0);
 
         // Calculate reflected radiation on tilted surface (IrT)
         let reflectedRadiationTilted = 0.2 * diffuseRadiationTilted;
@@ -453,34 +456,6 @@ const model = {
         // Calculate total radiation on collector (G)
         return Number(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted);
         //return Number(parseFloat(String(directRadiationTilted + diffuseRadiationTilted + reflectedRadiationTilted)).toFixed(6));
-    },
-
-    calculateTemperatureForNextStep: function(n, tilt, LST, Told, Tnew, V) {
-        // Constants
-        const C = 4182; // specific heat of water in J/kg°C
-        const rho = 1000; // density of water in kg/m^3
-
-        // Calculate Qcoll with the current guess of Tnew
-        let Qcoll = Number(this.calculateQcoll(n, tilt, LST, Told, Tnew));
-
-        // Calculate the new temperature Tnew using the formula
-        //Tnew = Told + (Qcoll / (C * rho * V));
-        Tnew = Number(parseFloat(String(Told + (Qcoll / (C * rho * V)))).toFixed(2));
-        // Add Tnew to yArray
-        // this.graphData.yArray.push(Tnew);
-
-        // Update elapsed time based on the timeStep and add it to xArray
-        // let updatedTime = this.graphData.xArray.length === 0
-        //     ? Number(timeStep)
-        //     : Number(this.graphData.xArray[this.graphData.xArray.length - 1]) + Number(timeStep);
-        //
-        // let newTime = parseFloat(updatedTime.toFixed(6));
-
-        // console.log("newTime:", newTime, "newValue:", Tnew);
-        // console.log("Told:", Told, "Qcoll:", Qcoll, "Calculated Tnew:", Tnew);
-
-        // this.graphData.xArray.push(newTime);
-        return Tnew;
     }
 };
 

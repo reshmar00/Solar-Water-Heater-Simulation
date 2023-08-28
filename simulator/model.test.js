@@ -135,58 +135,58 @@ describe('calculateCosineFromSine', () => {
 describe('calculateKT', () => {
     test('calculates KT, when given n - expecting 0.3 for 355', () => {
         const n = 355;
-        const calculatedKT = model.calculateKT(n);
+        const calculatedKT = model.calculateClearnessIndex(n);
         expect(calculatedKT).toBe(0.3);
     });
 
     test('calculates KT, when given n - expecting 0.3 for 33', () => {
         const n = 33;
-        const calculatedKT = model.calculateKT(n);
+        const calculatedKT = model.calculateClearnessIndex(n);
         expect(calculatedKT).toBe(0.3);
     });
 
     test('calculates KT, when given n - expecting 0.4 for 47', () => {
         const n = 47;
-        const calculatedKT = model.calculateKT(n);
+        const calculatedKT = model.calculateClearnessIndex(n);
         expect(calculatedKT).toBe(0.4);
     });
 
     test('calculates KT, when given n - expecting 0.7 for 199', () => {
         const n = 199;
-        const calculatedKT = model.calculateKT(n);
+        const calculatedKT = model.calculateClearnessIndex(n);
         expect(calculatedKT).toBe(0.6);
     });
 
     test('edge case 1', () => {
         const n = 135;
-        const calculatedKT = model.calculateKT(n);
+        const calculatedKT = model.calculateClearnessIndex(n);
         expect(calculatedKT).toBe(0.6);
     });
 
     test('edge case 2', () => {
         const n = 136;
-        const calculatedKT = model.calculateKT(n);
+        const calculatedKT = model.calculateClearnessIndex(n);
         expect(calculatedKT).toBe(0.8);
     });
 
     test('negative number', () => {
         const n = -136;
-        expect(() => model.calculateKT(n)).toThrow();
+        expect(() => model.calculateClearnessIndex(n)).toThrow();
     });
 
     test('positive number outside range', () => {
         const n = 366;
-        expect(() => model.calculateKT(n)).toThrow();
+        expect(() => model.calculateClearnessIndex(n)).toThrow();
     });
 
     test('infinity', () => {
         const n = Infinity;
-        expect(() => model.calculateKT(n)).toThrow();
+        expect(() => model.calculateClearnessIndex(n)).toThrow();
     });
 
     test('string', () => {
         const n = '365';
-        expect(() => model.calculateKT(n)).toThrow();
+        expect(() => model.calculateClearnessIndex(n)).toThrow();
     });
 });
 
@@ -414,70 +414,70 @@ describe('calculateTotalRadiationOnCollector', () => {
 describe('calculateQcoll', () => {
     it('should calculate Qcoll correctly for valid input', () => {
         // Test cases for specific days of the year and tilt angles
-        expect(model.calculateQcoll(1, 25, 12, 25, 26)).toBeCloseTo(570.4104, 3);
-        expect(model.calculateQcoll(1, 25, 12, 26, 27)).toBeCloseTo(570.4104, 3);
-        expect(model.calculateQcoll(1, 25, 12, 27, 28)).toBeCloseTo(570.4104, 3);
-        expect(model.calculateQcoll(1, 25, 12, 28.5, 28.6)).toBeCloseTo(571.0404, 3);
-        expect(model.calculateQcoll(1, 25, 12, 28.6, 28.7)).toBeCloseTo(571.0404, 3);
-        expect(model.calculateQcoll(1, 25, 12, 28.75, 28.76)).toBeCloseTo(571.1034, 3);
+        expect(model.calculateEnergyCollected(1, 25, 12, 25, 26)).toBeCloseTo(570.4104, 3);
+        expect(model.calculateEnergyCollected(1, 25, 12, 26, 27)).toBeCloseTo(570.4104, 3);
+        expect(model.calculateEnergyCollected(1, 25, 12, 27, 28)).toBeCloseTo(570.4104, 3);
+        expect(model.calculateEnergyCollected(1, 25, 12, 28.5, 28.6)).toBeCloseTo(571.0404, 3);
+        expect(model.calculateEnergyCollected(1, 25, 12, 28.6, 28.7)).toBeCloseTo(571.0404, 3);
+        expect(model.calculateEnergyCollected(1, 25, 12, 28.75, 28.76)).toBeCloseTo(571.1034, 3);
 
-        expect(model.calculateQcoll(19, 26, 9, 45.56, 46.57)).toBeCloseTo(589.8770, 3);
-        expect(model.calculateQcoll(19, 26, 9, 46.57, 46.78)).toBeCloseTo(590.4370, 3);
-        expect(model.calculateQcoll(19, 26, 9, 75.57, 76.83)).toBeCloseTo(589.702, 3);
-        expect(model.calculateQcoll(19, 26, 9, 76.84, 77.99)).toBeCloseTo(589.779, 3);
-        expect(model.calculateQcoll(19, 26, 9, 84.59, 85.00)).toBeCloseTo(590.297, 3);
+        expect(model.calculateEnergyCollected(19, 26, 9, 45.56, 46.57)).toBeCloseTo(589.8770, 3);
+        expect(model.calculateEnergyCollected(19, 26, 9, 46.57, 46.78)).toBeCloseTo(590.4370, 3);
+        expect(model.calculateEnergyCollected(19, 26, 9, 75.57, 76.83)).toBeCloseTo(589.702, 3);
+        expect(model.calculateEnergyCollected(19, 26, 9, 76.84, 77.99)).toBeCloseTo(589.779, 3);
+        expect(model.calculateEnergyCollected(19, 26, 9, 84.59, 85.00)).toBeCloseTo(590.297, 3);
 
-        expect(model.calculateQcoll(32, 28, 12, 66.99, 67.01)).toBeCloseTo(579.914, 3);
-        expect(model.calculateQcoll(32, 28, 12, 67.99, 68.01)).toBeCloseTo(579.914, 3);
-        expect(model.calculateQcoll(32, 28, 12, 68.45, 70.32)).toBeCloseTo(578.619, 3);
-        expect(model.calculateQcoll(32, 28, 12, 75.35, 75.37)).toBeCloseTo(579.914, 3);
-        expect(model.calculateQcoll(32, 28, 12, 82.34, 83,79)).toBeCloseTo(579.466, 3);
+        expect(model.calculateEnergyCollected(32, 28, 12, 66.99, 67.01)).toBeCloseTo(579.914, 3);
+        expect(model.calculateEnergyCollected(32, 28, 12, 67.99, 68.01)).toBeCloseTo(579.914, 3);
+        expect(model.calculateEnergyCollected(32, 28, 12, 68.45, 70.32)).toBeCloseTo(578.619, 3);
+        expect(model.calculateEnergyCollected(32, 28, 12, 75.35, 75.37)).toBeCloseTo(579.914, 3);
+        expect(model.calculateEnergyCollected(32, 28, 12, 82.34, 83,79)).toBeCloseTo(579.466, 3);
 
-        expect(model.calculateQcoll(90, 30, 12, 5.00, 5.01)).toBeCloseTo(704.743, 3);
-        expect(model.calculateQcoll(90, 30, 12, 5.01, 5.02)).toBeCloseTo(704.743, 3);
-        expect(model.calculateQcoll(90, 30, 12, 5.03, 5.04)).toBeCloseTo(704.743, 3);
-        expect(model.calculateQcoll(90, 30, 12, 5.04, 5.05)).toBeCloseTo(704.743, 3);
-        expect(model.calculateQcoll(90, 30, 12, 5.05, 5.06)).toBeCloseTo(704.743, 3);
+        expect(model.calculateEnergyCollected(90, 30, 12, 5.00, 5.01)).toBeCloseTo(704.743, 3);
+        expect(model.calculateEnergyCollected(90, 30, 12, 5.01, 5.02)).toBeCloseTo(704.743, 3);
+        expect(model.calculateEnergyCollected(90, 30, 12, 5.03, 5.04)).toBeCloseTo(704.743, 3);
+        expect(model.calculateEnergyCollected(90, 30, 12, 5.04, 5.05)).toBeCloseTo(704.743, 3);
+        expect(model.calculateEnergyCollected(90, 30, 12, 5.05, 5.06)).toBeCloseTo(704.743, 3);
 
-        expect(model.calculateQcoll(100, 12, 13, 37.54, 40.12)).toBeCloseTo(667.920, 3);
-        expect(model.calculateQcoll(100, 12, 13, 41.00, 41.02)).toBeCloseTo(669.712, 3);
-        expect(model.calculateQcoll(100, 12, 13, 45.71, 49.56)).toBeCloseTo(667.031, 3);
-        expect(model.calculateQcoll(100, 12, 13, 54.66, 59.99)).toBeCloseTo(665.995, 3);
-        expect(model.calculateQcoll(100, 12, 13, 67.77, 70.11)).toBeCloseTo(668.088, 3);
+        expect(model.calculateEnergyCollected(100, 12, 13, 37.54, 40.12)).toBeCloseTo(667.920, 3);
+        expect(model.calculateEnergyCollected(100, 12, 13, 41.00, 41.02)).toBeCloseTo(669.712, 3);
+        expect(model.calculateEnergyCollected(100, 12, 13, 45.71, 49.56)).toBeCloseTo(667.031, 3);
+        expect(model.calculateEnergyCollected(100, 12, 13, 54.66, 59.99)).toBeCloseTo(665.995, 3);
+        expect(model.calculateEnergyCollected(100, 12, 13, 67.77, 70.11)).toBeCloseTo(668.088, 3);
 
-        expect(model.calculateQcoll(125, 10, 11, 25.01, 30.02)).toBeCloseTo(1006.542, 3);
-        expect(model.calculateQcoll(125, 10, 11, 30.30, 40.00)).toBeCloseTo(1003.259, 3);
-        expect(model.calculateQcoll(125, 10, 11, 40.50, 47.30)).toBeCloseTo(1005.289, 3);
-        expect(model.calculateQcoll(125, 10, 11, 47.00, 50.20)).toBeCloseTo(1007.809, 3);
-        expect(model.calculateQcoll(125, 10, 11, 50.10, 51.00)).toBeCloseTo(1009.419, 3);
-        expect(model.calculateQcoll(125, 10, 11, 51.00, 59.60)).toBeCloseTo(1004.029, 3);
-        expect(model.calculateQcoll(125, 10, 11, 59.00, 62.00)).toBeCloseTo(1007.949, 3);
-        expect(model.calculateQcoll(125, 10, 11, 62.70, 67.00)).toBeCloseTo(1007.039, 3);
-        expect(model.calculateQcoll(125, 10, 11, 67.00, 70.08)).toBeCloseTo(1007.893, 3);
-        expect(model.calculateQcoll(125, 10, 11, 71.09, 81.02)).toBeCloseTo(1003.098, 3);
-        expect(model.calculateQcoll(125, 10, 11, 81.03, 82.07)).toBeCloseTo(1009.321, 3);
-        expect(model.calculateQcoll(125, 10, 11, 82.08, 83.02)).toBeCloseTo(1009.391, 3);
-        expect(model.calculateQcoll(125, 10, 11, 83.05, 84.09)).toBeCloseTo(1009.321, 3);
-        expect(model.calculateQcoll(125, 10, 11, 84.01, 85.00)).toBeCloseTo(1009.356, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 25.01, 30.02)).toBeCloseTo(1006.542, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 30.30, 40.00)).toBeCloseTo(1003.259, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 40.50, 47.30)).toBeCloseTo(1005.289, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 47.00, 50.20)).toBeCloseTo(1007.809, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 50.10, 51.00)).toBeCloseTo(1009.419, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 51.00, 59.60)).toBeCloseTo(1004.029, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 59.00, 62.00)).toBeCloseTo(1007.949, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 62.70, 67.00)).toBeCloseTo(1007.039, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 67.00, 70.08)).toBeCloseTo(1007.893, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 71.09, 81.02)).toBeCloseTo(1003.098, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 81.03, 82.07)).toBeCloseTo(1009.321, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 82.08, 83.02)).toBeCloseTo(1009.391, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 83.05, 84.09)).toBeCloseTo(1009.321, 3);
+        expect(model.calculateEnergyCollected(125, 10, 11, 84.01, 85.00)).toBeCloseTo(1009.356, 3);
 
 
         // Warm days + noon - expecting larger Qcoll values
-        expect(model.calculateQcoll(136, 45, 12, 84.01, 85.00)).toBeCloseTo(1253.8246, 3);
-        expect(model.calculateQcoll(140, 45, 12, 84.01, 85.00)).toBeCloseTo(1242.5788, 3);
-        expect(model.calculateQcoll(145, 45, 12, 84.01, 85.00)).toBeCloseTo(1230.2899, 3);
-        expect(model.calculateQcoll(150, 45, 12, 84.01, 85.00)).toBeCloseTo(1219.9602, 3);
-        expect(model.calculateQcoll(161, 45, 12, 84.01, 85.00)).toBeCloseTo(1204.1214, 3);
-        expect(model.calculateQcoll(166, 45, 12, 84.01, 85.00)).toBeCloseTo(1200.0536, 3);
+        expect(model.calculateEnergyCollected(136, 45, 12, 84.01, 85.00)).toBeCloseTo(1253.8246, 3);
+        expect(model.calculateEnergyCollected(140, 45, 12, 84.01, 85.00)).toBeCloseTo(1242.5788, 3);
+        expect(model.calculateEnergyCollected(145, 45, 12, 84.01, 85.00)).toBeCloseTo(1230.2899, 3);
+        expect(model.calculateEnergyCollected(150, 45, 12, 84.01, 85.00)).toBeCloseTo(1219.9602, 3);
+        expect(model.calculateEnergyCollected(161, 45, 12, 84.01, 85.00)).toBeCloseTo(1204.1214, 3);
+        expect(model.calculateEnergyCollected(166, 45, 12, 84.01, 85.00)).toBeCloseTo(1200.0536, 3);
 
 
         // Cold days + evening - expecting smaller Qcoll values
-        expect(model.calculateQcoll(277, 30, 18, 66.99, 67.01)).toBeCloseTo(354.1788, 3);
-        expect(model.calculateQcoll(289, 30, 18, 66.99, 67.01)).toBeCloseTo(356.6260, 3);
-        expect(model.calculateQcoll(301, 30, 18, 66.99, 67.01)).toBeCloseTo(358.9405, 3);
-        expect(model.calculateQcoll(324, 30, 18, 66.99, 67.01)).toBeCloseTo(362.6550, 3);
-        expect(model.calculateQcoll(355, 30, 18, 66.99, 67.01)).toBeCloseTo(274.0081, 3);
-        expect(model.calculateQcoll(364, 30, 18, 66.99, 67.01)).toBeCloseTo(274.1400, 3);
-        expect(model.calculateQcoll(365, 30, 18, 66.99, 67.01)).toBeCloseTo(274.1413, 3);
+        expect(model.calculateEnergyCollected(277, 30, 18, 66.99, 67.01)).toBeCloseTo(354.1788, 3);
+        expect(model.calculateEnergyCollected(289, 30, 18, 66.99, 67.01)).toBeCloseTo(356.6260, 3);
+        expect(model.calculateEnergyCollected(301, 30, 18, 66.99, 67.01)).toBeCloseTo(358.9405, 3);
+        expect(model.calculateEnergyCollected(324, 30, 18, 66.99, 67.01)).toBeCloseTo(362.6550, 3);
+        expect(model.calculateEnergyCollected(355, 30, 18, 66.99, 67.01)).toBeCloseTo(274.0081, 3);
+        expect(model.calculateEnergyCollected(364, 30, 18, 66.99, 67.01)).toBeCloseTo(274.1400, 3);
+        expect(model.calculateEnergyCollected(365, 30, 18, 66.99, 67.01)).toBeCloseTo(274.1413, 3);
 
     });
 });

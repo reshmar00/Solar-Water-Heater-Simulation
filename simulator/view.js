@@ -211,11 +211,11 @@ const view = {
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Temperature increase with Time',
+                        label: 'Temperature (°C)',
                         data: [],
                         borderWidth: 1,
                         borderColor: 'rgba(255, 255, 255, 1)',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        backgroundColor: 'rgba(255, 255, 255, 1)',
                         pointBackgroundColor: 'rgba(255, 255, 255, 1)',
                         pointRadius: 3,
                     }]
