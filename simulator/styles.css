@@ -61,6 +61,12 @@ h2{
     align-items: center;
 }
 
+.button-container {
+    display:flex;
+    margin:0;
+    padding-top: 100px;
+}
+
 .option-item {
     margin: 10px -5px;
     width: 100%;
@@ -133,7 +139,7 @@ select {
     vertical-align: baseline;
 }
 
-#startSimulator, #resetButton {
+#startSimulator, #stopSimulator {
     font-size: 16px;
     display: block;
     margin: 20px auto;
@@ -145,7 +151,7 @@ select {
     cursor: pointer;
 }
 
-#startSimulator:hover, #resetButton:hover {
+#startSimulator:hover, #stopSimulator:hover {
     background-color: #FFEA00;
 }
 
