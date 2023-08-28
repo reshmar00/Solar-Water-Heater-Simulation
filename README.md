@@ -6,7 +6,7 @@ This is a simple software simulation of a heat transfer system using a solar col
 &nbsp;&nbsp;&nbsp; 3. It is a drain-back system where the **pump moves water one way** and stops when the desired temperature is reached.\
 &nbsp;&nbsp;&nbsp; 4. There is a **constant volume of water** that is being circulated.\
 &nbsp;&nbsp;&nbsp; 5. I am not accounting for the efficiency of the pump.\
-&nbsp;&nbsp;&nbsp; 6. There are other minute factors I'm disregarding in my **calculations** ~ they serve as a **reasonable approximation** and **should not be considered for 100% accuracy**.
+&nbsp;&nbsp;&nbsp; 6. There are other factors I'm disregarding in my **calculations** ~ they serve as a **reasonable approximation** and **should not be considered for 100% accuracy**.
 
 
 ### Inputs:
