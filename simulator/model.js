@@ -13,7 +13,7 @@ const model = {
     selectedValues: {
         month: { label: 'Month', value: this.getMonth || 'January' },
         date: { label: 'Date', value: this.getDate || 1 },
-        time: { label: 'Time', value: this.getTime || 12 },
+        time: { label: 'Time', value: this.getTime || '12:00' },
         collectorArea: { label: 'Collector Area', value: this.getCollectorArea || 280.0 },
         collectorDepth: { label: 'Collector Depth', value: this.getCollectorDepth || 0.150 },
         collectorTilt: { label: 'Collector Tilt', value: this.getCollectorTilt || 45.0 },
@@ -34,6 +34,7 @@ const model = {
     densityOfWater: 1.0, // kg/m^3
     averageSolarConstant: 1361, // W/m2
     latInRadians: 0.686280915, // latitude (of Utah) in radians
+    pipeRadius: 0.05, // setting a 5cm radius for the pipe
 
     // F_R is the collector’s heat removal factor as a function of
     // tau, the transmittance of the cover
@@ -147,55 +148,59 @@ const model = {
     /* Function to convert the time selection from a string
      * to a number */
     timeOfDay: function (time) {
-        if (time === '01:00'){
-            return Number(1);
+        let timeAsNumber = -1;
+        if (time === '0100'){
+
+            timeAsNumber = Number(1);
         } else if(time === '02:00'){
-            return Number(2);
+            timeAsNumber = Number(2);
         } else if(time === '03:00'){
-            return Number(3);
+            timeAsNumber =Number(3);
         } else if(time === '04:00'){
-            return Number(4);
+            timeAsNumber = Number(4);
         } else if(time === '05:00'){
-            return Number(5);
+            timeAsNumber = Number(5);
         } else if(time === '06:00'){
-            return Number(6);
+            timeAsNumber =Number(6);
         } else if(time === '07:00'){
-            return Number(7);
+            timeAsNumber = Number(7);
         } else if(time === '08:00'){
-            return Number(8);
+            timeAsNumber = Number(8);
         } else if(time === '09:00'){
-            return Number(9);
+            timeAsNumber = Number(9);
         } else if(time === '10:00') {
-            return Number(10);
+            timeAsNumber = Number(10);
         } else if(time === '11:00'){
-            return Number(11);
+            timeAsNumber = Number(11);
         } else if(time === '12:00'){
-            return Number(12);
+            timeAsNumber = Number(12);
         } else if(time === '13:00'){
-            return Number(13);
+            timeAsNumber = Number(13);
         } else if(time === '14:00'){
-            return Number(14);
+            timeAsNumber = Number(14);
         } else if(time === '15:00'){
-            return Number(15);
+            timeAsNumber = Number(15);
         } else if(time === '16:00'){
-            return Number(16);
+            timeAsNumber = Number(16);
         } else if(time === '17:00'){
-            return Number(17);
+            timeAsNumber = Number(17);
         } else if(time === '18:00'){
-            return Number(18);
+            timeAsNumber = Number(18);
         } else if(time === '19:00'){
-            return Number(19);
+            timeAsNumber = Number(19);
         } else if(time === '20:00'){
-            return Number(20);
+            timeAsNumber = Number(20);
         } else if(time === '21:00'){
-            return Number(21);
+            timeAsNumber = Number(21);
         } else if(time === '22:00'){
-            return Number(22);
+            timeAsNumber = Number(22);
         } else if(time === '23:00'){
-            return Number(23);
+            timeAsNumber = Number(23);
         } else if(time === '24:00'){
-            return Number(24);
+            timeAsNumber = Number(24);
         }
+        console.log("Time as a number: ",timeAsNumber);
+        return timeAsNumber;
     },
 
     /* Function that returns average temperature based
@@ -229,6 +234,21 @@ const model = {
             return 0; // Invalid day number
         }
     },
+
+    /* Function to compute the total volume of water in the solar heating system.
+     * It is the combined volumes of the solar collector, the pipes, and the
+     * storage tank. We are assuming a constant volume of water. */
+    computeTotalVolume: function(){
+        // Compute volume: storageTankVolume + π * r^2 * h of pipe + collector volume
+        let pipeVolume = Number(Number(Math.PI) * Number(Math.pow(this.pipeRadius, 2)) * Number(this.selectedValues.pipeLength.value));
+        //console.log("Pipe volume:", pipeVolume)
+        let collectorVolume = Number(Number(this.selectedValues.collectorArea.value) * Number(this.selectedValues.collectorDepth.value));
+        //console.log("Collector volume:", collectorVolume)
+
+        // Adding all three to get the total volume
+        return Number(Number(this.selectedValues.storageTankVolume.value) + Number(pipeVolume) + Number(collectorVolume))
+    },
+
 
     /************************ Calculations ************************/
 
@@ -427,7 +447,7 @@ const model = {
                 throw new Error('Input must be a number');
             }
 
-            if (!Number.isInteger(dayOfYear) || dayOfYear <= 0 || dayOfYear > 365) {
+            if (dayOfYear <= 0 || dayOfYear > 365) {
                 throw new Error('Input value must be an integer between 1 and 365');
             }
 
@@ -490,13 +510,13 @@ const model = {
             if (typeof timeOfDay !== 'number') {
                 throw new Error('Input must be a number');
             }
-            if (!Number.isInteger(timeOfDay) || timeOfDay < 1 || timeOfDay > 24) {
+            if (timeOfDay < 1 || timeOfDay > 24) {
                 throw new Error('Input value must be a number between 1 and 24');
             }
             if (timeOfDay === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
-            return Number(this.degreesToRadians(15.0 * (timeOfDay - 12.0)));
+            return Number(this.degreesToRadians(15.0 * (Number(timeOfDay) - 12.0)));
         } catch (error) {
             throw error;
         }
@@ -526,20 +546,21 @@ const model = {
      *         t, time of day (number between 1 and 24)
      * Output: Rb, the geometric factor */
     calculateGeometricFactor: function(dayOfYear, collectorTilt, timeOfDay) {
+        let tOD = Number(timeOfDay);
         try {
-            if (typeof dayOfYear !== 'number' || typeof collectorTilt !== 'number' || typeof timeOfDay !== 'number') {
+            if (typeof dayOfYear !== 'number' || typeof collectorTilt !== 'number' || typeof tOD !== 'number') {
                 throw new Error('Input must be a number');
             }
-            if (!Number.isInteger(dayOfYear) || dayOfYear <= 0 || dayOfYear > 365) {
+            if (dayOfYear <= 0 || dayOfYear > 365) {
                 throw new Error('Input value must be an integer between 1 and 365');
             }
             if (collectorTilt < 0 || collectorTilt > 90) {
                 throw new Error('Input value must be an integer between 0 and 90');
             }
-            if (!Number.isInteger(timeOfDay) || timeOfDay < 1 || timeOfDay > 24) {
+            if (tOD < 1 || tOD > 24) {
                 throw new Error('Input value must be an integer between 1 and 24');
             }
-            if (!Number.isFinite(dayOfYear) || !Number.isFinite(collectorTilt) || !Number.isFinite(timeOfDay)) {
+            if (dayOfYear === Infinity || collectorTilt === Infinity || timeOfDay === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
 
@@ -550,10 +571,10 @@ const model = {
             let sinSolarDeclination = Math.sin(solarDeclination);
 
             // Calculate the solar hour angle -- in radians
-            let omegaInRadians = Number(this.calculateOmegaFromTimeOfDay(timeOfDay))
+            let omegaInRadians = Number(this.calculateOmegaFromTimeOfDay(tOD));
 
-            // Check that it makes sense, given the sunset hour angle (ωs)
-            let omegaS = Number(this.calculateOmegaS(this.latInRadians, solarDeclination))
+            // Check that it makes sense, given the sunset hour angle (omegaS)
+            let omegaS = Number(this.calculateOmegaS(this.latInRadians, solarDeclination));
 
             // If the sun is below the horizon...
             if (Math.abs(Number(omegaInRadians)) > omegaS) {

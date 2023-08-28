@@ -119,7 +119,7 @@ const view = {
     },
 
 
-    /* Method to display the values selected by the user */
+    /* Function to display the values selected by the user */
     displaySelectedValues: function(selectedValues) {
         const simulatorResultsContent = document.getElementById('two-d-rendering-content');
         simulatorResultsContent.innerHTML = '';
@@ -156,7 +156,7 @@ const view = {
 
     /* Using chart.js to create a line chart - first initialized without
      * information */
-    initEmptyGraph() {
+    initEmptySimulation() {
         const ctx = document.getElementById('myChart');
 
         // Destroy/delete the old graph instance.
@@ -247,9 +247,9 @@ const view = {
         }
     },
 
-    /* Using chart.js to update the initialized graph to show
+    /* Using chart.js to update the initialized simulation to show
      * a line chart */
-    displayGraph(xArray, yArray) {
+    displaySimulation(xArray, yArray) {
         const ctx = document.getElementById('myChart');
         if (this.chartInstance) {
             this.chartInstance.data.labels = xArray;
