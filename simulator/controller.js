@@ -45,38 +45,6 @@ const controller = {
 
     startSimulator: function() {
         console.log("Entered startSimulator function");
-
-        // Begin the animation process
-        this.triggerAnimations();
-
-        console.log("Exiting startSimulator function");
-    },
-
-    triggerAnimations: function() {
-        // Apply classes to trigger sliding animations
-        const controlsDiv = document.querySelector('.controls');
-        const graphDiv = document.querySelector('.graph');
-        const twoDRenderingDiv = document.querySelector('.two-d-rendering');
-
-        // Clearing anything that might have been running
-        controlsDiv.classList.remove('controls-slide-out', 'controls-slide-in');
-        graphDiv.classList.remove('graph-slide-in', 'graph-slide-out');
-        twoDRenderingDiv.classList.remove('two-d-rendering-slide-in', 'two-d-rendering-slide-out');
-
-        // After clearing things, add
-        controlsDiv.classList.add('controls-slide-out', 'transition');
-        graphDiv.classList.add('graph-slide-in', 'transition');
-        twoDRenderingDiv.classList.add('two-d-rendering-slide-in', 'transition');
-
-        // Listen for the transitionend event on any of the divs
-        controlsDiv.addEventListener('transitionend', this.handleAnimationEnd.bind(this));
-    },
-
-    handleAnimationEnd: function(event) {
-        console.log("Animation ended");
-        // Remove the event listener to avoid multiple calls
-        event.target.removeEventListener('transitionend', controller.handleAnimationEnd);
-
         // Display values and start plotting the graph
         this.displayValues();
     },
