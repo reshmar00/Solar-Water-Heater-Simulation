@@ -8,7 +8,6 @@
 const model = {
 
     /* Setting up slider values on window onload */
-
     onLoadFunction: function(){
         const sliderArray = [
             "collector-area", "collector-depth", "collector-tilt",
@@ -47,16 +46,16 @@ const model = {
     /* This sets up default values in case the user doesn't
      * make any selection from the dropdown menus or sliders */
     selectedValues: {
-        month: { label: 'Month', value: this.getMonth || 'January' },
-        date: { label: 'Date', value: this.getDate || 1 },
-        time: { label: 'Time', value: this.getTime || '1200' },
-        collectorArea: { label: 'Collector Area', value: this.getCollectorArea || 280.0 },
-        collectorDepth: { label: 'Collector Depth', value: this.getCollectorDepth || 0.150 },
-        collectorTilt: { label: 'Collector Tilt', value: this.getCollectorTilt || 45.0 },
-        pipeLength: { label: 'Pipe Length', value: this.getPipeLength || 130.0 },
-        storageTankVolume: { label: 'Storage Tank Volume', value: this.getStorageTankVolume || 1251.0 },
-        temperature: { label: 'Starting Temperature', value: this.getTemperature || 47.5 },
-        timeStep: { label: 'Time Step', value: this.getTimeStep || 0.1 },
+        month: { label: 'Month', value: 'January' },
+        date: { label: 'Date', value: 1 },
+        time: { label: 'Time', value: '1200' },
+        collectorArea: { label: 'Collector Area', value: 280.0 },
+        collectorDepth: { label: 'Collector Depth', value: 0.150 },
+        collectorTilt: { label: 'Collector Tilt', value: 45.0 },
+        pipeLength: { label: 'Pipe Length', value: 130.0 },
+        storageTankVolume: { label: 'Storage Tank Volume', value: 1251.0 },
+        temperature: { label: 'Starting Temperature', value: 47.5 },
+        timeStep: { label: 'Time Step', value: 0.1 },
     },
 
     /* Arrays that contain the values of time and temperature */
@@ -595,7 +594,7 @@ const model = {
             if (tOD < 1 || tOD > 24) {
                 throw new Error('Input value must be an integer between 1 and 24');
             }
-            if (dayOfYear === Infinity || collectorTilt === Infinity || timeOfDay === Infinity) {
+            if (dayOfYear === Infinity || collectorTilt === Infinity || tOD === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
 

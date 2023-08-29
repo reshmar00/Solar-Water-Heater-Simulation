@@ -43,7 +43,7 @@ const controller = {
             element.addEventListener(item.event, item.handler.bind(this));
         });
 
-        // window.addEventListener('resize', this.handleWindowResize);
+        window.addEventListener('resize', this.handleWindowResize);
     },
 
     stopSimulator: function() {
