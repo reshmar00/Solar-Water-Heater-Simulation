@@ -2,7 +2,7 @@
 
 This is a simple software simulation of a heat transfer system using a solar collector (specifically, an evacuated tube collector) and storage tank. I have made a few assumptions:\
 
-<img src="https://github.com/reshmar00/solar_heat_transfer_simulator/solar_heating_system.jpg" alt="Solar Water Heating System">
+<img src="https://github.com/reshmar00/solar_heat_transfer_simulator/blob/main/solar_heating_system.jpg" alt="Solar Water Heating System">
 
 &nbsp;&nbsp;&nbsp; 1. The end-use fluid being transferred through the pipes is *water*.\
 &nbsp;&nbsp;&nbsp; 2. There is negligible wear and tear.\
