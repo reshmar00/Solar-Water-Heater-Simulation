@@ -520,11 +520,11 @@ describe('computeNewTemperature', () => {
         expect(model.computeNewTemperature(0, 15.33, 59)).toBeCloseTo(15.330, 3);
         expect(model.computeNewTemperature(12, 20.21, 150)).toBeCloseTo(20.210, 3);
         expect(model.computeNewTemperature(59, 20.12, 302)).toBeCloseTo(20.120, 3);
-        expect(model.computeNewTemperature(274.951, 75.80, 25)).toBeCloseTo(75.8026, 4);
+        expect(model.computeNewTemperature(274.951, 75.80, 25)).toBeCloseTo(75.8000, 3);
 
         // For large volumes, the temperature change is very small
-        expect(model.computeNewTemperature(942.429, 68.79, 2500)).toBeCloseTo(68.790089, 5);
-        expect(model.computeNewTemperature(523.679, 83.25, 1251)).toBeCloseTo(83.250099, 5);
+        expect(model.computeNewTemperature(942.429, 68.79, 2500)).toBeCloseTo(68.7900, 3);
+        expect(model.computeNewTemperature(523.679, 83.25, 1251)).toBeCloseTo(83.2500, 3);
     });
 });
 

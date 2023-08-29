@@ -66,7 +66,7 @@ const model = {
 
     /* Constants */
     specificHeatOfWater: 4200.0, // J/kg°C
-    densityOfWater: 1.0, // kg/m^3
+    densityOfWater: 1000.0, // kg/m^3
     averageSolarConstant: 1361, // W/m2
     latInRadians: 0.686280915, // latitude (of Utah) in radians
     pipeRadius: 0.05, // setting a 5cm radius for the pipe
