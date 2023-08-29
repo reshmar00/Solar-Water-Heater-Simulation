@@ -7,13 +7,49 @@
 
 const model = {
 
+    /* Setting up slider values on window onload */
+
+    onLoadFunction: function(){
+        const sliderArray = [
+            "collector-area", "collector-depth", "collector-tilt",
+            "pipe-length", "storage-tank-volume", "temperature",
+            "time-step"
+        ];
+
+        function toCamelCase(str) {
+            return str.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+        }
+
+        for (let i = 0; i < sliderArray.length; i++) {
+            let slider = document.getElementById(sliderArray[i]);
+            if (slider) {
+                let camelCased = toCamelCase(sliderArray[i]);
+                updateModelAndView(camelCased, slider.value);
+            }
+        }
+
+        function updateModelAndView(camelCasedLabel, value) {
+            if (typeof model['set' + capitalizeFirstLetter(camelCasedLabel)] === 'function') {
+                model['set' + capitalizeFirstLetter(camelCasedLabel)](value);
+            }
+
+            if (typeof view['update' + capitalizeFirstLetter(camelCasedLabel) + 'Display'] === 'function') {
+                view['update' + capitalizeFirstLetter(camelCasedLabel) + 'Display'](value);
+            }
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    },
+
     /* Setting default values */
     /* This sets up default values in case the user doesn't
      * make any selection from the dropdown menus or sliders */
     selectedValues: {
         month: { label: 'Month', value: this.getMonth || 'January' },
         date: { label: 'Date', value: this.getDate || 1 },
-        time: { label: 'Time', value: this.getTime || '12:00' },
+        time: { label: 'Time', value: this.getTime || '1200' },
         collectorArea: { label: 'Collector Area', value: this.getCollectorArea || 280.0 },
         collectorDepth: { label: 'Collector Depth', value: this.getCollectorDepth || 0.150 },
         collectorTilt: { label: 'Collector Tilt', value: this.getCollectorTilt || 45.0 },
@@ -150,53 +186,52 @@ const model = {
     timeOfDay: function (time) {
         let timeAsNumber = -1;
         if (time === '0100'){
-
             timeAsNumber = Number(1);
-        } else if(time === '02:00'){
+        } else if(time === '0200'){
             timeAsNumber = Number(2);
-        } else if(time === '03:00'){
+        } else if(time === '0300'){
             timeAsNumber =Number(3);
-        } else if(time === '04:00'){
+        } else if(time === '0400'){
             timeAsNumber = Number(4);
-        } else if(time === '05:00'){
+        } else if(time === '0500'){
             timeAsNumber = Number(5);
-        } else if(time === '06:00'){
+        } else if(time === '0600'){
             timeAsNumber =Number(6);
-        } else if(time === '07:00'){
+        } else if(time === '0700'){
             timeAsNumber = Number(7);
-        } else if(time === '08:00'){
+        } else if(time === '0800'){
             timeAsNumber = Number(8);
-        } else if(time === '09:00'){
+        } else if(time === '0900'){
             timeAsNumber = Number(9);
-        } else if(time === '10:00') {
+        } else if(time === '1000') {
             timeAsNumber = Number(10);
-        } else if(time === '11:00'){
+        } else if(time === '1100'){
             timeAsNumber = Number(11);
-        } else if(time === '12:00'){
+        } else if(time === '1200'){
             timeAsNumber = Number(12);
-        } else if(time === '13:00'){
+        } else if(time === '1300'){
             timeAsNumber = Number(13);
-        } else if(time === '14:00'){
+        } else if(time === '1400'){
             timeAsNumber = Number(14);
-        } else if(time === '15:00'){
+        } else if(time === '1500'){
             timeAsNumber = Number(15);
-        } else if(time === '16:00'){
+        } else if(time === '1600'){
             timeAsNumber = Number(16);
-        } else if(time === '17:00'){
+        } else if(time === '1700'){
             timeAsNumber = Number(17);
-        } else if(time === '18:00'){
+        } else if(time === '1800'){
             timeAsNumber = Number(18);
-        } else if(time === '19:00'){
+        } else if(time === '1900'){
             timeAsNumber = Number(19);
-        } else if(time === '20:00'){
+        } else if(time === '2000'){
             timeAsNumber = Number(20);
-        } else if(time === '21:00'){
+        } else if(time === '2100'){
             timeAsNumber = Number(21);
-        } else if(time === '22:00'){
+        } else if(time === '2200'){
             timeAsNumber = Number(22);
-        } else if(time === '23:00'){
+        } else if(time === '2300'){
             timeAsNumber = Number(23);
-        } else if(time === '24:00'){
+        } else if(time === '2400'){
             timeAsNumber = Number(24);
         }
         console.log("Time as a number: ",timeAsNumber);

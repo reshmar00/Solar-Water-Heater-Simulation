@@ -23,6 +23,10 @@ const view = {
             option.text = month;
             monthDropdown.appendChild(option);
         });
+
+        // Set value from sessionStorage
+        const storedMonth = sessionStorage.getItem('month');
+        if (storedMonth) monthDropdown.value = storedMonth;
     },
 
     /* Date selection - based on the month ~ accounts for 30/31 days + Feb */
@@ -44,12 +48,16 @@ const view = {
             option.text = i;
             this.dateListElement.appendChild(option);
         }
+
+        // Set value from sessionStorage
+        const storedDate = sessionStorage.getItem('date');
+        if (storedDate) this.dateListElement.value = storedDate;
     },
 
     /* Time selection */
     /* Populates a drop-down menu with hourly options in a 24-hour */
     populateTimeDropdown: function() {
-        const times = ['01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+        const times = ['0100', '0200', '0300', '0400', '0500', '0600', '0700', '0800', '0900', '1000', '1100', '1200', '1300', '1400', '1500', '1600', '1700', '1800', '1900', '2000', '2100', '2200', '2300', '2400'];
         const timeDropdown = document.getElementById('time');
 
         timeDropdown.innerHTML = '<option>---Choose time---</option>';
@@ -59,6 +67,10 @@ const view = {
             option.text = time;
             timeDropdown.appendChild(option);
         });
+
+        // Set value from sessionStorage
+        const storedTime = sessionStorage.getItem('time');
+        if (storedTime) timeDropdown.value = storedTime;
     },
 
     /* Setting up the collector area slider's value... */
@@ -189,7 +201,7 @@ const view = {
                                 display: true,
                                 align: 'center',
                                 color: 'rgba(255, 255, 255, 1)',
-                                text: 'Time',
+                                text: 'Time (s)',
                                 font: {
                                     family: "Bai Jamjuree",
                                     size: 18,
@@ -208,11 +220,11 @@ const view = {
                                 display: true,
                                 align: 'center',
                                 color: 'rgba(255, 255, 255, 1)',
-                                text: 'Temperature',
+                                text: 'Temperature (°C)',
                                 font: {
                                     family: "Bai Jamjuree",
                                     size: 18,
-                                    weight: 'bold'
+                                    weight: 'bold',
                                 }
                             },
                             ticks: {
@@ -258,3 +270,4 @@ const view = {
         }
     }
 };
+

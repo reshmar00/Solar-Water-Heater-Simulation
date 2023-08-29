@@ -43,7 +43,7 @@ const controller = {
             element.addEventListener(item.event, item.handler.bind(this));
         });
 
-        window.addEventListener('resize', this.handleWindowResize);
+        // window.addEventListener('resize', this.handleWindowResize);
     },
 
     stopSimulator: function() {
@@ -59,7 +59,7 @@ const controller = {
     displayValues: function() {
         // Display selected values in simulatorResultsDiv
         view.displaySelectedValues(model.selectedValues);
-        console.log("Displayed selected values");
+        console.log("Selected values:", model.selectedValues);
 
         // Extracting values from model.selectedValues
         let TStart = Number(model.selectedValues.temperature.value);

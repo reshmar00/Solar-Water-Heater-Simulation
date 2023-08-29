@@ -49,55 +49,17 @@
                 <!-- For sliders -->
                 <script src="model.js"></script>
                 <script>
-                    function getModelValue(modelFuncName) {
-                        if (model[modelFuncName]) {
-                            return model[modelFuncName]();
-                        }
-                        return '';
-                    }
-
-                    function initializeSlider(slider, displayElementId) {
-                        const storedValue = sessionStorage.getItem(displayElementId);
-                        const displayElement = document.getElementById(displayElementId);
-
-                        if (storedValue) {
-                            slider.value = storedValue;
-                            displayElement.innerHTML = storedValue;
-                        } else {
-                            const modelValue = getModelValue(slider.getAttribute('data-model-func'));
-                            slider.value = modelValue;
-                            displayElement.innerHTML = modelValue;
-                        }
-                    }
-
-                    function handleSliderChange(slider) {
-                        const currentValue = slider.value;
-                        const displayElementId = slider.getAttribute('data-value-display');
-                        const displayElement = document.getElementById(displayElementId);
-
-                        displayElement.innerHTML = currentValue;
-                        sessionStorage.setItem(displayElementId, currentValue);
-                    }
-
-                    // On page load, set up each slider
                     window.onload = function() {
-                        const sliders = document.querySelectorAll('[data-value-display]');
-                        sliders.forEach(slider => {
-                            initializeSlider(slider, slider.getAttribute('data-value-display'));
-
-                            slider.addEventListener('input', function() {
-                                handleSliderChange(slider);
-                            });
-                        });
-                    }
+                        model.onLoadFunction();
+                    };
                 </script>
-
                 <div class="option-item">
                     <div class="label-container">
                         <label for="collector-area"><b>&nbsp;&nbsp;&nbsp;Collector Area (m<sup>2</sup>):</b></label>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="collector-area" data-value-display="collector-area-value" data-model-func="getCollectorArea"  min="20.0" max="500.0" step="0.1">
+                        <input type="range" id="collector-area"
+                               min="20.0" max="500.0" value="280.0" step="0.1">
                     </div>
                     <div class="value-container">
                         <span id="collector-area-value"></span>
@@ -109,7 +71,7 @@
                         <label for="collector-depth"><b>&nbsp;&nbsp;&nbsp;Collector Depth (m):</b></label>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="collector-depth" data-value-display="collector-depth-value" data-model-func="getCollectorDepth"  min="0.100" max="0.200" step="0.001">
+                        <input type="range" id="collector-depth" min="0.100" max="0.200" value="0.150" step="0.001">
                     </div>
                     <div class="value-container">
                         <span id="collector-depth-value"></span>
@@ -121,7 +83,7 @@
                         <label for="collector-tilt"><b>&nbsp;&nbsp;&nbsp;Collector Tilt (°):</b></label>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="collector-tilt" data-value-display="collector-tilt-value" data-model-func="getCollectorTilt" min="0.0" max="90.0" step="0.01">
+                        <input type="range" id="collector-tilt" min="0.0" max="90.0" value="45.0" step="0.01">
                     </div>
                     <div class="value-container">
                         <span id="collector-tilt-value"></span>
@@ -133,7 +95,7 @@
                         <label for="pipe-length"><b>&nbsp;&nbsp;&nbsp;Pipe Length (m):</b></label>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="pipe-length" data-value-display="pipe-length-value" data-model-func="getPipeLength" min="10.0" max="250.0" step="0.01">
+                        <input type="range" id="pipe-length" min="10.0" max="250.0" value="130.0" step="0.01">
                     </div>
                     <div class="value-container">
                         <span id="pipe-length-value"></span>
@@ -145,7 +107,7 @@
                         <label for="storage-tank-volume"><b>&nbsp;&nbsp;&nbsp;Storage Tank Volume (m<sup>3</sup>):</b></label>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="storage-tank-volume" data-value-display="storage-tank-volume-value" data-model-func="getStorageTankVolume"  min="1.0" max="2500.0" step="0.1">
+                        <input type="range" id="storage-tank-volume" min="1.0" max="2500.0" value="1251.0" step="0.1">
                     </div>
                     <div class="value-container">
                         <span id="storage-tank-volume-value"></span>
@@ -157,7 +119,7 @@
                         <label for="temperature"><b>&nbsp;&nbsp;&nbsp;Temperature (°C):</b></label>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="temperature" data-value-display="temperature-value" data-model-func="getTemperature" min="5.0" max="85.0" step="0.01">
+                        <input type="range" id="temperature" min="5.0" max="85.0" value="47.5.0" step="0.01">
                     </div>
                     <div class="value-container">
                         <span id="temperature-value"></span>
@@ -169,7 +131,7 @@
                         <label for="time-step"><b>&nbsp;&nbsp;&nbsp;Time Step (s):</b></label>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="time-step" data-value-display="time-step-value" data-model-func="getTimeStep" min="0.01" max="60.0" step="0.01" value="0.01">
+                        <input type="range" id="time-step" min="0.01" max="60.0" value="1.0" step="0.01">
                     </div>
                     <div class="value-container">
                         <span id="time-step-value"></span>
@@ -190,14 +152,12 @@
         <div class="result-column"></div>
         <div class="result-column"></div>
         <!-- This is where the simulation results or other data will appear -->
-        <!-- You can populate this with desired content -->
         <div>
             <canvas id="myChart"></canvas>
         </div>
     </div>
 </div>
 <!-- My MVC scripts  -->
-<!--<script src="model.js"></script>-->
 <script src="view.js"></script>
 <script src="controller.js"></script>
 
