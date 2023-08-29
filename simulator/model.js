@@ -580,9 +580,8 @@ const model = {
      *         t, time of day (number between 1 and 24)
      * Output: Rb, the geometric factor */
     calculateGeometricFactor: function(dayOfYear, collectorTilt, timeOfDay) {
-        let tOD = Number(timeOfDay);
         try {
-            if (typeof dayOfYear !== 'number' || typeof collectorTilt !== 'number' || typeof tOD !== 'number') {
+            if (typeof dayOfYear !== 'number' || typeof collectorTilt !== 'number' || typeof timeOfDay !== 'number') {
                 throw new Error('Input must be a number');
             }
             if (dayOfYear <= 0 || dayOfYear > 365) {
@@ -591,10 +590,10 @@ const model = {
             if (collectorTilt < 0 || collectorTilt > 90) {
                 throw new Error('Input value must be an integer between 0 and 90');
             }
-            if (tOD < 1 || tOD > 24) {
+            if (timeOfDay < 1 || timeOfDay > 24) {
                 throw new Error('Input value must be an integer between 1 and 24');
             }
-            if (dayOfYear === Infinity || collectorTilt === Infinity || tOD === Infinity) {
+            if (dayOfYear === Infinity || collectorTilt === Infinity || timeOfDay === Infinity) {
                 throw new Error('Input value cannot be infinity');
             }
 
@@ -605,7 +604,7 @@ const model = {
             let sinSolarDeclination = Math.sin(solarDeclination);
 
             // Calculate the solar hour angle -- in radians
-            let omegaInRadians = Number(this.calculateOmegaFromTimeOfDay(tOD));
+            let omegaInRadians = Number(this.calculateOmegaFromTimeOfDay(timeOfDay));
 
             // Check that it makes sense, given the sunset hour angle (omegaS)
             let omegaS = Number(this.calculateOmegaS(this.latInRadians, solarDeclination));

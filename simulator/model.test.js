@@ -1,6 +1,5 @@
 const model = require('./model');
 
-
 // Testing if calculations result in reasonable values in model.js
 describe('degreesToRadians', () => {
     test('converts 0 degrees to 0 radians', () => {
@@ -311,42 +310,36 @@ describe('calculateSolarDeclination', () => {
     });
 });
 
-describe('calculateGeometricFactor', () => {
-    it('should calculate the geometric factor, Rb, correctly for valid input', () => {
-        // Test cases for specific days of the year and tilt angles
-        expect(model.calculateGeometricFactor(1, 25, 9)).toBeCloseTo(1.2573, 3);
-        expect(model.calculateGeometricFactor(1, 30, 9)).toBeCloseTo(1.5723, 3);
-        expect(model.calculateGeometricFactor(19, 26, 10)).toBeCloseTo(1.2316, 3);
-        expect(model.calculateGeometricFactor(31, 27, 12)).toBeCloseTo(1.2188, 3);
-        expect(model.calculateGeometricFactor(32, 28, 12)).toBeCloseTo(1.2501, 3);
-        expect(model.calculateGeometricFactor(90, 30, 12)).toBeCloseTo(1.1107, 3);
-        expect(model.calculateGeometricFactor(100, 12, 13)).toBeCloseTo(0.945, 3);
-        expect(model.calculateGeometricFactor(111, 3.67, 14)).toBeCloseTo(0.938, 3);
-        expect(model.calculateGeometricFactor(125, 10, 11)).toBeCloseTo(0.9822, 3);
-        expect(model.calculateGeometricFactor(134, 15.5, 10)).toBeCloseTo(1.0038, 3);
-        expect(model.calculateGeometricFactor(180, 45, 9)).toBeCloseTo(0.8226, 3);
-        expect(model.calculateGeometricFactor(253, 34, 16)).toBeCloseTo(1.1073, 3);
-        expect(model.calculateGeometricFactor(363, 18.3456, 15)).toBeCloseTo(0.9450, 3);
-
-        // Post sunset and pre sunrise, all values of Rb should be 0
-        expect(model.calculateGeometricFactor(158, 47.89, 23)).toBeCloseTo(0.000, 3);
-        expect(model.calculateGeometricFactor(173, 90, 22)).toBeCloseTo(0.000, 3);
-        expect(model.calculateGeometricFactor(181, 55.567, 21)).toBeCloseTo(0.000, 3);
-        expect(model.calculateGeometricFactor(272, 60.9876, 6)).toBeCloseTo(0.000, 3);
-    });
-
-    it('should throw an error for non-number input', () => {
-        expect(() => model.calculateGeometricFactor('150', 30)).toThrow();
-        expect(() => model.calculateGeometricFactor(180, '45')).toThrow();
-    });
-
-    it('should throw an error for out-of-range input', () => {
-        expect(() => model.calculateGeometricFactor(0, 300)).toThrowError();
-        expect(() => model.calculateGeometricFactor(400, 45)).toThrowError();
-    });
-
-    it('should throw an error for Infinity input', () => {
-        expect(() => model.calculateGeometricFactor(180, Infinity)).toThrowError();
+describe('calculateOmegaFromTimeOfDay', () => {
+    it('should calculate the solar hour angle in radians correctly for valid input', () => {
+        // Test cases for specific times of the day
+        // The solar hour angle varies from -180° to 180° in degrees,
+        // which is -π to π in radians. It is 0 at noon and is negative
+        // before noon and positive after.
+        expect(model.calculateOmegaFromTimeOfDay(1)).toBeCloseTo(-2.879, 2);
+        expect(model.calculateOmegaFromTimeOfDay(2)).toBeCloseTo(-2.617, 2);
+        expect(model.calculateOmegaFromTimeOfDay(3)).toBeCloseTo(-2.356, 2);
+        expect(model.calculateOmegaFromTimeOfDay(4)).toBeCloseTo(-2.094, 2);
+        expect(model.calculateOmegaFromTimeOfDay(5)).toBeCloseTo(-1.832, 2);
+        expect(model.calculateOmegaFromTimeOfDay(6)).toBeCloseTo(-1.570, 2);
+        expect(model.calculateOmegaFromTimeOfDay(7)).toBeCloseTo(-1.308, 2);
+        expect(model.calculateOmegaFromTimeOfDay(8)).toBeCloseTo(-1.047, 2);
+        expect(model.calculateOmegaFromTimeOfDay(9)).toBeCloseTo(-0.785, 2);
+        expect(model.calculateOmegaFromTimeOfDay(10)).toBeCloseTo(-0.523, 2);
+        expect(model.calculateOmegaFromTimeOfDay(11)).toBeCloseTo(-0.261, 2);
+        expect(model.calculateOmegaFromTimeOfDay(12)).toBeCloseTo(0.000, 2);
+        expect(model.calculateOmegaFromTimeOfDay(13)).toBeCloseTo(0.261, 2);
+        expect(model.calculateOmegaFromTimeOfDay(14)).toBeCloseTo(0.523, 2);
+        expect(model.calculateOmegaFromTimeOfDay(15)).toBeCloseTo(0.785, 2);
+        expect(model.calculateOmegaFromTimeOfDay(16)).toBeCloseTo(1.047, 2);
+        expect(model.calculateOmegaFromTimeOfDay(17)).toBeCloseTo(1.308, 2);
+        expect(model.calculateOmegaFromTimeOfDay(18)).toBeCloseTo(1.570, 2);
+        expect(model.calculateOmegaFromTimeOfDay(19)).toBeCloseTo(1.832, 2);
+        expect(model.calculateOmegaFromTimeOfDay(20)).toBeCloseTo(2.094, 2);
+        expect(model.calculateOmegaFromTimeOfDay(21)).toBeCloseTo(2.356, 2);
+        expect(model.calculateOmegaFromTimeOfDay(22)).toBeCloseTo(2.617, 2);
+        expect(model.calculateOmegaFromTimeOfDay(23)).toBeCloseTo(2.879, 2);
+        expect(model.calculateOmegaFromTimeOfDay(24)).toBeCloseTo(3.141, 2);
     });
 });
 
@@ -430,99 +423,108 @@ describe('calculateGeometricFactor', () => {
         expect(model.calculateGeometricFactor(158, 47.89, 23)).toBeCloseTo(0.000, 3);
         expect(model.calculateGeometricFactor(173, 90, 22)).toBeCloseTo(0.000, 3);
     });
-    //
-    // it('should throw an error for invalid input types', () => {
-    //     expect(() => model.calculateGeometricFactor('a', 25, 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, 'b', 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, 25, 'c')).toThrow();
-    // });
-    //
-    // it('should throw an error for out-of-range values', () => {
-    //     expect(() => model.calculateGeometricFactor(0, 25, 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(366, 25, 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, -1, 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, 91, 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, 25, 0)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, 25, 25)).toThrow();
-    // });
-    //
-    // it('should handle Infinity values', () => {
-    //     expect(() => model.calculateGeometricFactor(Infinity, 25, 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, Infinity, 9)).toThrow();
-    //     expect(() => model.calculateGeometricFactor(1, 25, Infinity)).toThrow();
-    // });
+
+    it('should throw an error for invalid input types', () => {
+        expect(() => model.calculateGeometricFactor('a', 25, 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, 'b', 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, 25, 'c')).toThrow();
+    });
+
+    it('should throw an error for out-of-range values', () => {
+        expect(() => model.calculateGeometricFactor(0, 25, 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(366, 25, 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, -1, 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, 91, 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, 25, 0)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, 25, 25)).toThrow();
+    });
+
+    it('should handle Infinity values', () => {
+        expect(() => model.calculateGeometricFactor(Infinity, 25, 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, Infinity, 9)).toThrow();
+        expect(() => model.calculateGeometricFactor(1, 25, Infinity)).toThrow();
+    });
+
+});
+
+describe('calculateTotalRadiationOnCollector', () => {
+
+    it('should calculate total radiation on the collector correctly for valid input', () => {
+        // Test cases for specific days of the year, tilt angles, and times of day.
+        expect(model.calculateTotalRadiationOnCollector(1, 25, 9)).toBeCloseTo(1013.6951, 3);
+        expect(model.calculateTotalRadiationOnCollector(50, 45, 12)).toBeCloseTo(1583.6613, 3);
+        expect(model.calculateTotalRadiationOnCollector(100, 10, 14)).toBeCloseTo(1152.0072, 3);
+        expect(model.calculateTotalRadiationOnCollector(284, 37, 11)).toBeCloseTo(1357.2061, 3);
+        expect(model.calculateTotalRadiationOnCollector(212, 45, 12)).toBeCloseTo(1623.6593, 3);
+    });
+
+    it('should return a lower value for times after sunset and before sunrise', () => {
+        expect(model.calculateTotalRadiationOnCollector(59, 45, 5)).toBeCloseTo(567.60202, 3);
+        expect(model.calculateTotalRadiationOnCollector(18, 30, 4)).toBeCloseTo(471.9414, 3);
+        expect(model.calculateTotalRadiationOnCollector(158, 47.89, 23)).toBeCloseTo(1057.4866, 3);
+        expect(model.calculateTotalRadiationOnCollector(173, 90, 22)).toBeCloseTo(552.4442, 3);
+    });
+
+    it('should throw an error for invalid input types', () => {
+        expect(() => model.calculateTotalRadiationOnCollector('a', 25, 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, 'b', 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, 25, 'c')).toThrow();
+    });
+
+    it('should throw an error for out-of-range values', () => {
+        expect(() => model.calculateTotalRadiationOnCollector(0, 25, 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(366, 25, 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, -1, 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, 91, 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, 25, 0)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, 25, 25)).toThrow();
+    });
+
+    it('should handle Infinity values', () => {
+        expect(() => model.calculateTotalRadiationOnCollector(Infinity, 25, 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, Infinity, 9)).toThrow();
+        expect(() => model.calculateTotalRadiationOnCollector(1, 25, Infinity)).toThrow();
+    });
 
 });
 
 
-// describe('calculateEnergyCollected, QColl', () => {
-//     it('should correctly calculate  the energy collected per unit collector ' +
-//         'area per unit time (QColl) for valid input', () => {
-//         // Test cases for specific days of the year and tilt angles
-//         expect(model.calculateEnergyCollected(1, 25, 26)).toBeCloseTo(1.2799, 3);
-//         expect(model.calculateEnergyCollected(1, 25, 27)).toBeCloseTo(1.98, 3);
-//         expect(model.calculateEnergyCollected(1, 25, 28)).toBeCloseTo(2.6799, 3);
-//         expect(model.calculateEnergyCollected(1, 25, 28.6)).toBeCloseTo(3.100, 3);
-//         expect(model.calculateEnergyCollected(1, 25, 28.7)).toBeCloseTo(3.1699, 3);
-//         expect(model.calculateEnergyCollected(1, 25, 28.76)).toBeCloseTo(3.2120, 3);
-//
-//         expect(model.calculateEnergyCollected(19, 26, 9, 45.56, 46.57)).toBeCloseTo(589.8770, 3);
-//         expect(model.calculateEnergyCollected(19, 26, 9, 46.57, 46.78)).toBeCloseTo(590.4370, 3);
-//         expect(model.calculateEnergyCollected(19, 26, 9, 75.57, 76.83)).toBeCloseTo(589.702, 3);
-//         expect(model.calculateEnergyCollected(19, 26, 9, 76.84, 77.99)).toBeCloseTo(589.779, 3);
-//         expect(model.calculateEnergyCollected(19, 26, 9, 84.59, 85.00)).toBeCloseTo(590.297, 3);
-//
-//         expect(model.calculateEnergyCollected(32, 28, 12, 66.99, 67.01)).toBeCloseTo(579.914, 3);
-//         expect(model.calculateEnergyCollected(32, 28, 12, 67.99, 68.01)).toBeCloseTo(579.914, 3);
-//         expect(model.calculateEnergyCollected(32, 28, 12, 68.45, 70.32)).toBeCloseTo(578.619, 3);
-//         expect(model.calculateEnergyCollected(32, 28, 12, 75.35, 75.37)).toBeCloseTo(579.914, 3);
-//         expect(model.calculateEnergyCollected(32, 28, 12, 82.34, 83,79)).toBeCloseTo(579.466, 3);
-//
-//         // expect(model.calculateEnergyCollected(90, 30, 12, 5.00, 5.01)).toBeCloseTo(704.743, 3);
-//         // expect(model.calculateEnergyCollected(90, 30, 12, 5.01, 5.02)).toBeCloseTo(704.743, 3);
-//         // expect(model.calculateEnergyCollected(90, 30, 12, 5.03, 5.04)).toBeCloseTo(704.743, 3);
-//         // expect(model.calculateEnergyCollected(90, 30, 12, 5.04, 5.05)).toBeCloseTo(704.743, 3);
-//         // expect(model.calculateEnergyCollected(90, 30, 12, 5.05, 5.06)).toBeCloseTo(704.743, 3);
-//         //
-//         // expect(model.calculateEnergyCollected(100, 12, 13, 37.54, 40.12)).toBeCloseTo(667.920, 3);
-//         // expect(model.calculateEnergyCollected(100, 12, 13, 41.00, 41.02)).toBeCloseTo(669.712, 3);
-//         // expect(model.calculateEnergyCollected(100, 12, 13, 45.71, 49.56)).toBeCloseTo(667.031, 3);
-//         // expect(model.calculateEnergyCollected(100, 12, 13, 54.66, 59.99)).toBeCloseTo(665.995, 3);
-//         // expect(model.calculateEnergyCollected(100, 12, 13, 67.77, 70.11)).toBeCloseTo(668.088, 3);
-//         //
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 25.01, 30.02)).toBeCloseTo(1006.542, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 30.30, 40.00)).toBeCloseTo(1003.259, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 40.50, 47.30)).toBeCloseTo(1005.289, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 47.00, 50.20)).toBeCloseTo(1007.809, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 50.10, 51.00)).toBeCloseTo(1009.419, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 51.00, 59.60)).toBeCloseTo(1004.029, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 59.00, 62.00)).toBeCloseTo(1007.949, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 62.70, 67.00)).toBeCloseTo(1007.039, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 67.00, 70.08)).toBeCloseTo(1007.893, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 71.09, 81.02)).toBeCloseTo(1003.098, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 81.03, 82.07)).toBeCloseTo(1009.321, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 82.08, 83.02)).toBeCloseTo(1009.391, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 83.05, 84.09)).toBeCloseTo(1009.321, 3);
-//         // expect(model.calculateEnergyCollected(125, 10, 11, 84.01, 85.00)).toBeCloseTo(1009.356, 3);
-//         //
-//         //
-//         // // Warm days + noon - expecting larger Qcoll values
-//         // expect(model.calculateEnergyCollected(136, 45, 12, 84.01, 85.00)).toBeCloseTo(1253.8246, 3);
-//         // expect(model.calculateEnergyCollected(140, 45, 12, 84.01, 85.00)).toBeCloseTo(1242.5788, 3);
-//         // expect(model.calculateEnergyCollected(145, 45, 12, 84.01, 85.00)).toBeCloseTo(1230.2899, 3);
-//         // expect(model.calculateEnergyCollected(150, 45, 12, 84.01, 85.00)).toBeCloseTo(1219.9602, 3);
-//         // expect(model.calculateEnergyCollected(161, 45, 12, 84.01, 85.00)).toBeCloseTo(1204.1214, 3);
-//         // expect(model.calculateEnergyCollected(166, 45, 12, 84.01, 85.00)).toBeCloseTo(1200.0536, 3);
-//         //
-//         //
-//         // // Cold days + evening - expecting smaller QColl values
-//         // expect(model.calculateEnergyCollected(277, 30, 18, 66.99, 67.01)).toBeCloseTo(354.1788, 3);
-//         // expect(model.calculateEnergyCollected(289, 30, 18, 66.99, 67.01)).toBeCloseTo(356.6260, 3);
-//         // expect(model.calculateEnergyCollected(301, 30, 18, 66.99, 67.01)).toBeCloseTo(358.9405, 3);
-//         // expect(model.calculateEnergyCollected(324, 30, 18, 66.99, 67.01)).toBeCloseTo(362.6550, 3);
-//         // expect(model.calculateEnergyCollected(355, 30, 18, 66.99, 67.01)).toBeCloseTo(274.0081, 3);
-//         // expect(model.calculateEnergyCollected(364, 30, 18, 66.99, 67.01)).toBeCloseTo(274.1400, 3);
-//         // expect(model.calculateEnergyCollected(365, 30, 18, 66.99, 67.01)).toBeCloseTo(274.1413, 3);
-//
-//     });
-// });
+describe('calculateEnergyCollected, QColl', () => {
+    it('should correctly calculate  the energy collected per unit collector ' +
+        'area per unit time (QColl) for valid input', () => {
+        // Test cases for specific days of the year and tilt angles
+
+        // Input G is from before sunrise and after sunset, expecting smaller QColl values
+        expect(model.calculateEnergyCollected(471.9414, 84.01, 85.00)).toBeCloseTo(274.419, 3);
+        expect(model.calculateEnergyCollected(471.9414, 84.02, 84.00)).toBeCloseTo(273.712, 3);
+        expect(model.calculateEnergyCollected(471.9414, 84.09, 85.00)).toBeCloseTo(274.363, 3);
+        expect(model.calculateEnergyCollected(471.9414, 84.99, 85.00)).toBeCloseTo(273.733, 3);
+        expect(model.calculateEnergyCollected(471.9414, 83.25, 85.00)).toBeCloseTo(274.951, 3);
+        expect(model.calculateEnergyCollected(471.9414, 81.03, 85.00)).toBeCloseTo(276.505, 3);
+
+        // Input G is from a warm day at noon, expecting larger QColl values
+        expect(model.calculateEnergyCollected(1623.6593, 66.99, 67.01)).toBeCloseTo(941.7363, 3);
+        expect(model.calculateEnergyCollected(1623.6593, 66.99, 68.01)).toBeCloseTo(942.436, 3);
+        expect(model.calculateEnergyCollected(1623.6593, 25.57, 25.03)).toBeCloseTo(941.344, 3);
+        expect(model.calculateEnergyCollected(1623.6593, 67.89, 67.90)).toBeCloseTo(941.729, 3);
+        expect(model.calculateEnergyCollected(1623.6593, 67.90, 67.91)).toBeCloseTo(941.729, 3);
+        expect(model.calculateEnergyCollected(1623.6593, 66.92, 67.93)).toBeCloseTo(942.429, 3);
+        expect(model.calculateEnergyCollected(1623.6593, 66.94, 67.95)).toBeCloseTo(942.429, 3);
+
+    });
+});
+describe('computeNewTemperature', () => {
+
+    it('should compute new temperature correctly for valid input', () => {
+        // Test cases for specific energy, old temperatures, and volumes.
+        expect(model.computeNewTemperature(0, 15.33, 59)).toBeCloseTo(15.330, 3);
+        expect(model.computeNewTemperature(12, 20.21, 150)).toBeCloseTo(20.210, 3);
+        expect(model.computeNewTemperature(59, 20.12, 302)).toBeCloseTo(20.120, 3);
+        expect(model.computeNewTemperature(274.951, 75.80, 25)).toBeCloseTo(75.8026, 4);
+
+        // For large volumes, the temperature change is very small
+        expect(model.computeNewTemperature(942.429, 68.79, 2500)).toBeCloseTo(68.790089, 5);
+        expect(model.computeNewTemperature(523.679, 83.25, 1251)).toBeCloseTo(83.250099, 5);
+    });
+});
+
