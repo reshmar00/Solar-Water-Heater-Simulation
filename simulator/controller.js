@@ -158,7 +158,7 @@ const controller = {
             currentTime = currentTime + timeStep;
 
             // Add data to the model's arrays
-            model.simulationData.xArrayTime.push(currentTime);
+            model.simulationData.xArrayTime.push(currentTime.toFixed(3));
             model.simulationData.yArrayTemp.push(TNew);
 
             // Update the graph using the view

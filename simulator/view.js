@@ -167,6 +167,7 @@ const view = {
                                 }
                             },
                             ticks: {
+                                precision: 3,
                                 color: 'rgba(255, 255, 255, 1)' // White color for the x-axis ticks
                             },
                             grid: {
