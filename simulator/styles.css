@@ -5,12 +5,19 @@ body, html {
     font-family: "Bai Jamjuree", sans-serif;
     color: white;
     overflow-x: hidden;
-    overflow-y: hidden;
+    /**/
+    overflow-y: auto;
 }
 
 h1, h2 {
     text-align: center;
     color: white;
+}
+
+.chart-container {
+    position: relative;
+    height: 80vh;
+    width: 100%;
 }
 
 
@@ -20,6 +27,9 @@ h1, h2 {
     position: relative;
     background: url('/bg_solar-2.png') no-repeat center center fixed;
     background-size: 140% 100%;
+    /**/
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 .controls, .graph{
@@ -157,8 +167,10 @@ select {
     color: #FFFFFF;
     padding: 20px;
     display: flex;
-    justify-content: space-between;  /* Distribute the columns evenly */
-    flex-wrap: wrap;  /* Allow columns to wrap if they don't fit */
+    flex-direction: column;  /* Stack the content vertically */
+    justify-content: center; /* Center the content horizontally */
+    align-items: center;     /* Center the content vertically */
+    text-align: center;      /* Center the text within each element */
 }
 
 .result-column {
@@ -188,22 +200,53 @@ select {
     }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
     .controls-container {
-        flex-direction: column; /* Stack controls and graph vertically on smaller screens */
+        flex-direction: column; /* stack controls and graph vertically */
     }
+
     .controls, .graph {
-        width: 90%; /* Make both controls and graph full width on smaller screens */
+        width: 100%;
+        height: auto;
+        overflow-y: auto; /* if content overflows, it becomes scrollable */
+        max-height: 70vh;
     }
+
     .options-container {
-        width: 85%; /* Slightly increase the width of the options container for small screens */
+        width: 95%; /* increase width slightly */
+        bottom: 1%; /* adjust bottom spacing */
+        padding: 3px; /* reduce padding */
     }
+
     .button-container {
-        flex-direction: column; /* Stack buttons vertically on smaller screens */
-        align-items: center; /* Center the buttons */
-        padding-top: 20px; /* Reduce padding */
+        flex-direction: column; /* stack buttons vertically */
+        align-items: center; /* center the buttons */
+        padding-top: 20px; /* reduce padding */
     }
-    .graph{
-        width: 20%;
+
+    .option-item {
+        flex-direction: column; /* stack label and dropdown/slider */
+        align-items: center; /* center them */
+        margin: 10px 0; /* adjust margin */
+    }
+
+    .label-container, .dropdown-container, .slider-container {
+        width: 100%; /* full width for these on mobile */
+        padding: 5px 0; /* some vertical padding for spacing */
+        text-align: center; /* center align text */
+    }
+
+    #startSimulator, #stopSimulator {
+        font-size: 14px; /* slightly smaller font */
+        padding: 8px 16px; /* adjust padding */
+    }
+
+    #two-d-rendering-content {
+        flex-direction: column; /* stack columns vertically */
+    }
+
+    .result-column {
+        width: 100%; /* full width for columns */
+        padding: 5px 0; /* adjust padding */
     }
 }

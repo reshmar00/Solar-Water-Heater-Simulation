@@ -122,36 +122,11 @@ const view = {
     /* Function to display the values selected by the user */
     displaySelectedValues: function(selectedValues) {
         const simulatorResultsContent = document.getElementById('two-d-rendering-content');
-        simulatorResultsContent.innerHTML = '';
-
-        const columns = [
-            document.createElement('div'),
-            document.createElement('div'),
-            document.createElement('div')
-        ];
-        columns.forEach(column => column.className = 'result-column');
-
-        let currentColumn = 0;
-        let count = 0;
-
-        for (const key in selectedValues) {
-            if ((count === 5 && currentColumn === 0) || (count === 3 && currentColumn === 1)) {
-                currentColumn++;  // move to next column after 3 values for the first column, and 6 values total for the second column
-            }
-
-            const { label } = selectedValues[key];
-            const getterName = 'get' + key.charAt(0).toUpperCase() + key.slice(1); // Convert the key to the getter function name
-            const value = model[getterName](); // Call the corresponding getter function
-            const formattedValue = this.formatValue(key, value);
-            const content = `${label}: ${formattedValue}<br>`;
-            columns[currentColumn].innerHTML += content;
-
-            count++;
-        }
         let totalVolume = model.computeTotalVolume().toFixed(3);
-        columns[2].innerHTML += "Total Volume: " + totalVolume + "m<sup>2</sup>\n";
-        columns[2].innerHTML += "Ending Temperature: 85°C\n";
-        columns.forEach(column => simulatorResultsContent.appendChild(column));
+        simulatorResultsContent.innerHTML = "Total Volume: " + totalVolume + " cubic meters\n";
+        simulatorResultsContent.innerHTML += "Starting Temperature: " + model.getTemperature() + "°C\n";
+        simulatorResultsContent.innerHTML += "Ending Temperature: 85°C\n";
+
     },
 
     /********************** Chart Code  *************************/
@@ -183,6 +158,8 @@ const view = {
                     }]
                 },
                 options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
                     scales: {
                         x: {
                             beginAtZero: true,
