@@ -14,7 +14,11 @@ For the purpose of this simulation, I have assumed that this system specifically
 
 This simulation primarily tracks two values: heat and temperature.
 
-***
+## How to use this app:
+First, install the dependencies chart.js and node.js.
+Then, clone this repository and open index.html in a browser
+
+## Technical details:
 
 ### **Heat**
 
