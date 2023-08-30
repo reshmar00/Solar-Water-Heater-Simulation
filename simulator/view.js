@@ -110,16 +110,6 @@ const view = {
         this.timeStepValueElement.textContent = value;
     },
 
-    /* Function to display the values selected by the user */
-    displaySelectedValues: function(selectedValues) {
-        const simulatorResultsContent = document.getElementById('two-d-rendering-content');
-        let totalVolume = model.computeTotalVolume().toFixed(3);
-        simulatorResultsContent.innerHTML = "Total Volume: " + totalVolume + " cubic meters\n";
-        simulatorResultsContent.innerHTML += "Starting Temperature: " + model.getTemperature() + "°C\n";
-        simulatorResultsContent.innerHTML += "Ending Temperature: 85°C\n";
-
-    },
-
     /********************** Chart Code  *************************/
 
     /* Using chart.js to create a line chart - first initialized without
@@ -204,7 +194,7 @@ const view = {
                             display: true,
                             align: 'center',
                             color: 'rgba(255, 255, 255, 1)',
-                            text: 'Solar collector heat transfer efficiency',
+                            text: 'Temperature of water in solar heating system',
                             font: {
                                 family: "Bai Jamjuree",
                                 size: 18,

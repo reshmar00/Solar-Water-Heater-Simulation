@@ -42,8 +42,6 @@ const controller = {
             const element = document.getElementById(item.id);
             element.addEventListener(item.event, item.handler.bind(this));
         });
-
-        window.addEventListener('resize', this.handleWindowResize);
     },
 
     stopSimulator: function() {
@@ -52,7 +50,7 @@ const controller = {
 
     startSimulator: function() {
         console.log("Entered startSimulator function");
-        console.log("Inner width is ", window.innerWidth);
+
         // Display values and start plotting the graph
 
         // Show the graph div
@@ -61,7 +59,6 @@ const controller = {
 
         // Initialize or fetch model values
         if (window.innerWidth <= 768) {
-            // this.init();
             console.log("Entered 768 pixels and below zone")
             this.triggerAnimations();
         }
@@ -94,12 +91,10 @@ const controller = {
         // Hide the controls div
         const controlsDiv = document.querySelector('.controls');
         controlsDiv.style.display = 'none';
+
         // Reset the translation for the graph div
         const graphDiv = document.querySelector('.graph');
         graphDiv.style.transform = 'translateX(0)';
-
-        // /* initialize empty graph for simulation */
-        // view.initEmptySimulation();
 
         // Display values and start plotting the graph
         console.log("Starting to display values");
@@ -109,8 +104,6 @@ const controller = {
     displayValues: function() {
         console.log("Displaying values");
         console.log(model.selectedValues);
-        // Display selected values in simulatorResultsDiv
-        view.displaySelectedValues(model.selectedValues);
 
         // Extracting values from model.selectedValues
         let TStart = Number(model.selectedValues.temperature.value);

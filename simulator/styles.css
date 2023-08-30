@@ -28,7 +28,6 @@ h2{
     position: relative;
     background: url('/bg_solar-2.png') no-repeat center center fixed;
     background-size: 140% 100%;
-    /**/
     overflow-y: auto;
     max-height: 100vh;
 }
@@ -68,10 +67,17 @@ h2{
     align-items: center;
 }
 
+.results {
+    padding: 0 15px 0 0;
+    font-weight:bold;
+    text-align: center;
+    color: white;
+}
+
 .button-container {
     display:flex;
     margin:0;
-    padding-top: 100px;
+    padding-bottom: 10px;
 }
 
 .option-item {
@@ -221,57 +227,6 @@ select {
     .button-container {
         flex-direction: column; /* Stack buttons vertically on smaller screens */
         align-items: center; /* Center the buttons */
-        padding-top: 20px; /* Reduce padding */
+        padding-top: 0; /* Reduce padding */
     }
 }
-
-/*@media (max-width: 480px) {*/
-/*    .controls-container {*/
-/*        flex-direction: column; !* stack controls and graph vertically *!*/
-/*    }*/
-
-/*    .controls, .graph {*/
-/*        width: 100%;*/
-/*        height: auto;*/
-/*        overflow-y: auto; !* if content overflows, it becomes scrollable *!*/
-/*        max-height: 70vh;*/
-/*    }*/
-
-/*    .options-container {*/
-/*        width: 95%; !* increase width slightly *!*/
-/*        bottom: 1%; !* adjust bottom spacing *!*/
-/*        padding: 3px; !* reduce padding *!*/
-/*    }*/
-
-/*    .button-container {*/
-/*        flex-direction: column; !* stack buttons vertically *!*/
-/*        align-items: center; !* center the buttons *!*/
-/*        padding-top: 20px; !* reduce padding *!*/
-/*    }*/
-
-/*    .option-item {*/
-/*        flex-direction: column; !* stack label and dropdown/slider *!*/
-/*        align-items: center; !* center them *!*/
-/*        margin: 10px 0; !* adjust margin *!*/
-/*    }*/
-
-/*    .label-container, .dropdown-container, .slider-container {*/
-/*        width: 100%; !* full width for these on mobile *!*/
-/*        padding: 5px 0; !* some vertical padding for spacing *!*/
-/*        text-align: center; !* center align text *!*/
-/*    }*/
-
-/*    #startSimulator, #stopSimulator {*/
-/*        font-size: 14px; !* slightly smaller font *!*/
-/*        padding: 8px 16px; !* adjust padding *!*/
-/*    }*/
-
-/*    #two-d-rendering-content {*/
-/*        flex-direction: column; !* stack columns vertically *!*/
-/*    }*/
-
-/*    .result-column {*/
-/*        width: 100%; !* full width for columns *!*/
-/*        padding: 5px 0; !* adjust padding *!*/
-/*    }*/
-/*}*/
