@@ -20,7 +20,7 @@ This simulation primarily tracks two values: heat and temperature.
 First, install the dependencies chart.js and node.js.\
 Then, clone this repository and open index.html in a browser.\
 
-### Technologies use:
+### Technologies used:
 - JavaScript
 - JEST
 - HTML
