@@ -51,10 +51,6 @@
                     window.onload = function() {
                         model.onLoadFunction();
                     };
-                    window.addEventListener("resize", function() {
-                        const ctx = document.getElementById('myChart')
-                        ctx.resize();
-                    });
                 </script>
                 <div class="option-item">
                     <div class="label-container">
@@ -151,10 +147,6 @@
     <div class="graph">
         <h2>Simulator Results</h2>
         <pre id="two-d-rendering-content"></pre>
-        <div class="result-column"></div>
-        <div class="result-column"></div>
-        <div class="result-column"></div>
-        <!-- This is where the simulation results or other data will appear -->
         <div class="chart-container">
             <canvas id="myChart"></canvas>
         </div>

@@ -110,15 +110,6 @@ const view = {
         this.timeStepValueElement.textContent = value;
     },
 
-    /* Method to format how values are displayed */
-    formatValue: function(key, value) {
-        if (key !== 'month' && key !== 'date' && key !== 'time') {
-            return parseFloat(value).toFixed(6);
-        }
-        return value;
-    },
-
-
     /* Function to display the values selected by the user */
     displaySelectedValues: function(selectedValues) {
         const simulatorResultsContent = document.getElementById('two-d-rendering-content');
@@ -229,11 +220,14 @@ const view = {
     /* Using chart.js to update the initialized simulation to show
      * a line chart */
     displaySimulation(xArray, yArray) {
+        console.log("Entered displaySimulation");
         const ctx = document.getElementById('myChart');
         if (this.chartInstance) {
+            console.log("Entered displaySimulation's if statement");
             this.chartInstance.data.labels = xArray;
             this.chartInstance.data.datasets[0].data = yArray;
             this.chartInstance.update();
+            console.log("Updated chart");
         }
     }
 };

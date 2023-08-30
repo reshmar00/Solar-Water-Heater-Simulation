@@ -52,14 +52,65 @@ const controller = {
 
     startSimulator: function() {
         console.log("Entered startSimulator function");
+        console.log("Inner width is ", window.innerWidth);
         // Display values and start plotting the graph
+
+        // Show the graph div
+        const graphDiv = document.querySelector('.graph');
+        graphDiv.style.display = 'block';
+
+        // Initialize or fetch model values
+        if (window.innerWidth <= 768) {
+            // this.init();
+            console.log("Entered 768 pixels and below zone")
+            this.triggerAnimations();
+        }
+        else {
+            this.displayValues();
+        }
+
+    },
+
+    triggerAnimations: function() {
+        console.log("Starting trigger animations function");
+        const controlsDiv = document.querySelector('.controls');
+        const graphDiv = document.querySelector('.graph');
+
+        // Apply classes to trigger sliding animations
+        controlsDiv.classList.add('controls-slide-out', 'transition');
+        graphDiv.classList.add('graph-slide-in', 'transition');
+
+        // Listen for the transitionend event on the controls div
+        controlsDiv.addEventListener('transitionend', this.handleAnimationEnd.bind(this));
+        console.log("Ending trigger animations function");
+    },
+
+    handleAnimationEnd: function(event) {
+        console.log("Animation ended");
+
+        // Remove the event listener to avoid multiple calls
+        event.target.removeEventListener('transitionend', controller.handleAnimationEnd);
+
+        // Hide the controls div
+        const controlsDiv = document.querySelector('.controls');
+        controlsDiv.style.display = 'none';
+        // Reset the translation for the graph div
+        const graphDiv = document.querySelector('.graph');
+        graphDiv.style.transform = 'translateX(0)';
+
+        // /* initialize empty graph for simulation */
+        // view.initEmptySimulation();
+
+        // Display values and start plotting the graph
+        console.log("Starting to display values");
         this.displayValues();
     },
 
     displayValues: function() {
+        console.log("Displaying values");
+        console.log(model.selectedValues);
         // Display selected values in simulatorResultsDiv
         view.displaySelectedValues(model.selectedValues);
-        console.log("Selected values:", model.selectedValues);
 
         // Extracting values from model.selectedValues
         let TStart = Number(model.selectedValues.temperature.value);

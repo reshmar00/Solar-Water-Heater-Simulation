@@ -5,13 +5,14 @@ body, html {
     font-family: "Bai Jamjuree", sans-serif;
     color: white;
     overflow-x: hidden;
-    /**/
     overflow-y: auto;
 }
 
-h1, h2 {
+h2{
     text-align: center;
     color: white;
+    margin:0;
+    padding:0;
 }
 
 .chart-container {
@@ -162,8 +163,9 @@ select {
 }
 
 #two-d-rendering-content {
+    position: relative;
     font-family: "Bai Jamjuree", sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     color: #FFFFFF;
     padding: 20px;
     display: flex;
@@ -179,74 +181,97 @@ select {
     box-sizing: border-box;  /* Include padding in width calculation */
 }
 
+/* Code for transitions */
+
+.controls-slide-out {
+    left: -100%;
+    width: 0;
+    opacity: 0;
+    transition: left 0.5s ease-in-out, width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.graph-slide-in {
+    width: 100%;
+    /*left: 0;*/
+    /*display: block;*/
+    /*transform: translateX(-100%);*/
+    /*transition: transform 0.5s ease-in-out;*/
+}
+.transition {
+    transition: all 0.5s ease;
+}
+
 /* Styles for screens smaller than 768 pixels */
 @media (max-width: 768px) {
+    .graph {
+        display: none; /* Hide the graph div initially */
+    }
+
     .controls-container {
         flex-direction: column; /* Stack controls and graph vertically on smaller screens */
     }
-    .controls, .graph {
-        width: 100%; /* Make both controls and graph full width on smaller screens */
+
+    .controls {
+        width: 100%;
+        height: 100vh; /* Make the controls div full screen height */
     }
     .options-container {
-        width: 95%; /* Slightly increase the width of the options container for small screens */
+        width: 50%; /* Slightly increase the width of the options container for small screens */
     }
     .button-container {
         flex-direction: column; /* Stack buttons vertically on smaller screens */
         align-items: center; /* Center the buttons */
         padding-top: 20px; /* Reduce padding */
     }
-    .graph{
-        width: 30%;
-    }
 }
 
-@media (max-width: 480px) {
-    .controls-container {
-        flex-direction: column; /* stack controls and graph vertically */
-    }
+/*@media (max-width: 480px) {*/
+/*    .controls-container {*/
+/*        flex-direction: column; !* stack controls and graph vertically *!*/
+/*    }*/
 
-    .controls, .graph {
-        width: 100%;
-        height: auto;
-        overflow-y: auto; /* if content overflows, it becomes scrollable */
-        max-height: 70vh;
-    }
+/*    .controls, .graph {*/
+/*        width: 100%;*/
+/*        height: auto;*/
+/*        overflow-y: auto; !* if content overflows, it becomes scrollable *!*/
+/*        max-height: 70vh;*/
+/*    }*/
 
-    .options-container {
-        width: 95%; /* increase width slightly */
-        bottom: 1%; /* adjust bottom spacing */
-        padding: 3px; /* reduce padding */
-    }
+/*    .options-container {*/
+/*        width: 95%; !* increase width slightly *!*/
+/*        bottom: 1%; !* adjust bottom spacing *!*/
+/*        padding: 3px; !* reduce padding *!*/
+/*    }*/
 
-    .button-container {
-        flex-direction: column; /* stack buttons vertically */
-        align-items: center; /* center the buttons */
-        padding-top: 20px; /* reduce padding */
-    }
+/*    .button-container {*/
+/*        flex-direction: column; !* stack buttons vertically *!*/
+/*        align-items: center; !* center the buttons *!*/
+/*        padding-top: 20px; !* reduce padding *!*/
+/*    }*/
 
-    .option-item {
-        flex-direction: column; /* stack label and dropdown/slider */
-        align-items: center; /* center them */
-        margin: 10px 0; /* adjust margin */
-    }
+/*    .option-item {*/
+/*        flex-direction: column; !* stack label and dropdown/slider *!*/
+/*        align-items: center; !* center them *!*/
+/*        margin: 10px 0; !* adjust margin *!*/
+/*    }*/
 
-    .label-container, .dropdown-container, .slider-container {
-        width: 100%; /* full width for these on mobile */
-        padding: 5px 0; /* some vertical padding for spacing */
-        text-align: center; /* center align text */
-    }
+/*    .label-container, .dropdown-container, .slider-container {*/
+/*        width: 100%; !* full width for these on mobile *!*/
+/*        padding: 5px 0; !* some vertical padding for spacing *!*/
+/*        text-align: center; !* center align text *!*/
+/*    }*/
 
-    #startSimulator, #stopSimulator {
-        font-size: 14px; /* slightly smaller font */
-        padding: 8px 16px; /* adjust padding */
-    }
+/*    #startSimulator, #stopSimulator {*/
+/*        font-size: 14px; !* slightly smaller font *!*/
+/*        padding: 8px 16px; !* adjust padding *!*/
+/*    }*/
 
-    #two-d-rendering-content {
-        flex-direction: column; /* stack columns vertically */
-    }
+/*    #two-d-rendering-content {*/
+/*        flex-direction: column; !* stack columns vertically *!*/
+/*    }*/
 
-    .result-column {
-        width: 100%; /* full width for columns */
-        padding: 5px 0; /* adjust padding */
-    }
-}
+/*    .result-column {*/
+/*        width: 100%; !* full width for columns *!*/
+/*        padding: 5px 0; !* adjust padding *!*/
+/*    }*/
+/*}*/
