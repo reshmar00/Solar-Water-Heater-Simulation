@@ -13,6 +13,7 @@ h1, h2 {
     color: white;
 }
 
+
 .controls-container {
     display: flex;
     height: 100%;
@@ -35,11 +36,11 @@ h1, h2 {
 }
 
 .graph {
+    position: relative;
     height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
     box-sizing: border-box;
-    position: relative;
     width: 55%;
 }
 
@@ -164,4 +165,45 @@ select {
     flex: 1;  /* Allow columns to grow and take up available space */
     padding: 0 10px;  /* Add some horizontal padding for separation */
     box-sizing: border-box;  /* Include padding in width calculation */
+}
+
+/* Styles for screens smaller than 768 pixels */
+@media (max-width: 768px) {
+    .controls-container {
+        flex-direction: column; /* Stack controls and graph vertically on smaller screens */
+    }
+    .controls, .graph {
+        width: 100%; /* Make both controls and graph full width on smaller screens */
+    }
+    .options-container {
+        width: 95%; /* Slightly increase the width of the options container for small screens */
+    }
+    .button-container {
+        flex-direction: column; /* Stack buttons vertically on smaller screens */
+        align-items: center; /* Center the buttons */
+        padding-top: 20px; /* Reduce padding */
+    }
+    .graph{
+        width: 30%;
+    }
+}
+
+@media (max-width: 360px) {
+    .controls-container {
+        flex-direction: column; /* Stack controls and graph vertically on smaller screens */
+    }
+    .controls, .graph {
+        width: 90%; /* Make both controls and graph full width on smaller screens */
+    }
+    .options-container {
+        width: 85%; /* Slightly increase the width of the options container for small screens */
+    }
+    .button-container {
+        flex-direction: column; /* Stack buttons vertically on smaller screens */
+        align-items: center; /* Center the buttons */
+        padding-top: 20px; /* Reduce padding */
+    }
+    .graph{
+        width: 20%;
+    }
 }
