@@ -10,12 +10,6 @@ body, html {
 
 h1, h2 {
     text-align: center;
-}
-
-h1 {
-    color: white;
-}
-h2{
     color: white;
 }
 
@@ -26,6 +20,7 @@ h2{
     background: url('/bg_solar-2.png') no-repeat center center fixed;
     background-size: 140% 100%;
 }
+
 .controls, .graph{
     background-color: transparent;
 }
@@ -99,7 +94,7 @@ h2{
 }
 
 .value-container {
-    width: 50px; /* Adjusting the width for consistency */
+    width: 50px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -117,7 +112,7 @@ select, input[type="range"] {
     width: 100%;
     height: 25px;
     margin: 0;
-    padding: 0; /* Ensure no padding interferes with the height */
+    padding: 0;
     box-sizing: border-box; /* This makes sure the width doesn't exceed 100% with border/padding */
     vertical-align: middle; /* This should help vertically center it */
 }
@@ -160,7 +155,7 @@ select {
     font-size: 18px;
     color: #FFFFFF;
     padding: 20px;
-    display: flex;  /* Turn this into a flex container */
+    display: flex;
     justify-content: space-between;  /* Distribute the columns evenly */
     flex-wrap: wrap;  /* Allow columns to wrap if they don't fit */
 }

@@ -10,7 +10,7 @@ const view = {
 
     /* Logic for selecting the month, date, and time*/
     /* Month selection */
-    /* Populates a drop-down menu with months of th year
+    /* Populates a drop-down menu with months of the year
      * Depending on this selection, the user can select a date */
     populateMonthDropdown: function() {
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -23,10 +23,6 @@ const view = {
             option.text = month;
             monthDropdown.appendChild(option);
         });
-
-        // Set value from sessionStorage
-        const storedMonth = sessionStorage.getItem('month');
-        if (storedMonth) monthDropdown.value = storedMonth;
     },
 
     /* Date selection - based on the month ~ accounts for 30/31 days + Feb */
@@ -48,10 +44,6 @@ const view = {
             option.text = i;
             this.dateListElement.appendChild(option);
         }
-
-        // Set value from sessionStorage
-        const storedDate = sessionStorage.getItem('date');
-        if (storedDate) this.dateListElement.value = storedDate;
     },
 
     /* Time selection */
@@ -67,10 +59,6 @@ const view = {
             option.text = time;
             timeDropdown.appendChild(option);
         });
-
-        // Set value from sessionStorage
-        const storedTime = sessionStorage.getItem('time');
-        if (storedTime) timeDropdown.value = storedTime;
     },
 
     /* Setting up the collector area slider's value... */
@@ -147,7 +135,7 @@ const view = {
         let count = 0;
 
         for (const key in selectedValues) {
-            if ((count === 3 && currentColumn === 0) || (count === 6 && currentColumn === 1)) {
+            if ((count === 5 && currentColumn === 0) || (count === 3 && currentColumn === 1)) {
                 currentColumn++;  // move to next column after 3 values for the first column, and 6 values total for the second column
             }
 
@@ -160,7 +148,9 @@ const view = {
 
             count++;
         }
-
+        let totalVolume = model.computeTotalVolume().toFixed(3);
+        columns[2].innerHTML += "Total Volume: " + totalVolume + "m<sup>2</sup>\n";
+        columns[2].innerHTML += "Ending Temperature: 85°C\n";
         columns.forEach(column => simulatorResultsContent.appendChild(column));
     },
 
@@ -270,4 +260,3 @@ const view = {
         }
     }
 };
-
