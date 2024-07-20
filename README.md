@@ -14,6 +14,10 @@ For the purpose of this simulation, I have assumed that this system specifically
 
 This simulation primarily tracks two values: heat and temperature.
 
+## Demo
+
+![Demo](./solar-water-heater-demo.gif)
+
 ## About this app
 
 ### How to use it:
