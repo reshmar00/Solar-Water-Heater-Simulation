@@ -26,8 +26,8 @@ h2{
     display: flex;
     height: 100%;
     position: relative;
-    background: url('/simulator/bg_solar-2.png') no-repeat center center fixed;
-    background-size: 140% 100%;
+    background: url('/simulator/bg-images/solar-bg-desktop.jpg') no-repeat center center fixed;
+    background-size: cover;
     overflow-y: auto;
     max-height: 100vh;
 }
@@ -196,25 +196,28 @@ select {
     transition: left 0.5s ease-in-out, width 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 
-.graph-slide-in {
-    width: 100%;
-    /*left: 0;*/
-    /*display: block;*/
-    /*transform: translateX(-100%);*/
-    /*transition: transform 0.5s ease-in-out;*/
-}
 .transition {
     transition: all 0.5s ease;
+}
+
+.graph-slide-in {
+    width: 100%;
+    /*transition: width 0.5s ease-in-out;*/
 }
 
 /* Styles for screens smaller than 768 pixels */
 @media (max-width: 768px) {
     .graph {
+        position: fixed;
+        transition: top 0.5s ease-in-out;
         display: none; /* Hide the graph div initially */
     }
 
     .controls-container {
         flex-direction: column; /* Stack controls and graph vertically on smaller screens */
+        background: url('/simulator/bg-images/solar-bg-tab.jpg') no-repeat center center fixed;
+        background-size: cover;
+        overflow: hidden;
     }
 
     .controls {
@@ -228,5 +231,12 @@ select {
         flex-direction: column; /* Stack buttons vertically on smaller screens */
         align-items: center; /* Center the buttons */
         padding-top: 0; /* Reduce padding */
+    }
+}
+
+@media (max-width: 375px) {
+    .controls-container {
+        background: url('/simulator/bg-images/solar-bg-phone.jpg') no-repeat center center fixed;
+        background-size: cover;
     }
 }
